@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wallet.Entities\Wallet.Entities.csproj" />
+    <ProjectReference Include="..\Wallet.Logger\Wallet.Logger.csproj" />
+    <ProjectReference Include="..\Wallet.Repository\Wallet.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
