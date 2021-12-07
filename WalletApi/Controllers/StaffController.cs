@@ -63,6 +63,17 @@ namespace WalletApi.Controllers
             return Ok(allCustomers);
         }
 
+        [HttpGet("GetCustomers")]
+        public async Task<IActionResult> GetCustomers()
+        {
+            var allCustomers = await _userService.GetCustomers();
+
+            if (allCustomers.Count() <= 0)
+                return BadRequest(new ErrorDetails { StatusCode = 400, Message = $"0 Customers found" });
+
+            return Ok(allCustomers);
+        }
+
         [HttpGet("GetAllAccounts")]
         public async Task<IActionResult> GetAllAccounts()
         {

@@ -107,5 +107,28 @@ namespace Wallet.Repository.Repositories
         {
             _dbSet.RemoveRange(obj);
         }
+
+        public T FindOneInclude(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            var query = GetAllIncluding(includeProperties);
+            T obj = query.FirstOrDefault(predicate);
+
+            return obj;
+        }
+
+        public async Task<IEnumerable<T>> GetAllAndInclude(params Expression<Func<T, object>>[] includeProperties)
+        {
+            var query = GetAllIncluding(includeProperties);
+            IEnumerable<T> results = await query.ToListAsync();
+            return results;
+        }
+
+        private IQueryable<T> GetAllIncluding(Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> queryable = _dbContext.Set<T>();
+
+            return includeProperties.Aggregate(queryable,
+                (current, includeProperty) => current.Include(includeProperty));
+        }
     }
 }

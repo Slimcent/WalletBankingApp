@@ -16,6 +16,7 @@ namespace Wallet.Services.Interfaces
         Task<Response> GetByUsernme(string username);
         Task<Response> GetUserByAccountNumber(string walletId);
         Task<IEnumerable<Customer>> GetAllCustomers();
+        Task<IEnumerable<CustomerAccountDto>> GetCustomers();
         Task<IEnumerable<AllTransactionsDto>> GetAllTransactions();
         IEnumerable<Transaction> GetTotalNumberOfTransactions();
         Task<IEnumerable<AllRolesDto>> GetAllRoles();
@@ -28,6 +29,5 @@ namespace Wallet.Services.Interfaces
         IEnumerable<BuyData> GetTotalNumberOfData();
         Task<IEnumerable<Customer>> GetCustomersAsync();
         Task<Customer> GetSingleCustomer(Guid id);
-        //Task<ViewAccountDto> GetCustomerByAccountNumber(string accountNumber);
     }
 }

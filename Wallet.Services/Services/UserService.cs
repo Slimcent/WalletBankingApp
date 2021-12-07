@@ -185,20 +185,24 @@ namespace Wallet.Services.Services
             return customers;
         }
 
+        public  async Task<IEnumerable<CustomerAccountDto>> GetCustomers()
+        {
+            var customers = await _customerRepo.GetAllAndInclude(c => c.User, c => c.Account);
 
-        //public async Task<ViewAccountDto> GetCustomerByAccountNumber(string accountNumber)
-        //{
-        //    IAccountService accountService = _serviceFactory.GetServices<IAccountService>();
-        //    var accountDetail = await accountService.GetByAccountNumber(accountNumber);
+            var dto = _mapper.Map<IEnumerable<CustomerAccountDto>>(customers);
 
-        //    return accountDetail;
-        //}
+            //var dto = customers.Select(a => new CustomerAccountDto
+            //{
+            //    FullName = a.User.FullName,
+            //    UserName = a.User.UserName,
+            //    Email = a .User.Email,
+            //    PhoneNumber = a.PhoneNumber,
+            //    WalletID = a.Account.WalletID,
+            //    Balance = a.Account.Balance,
+            //    IsActive = a.Account.IsActive
+            //});
 
-
-
-        //public async Task<Customer> GetSingleCustomer(Guid id)
-        //{
-        //    return await Task.FromResult(_customerRepo.GetSingleByCondition(x => x.Id == id));
-        //}
+            return dto;
+        }
     }
 }
