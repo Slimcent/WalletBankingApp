@@ -4,7 +4,7 @@ namespace Wallet.Entities.DataTransferObjects.Transaction
 {
     public class AddDataNetworkProviderDto
     {
-        [Display(Name = "Network Name"), RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Invalid Name Format")]
+        [Required(ErrorMessage = "Network Name cannot be empty"), Display(Name = "Network Name"), RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Alphabets allowed")]
         public string NetworkName { get; set; }
     }
 }

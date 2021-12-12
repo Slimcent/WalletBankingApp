@@ -191,17 +191,6 @@ namespace Wallet.Services.Services
 
             var dto = _mapper.Map<IEnumerable<CustomerAccountDto>>(customers);
 
-            //var dto = customers.Select(a => new CustomerAccountDto
-            //{
-            //    FullName = a.User.FullName,
-            //    UserName = a.User.UserName,
-            //    Email = a .User.Email,
-            //    PhoneNumber = a.PhoneNumber,
-            //    WalletID = a.Account.WalletID,
-            //    Balance = a.Account.Balance,
-            //    IsActive = a.Account.IsActive
-            //});
-
             return dto;
         }
     }

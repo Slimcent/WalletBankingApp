@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NLog;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,7 +53,11 @@ namespace WalletApi
             services.AddScoped<ExistingEmailValidation>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication();
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                config.RespectBrowserAcceptHeader = true;
+                config.ReturnHttpNotAcceptable = true;
+            }).AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WalletApi", Version = "v1" });

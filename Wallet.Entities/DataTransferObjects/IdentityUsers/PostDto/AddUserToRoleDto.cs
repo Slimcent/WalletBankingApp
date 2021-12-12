@@ -4,9 +4,11 @@ namespace Wallet.Entities.DataTransferObjects.IdentityUsers
 {
     public class AddUserToRoleDto
     {
-        [Required(ErrorMessage = "Role Name cannot be empty"), MinLength(2), MaxLength(50)]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Invalid Name Format")]
-        public string RoleName { get; set; }
+        [Required(ErrorMessage = "Role Name cannot be empty"),  MinLength(2), MaxLength(50)]
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Only Alphabets allowed")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Email canot be empty"), EmailAddress]
         public string Email { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects.Transaction;
@@ -17,13 +18,15 @@ namespace Wallet.Services.Services
         private readonly IRepository<Account> _accountRepo;
         private readonly IRepository<BillPayment> _billRepo;
         private readonly IRepository<AirTime> _airTimeRepo;
+        private readonly IMapper _mapper;
 
-        public TransactionService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
+        public TransactionService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
         {
             _accountRepo = unitOfWork.GetRepository<Account>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<BillPayment>();
             _airTimeRepo = unitOfWork.GetRepository<AirTime>();
+            _mapper = mapper;
             _serviceFactory = serviceFactory;
         }
 
@@ -41,6 +44,8 @@ namespace Wallet.Services.Services
 
             wallet.Balance += model.Amount;
 
+            //var depositDto = _mapper.Map<Transaction>(model);
+
             var deposit = new Transaction()
             {
                 Amount = model.Amount,
@@ -50,7 +55,7 @@ namespace Wallet.Services.Services
                 TransactionMode = TransactionMode.Deposit,
                 UserId = wallet.UserId
             };
-           await  _transactionRepo.AddAsync(deposit);
+            await  _transactionRepo.AddAsync(deposit);
 
             return new Response(true, $"Your Deposit of {model.Amount} was Successful! \nYour new Wallet Ballance is {wallet.Balance}");
         }

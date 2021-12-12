@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.DataTransferObjects.IdentityUsers;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.GobalError;
 using Wallet.Entities.Models.CustomerToUser;
@@ -35,7 +37,7 @@ namespace WalletApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("Create User")]
+        [HttpPost("CreateUser")]
         [ServiceFilter(typeof(ModelStateValidation))]
         //[ServiceFilter(typeof(ExistingEmailValidation))]
         public async Task<IActionResult> CreateUser([FromBody] AddUserDto user)
@@ -56,7 +58,7 @@ namespace WalletApi.Controllers
             return Ok(new ErrorDetails {StatusCode = 200, Message = $"User, {user.UserName} was Created Successfully" } );
         }
 
-        [HttpPost("Create Customer")]
+        [HttpPost("CreateCustomer")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> CreateCustomer([FromBody] AddCustomerDto model)
         {
@@ -75,7 +77,7 @@ namespace WalletApi.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPost("Add Role")]
+        [HttpPost("AddRole")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddRole([FromBody] AddRoleDto model)
         {
@@ -87,7 +89,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Add User To Role")]
+        [HttpPost("AddUserToRole")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddUserToRole([FromBody] AddUserToRoleDto model)
         {
@@ -99,7 +101,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Add Bill")]
+        [HttpPost("AddBill")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddBill([FromBody] AddBillDto model)
         {
@@ -111,7 +113,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Add AirTime")]
+        [HttpPost("AddAirTime")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddAirTime([FromBody] AddNetworkProviderDto model)
         {
@@ -123,7 +125,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Add Data")]
+        [HttpPost("AddData")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddData([FromBody] AddNetworkProviderDto model)
         {
@@ -135,7 +137,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet("Get Total Number of Users")]
+        [HttpGet("GetTotalNumberOfUsers")]
         public IActionResult GetTotalNumberOfUsers()
         {
             var allUsers = _userService.GetTotalNumberOfUsers().Count();
@@ -146,7 +148,7 @@ namespace WalletApi.Controllers
             return Ok(allUsers + " " + "Users");
         }
 
-        [HttpGet("Get All Users")]
+        [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
             var allUsers = await _userService.GetAllUsers();
@@ -157,7 +159,7 @@ namespace WalletApi.Controllers
             return Ok(allUsers);
         }
 
-        [HttpGet("Get All Transactions")]
+        [HttpGet("GetAllTransactions")]
         public async Task<IActionResult> GetAllTransactions()
         {
             var allTransactions = await _userService.GetAllTransactions();
@@ -166,6 +168,61 @@ namespace WalletApi.Controllers
                 return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Transactiions found" });
 
             return Ok(allTransactions);
+        }
+
+        [HttpPatch("EditUser")]
+        public async Task<IActionResult> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
+        {
+            var user = await _adminService.EditUser(Id, model);
+
+            if (user.Success)
+                return Ok(user.Message);
+
+            return BadRequest(user.Message);
+        }
+
+        [HttpPatch("EditRole")]
+        public async Task<IActionResult> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
+        {
+            var role = await _adminService.EditRole(Id, model);
+
+            if (role.Success)
+                return Ok(role.Message);
+
+            return BadRequest(role.Message);
+        }
+
+        [HttpPatch("EditBill")]
+        public async Task<IActionResult> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
+        {
+            var bill = await _adminService.EditBill(Id, model);
+
+            if (bill.Success)
+                return Ok(bill.Message);
+
+            return BadRequest(bill.Message);
+        }
+
+        [HttpPatch("EditAirtime")]
+        public async Task<IActionResult> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
+        {
+            var airTime = await _adminService.EditAirTime(Id, model);
+
+            if (airTime.Success)
+                return Ok(airTime.Message);
+
+            return BadRequest(airTime.Message);
+        }
+
+        [HttpPatch("EditData")]
+        public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
+        {
+            var data = await _adminService.EditData(Id, model);
+
+            if (data.Success)
+                return Ok(data.Message);
+
+            return BadRequest(data.Message);
         }
     }
 }

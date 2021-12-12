@@ -86,6 +86,7 @@ namespace Wallet.Repository.Repositories
         public T Update(T obj)
         {
             _dbSet.Update(obj);
+            _dbContext.SaveChanges();
             return obj;
         }
         public void AddRange(IList<T> obj)

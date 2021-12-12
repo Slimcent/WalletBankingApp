@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using Wallet.Entities.DataTransferObjects;
+using Wallet.Entities.DataTransferObjects.IdentityUsers;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
+using Wallet.Entities.DataTransferObjects.Transaction;
+using Wallet.Entities.DataTransferObjects.Transaction.PostDto;
 using Wallet.Entities.Models.Domain;
 
 namespace Wallet.Entities.Mapper
@@ -24,6 +28,16 @@ namespace Wallet.Entities.Mapper
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Account.IsActive))
                 .ForMember(dest => dest.WalletID, opt => opt.MapFrom(src => src.Account.WalletID))
                 .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.Account.Balance));
+            CreateMap<AddRoleDto, Role>();
+            CreateMap<AddBillDto, BillPayment>();
+            CreateMap<AddNetworkProviderDto, BuyData>();
+            CreateMap<AddNetworkProviderDto, AirTime>();
+            CreateMap<DepositTransactionDto, Transaction>();
+            CreateMap<PatchUserDto, User>();
+            CreateMap<PatchRoleDto, Role>();
+            CreateMap<PatchBillDto, BillPayment>();
+            CreateMap<PatchAirTimeDto, AirTime>();
+            CreateMap<PatchDataDto, BuyData>();
         }
     }
 }

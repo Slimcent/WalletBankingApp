@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.DataTransferObjects.IdentityUsers;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.CustomerToUser;
@@ -22,9 +25,16 @@ namespace Wallet.Services.Interfaces
         Task<Response> AddAirTime(AddNetworkProviderDto model);
         Task<Response> AddData(AddNetworkProviderDto model);
         Task CreateCustomer(string userId);
-        Task<User> GetUserByID(object Id);
-        Task<User> UpdateUser(User user);
-        string DeleteUser(string Id);
-        string DeleteUser(User user);
+        Task<Response> EditUser(string Id, JsonPatchDocument<PatchUserDto> model);
+        Task<Response> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model);
+        Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model);
+        Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model);
+        Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model);
+        Task<Response> DeleteUserByName(string email);
+        Task<Response> DeleteRoleByName(string name);
+        Task<Response> DeleteBillByName(string name);
+        Task<Response> DeleteAirTimeByName(string name);
+        Task<Response> DeleteDataByName(string name);
+        Task<Response> DeleteUserById(string Id);
     }
 }

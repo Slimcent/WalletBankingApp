@@ -16,6 +16,8 @@ using Wallet.Entities.DataTransferObjects.IdentityUsers;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using System.Linq;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Wallet.Services.Services
 {
@@ -57,14 +59,15 @@ namespace Wallet.Services.Services
             //var emailExists = await _userManager.FindByEmailAsync(dto.Email.ToLower().Trim());
             
             var password = "123456";
-            //var user = _mapper.Map<User>(dto);
-            var user = new User
-            {
-                FullName = $"{dto.FirstName} {dto.LastName}",
-                UserName = dto.UserName,
-                Email = dto.Email,
-                EmailConfirmed = true
-            };
+            var user = _mapper.Map<User>(dto);
+
+            //var user = new User
+            //{
+            //    FullName = $"{dto.FirstName} {dto.LastName}",
+            //    UserName = dto.UserName,
+            //    Email = dto.Email,
+            //    EmailConfirmed = true
+            //};
                 
             var result = await _userManager.CreateAsync(user, password);
             if (!_roleManager.RoleExistsAsync("Manager").Result)
@@ -136,15 +139,10 @@ namespace Wallet.Services.Services
         {
             if (await _roleManager.RoleExistsAsync(model.Name.Trim().ToLower()))
                 return new Response(false, "Role Already Exists");
-           
-            var role = new Role
-            {
-                Name = model.Name.Trim(),
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
 
-            var result = await _roleManager.CreateAsync(role);
+            var roleDto = _mapper.Map<Role>(model);
+           
+            var result = await _roleManager.CreateAsync(roleDto);
 
             if (result.Succeeded)
                 return new Response(true, $"Role with Name {model.Name} has been added Successful!");
@@ -158,12 +156,12 @@ namespace Wallet.Services.Services
             if(user == null)
                 return new Response(false, "User does not Exist");
 
-            var result = await _userManager.AddToRoleAsync(user, model.RoleName);
+            var result = await _userManager.AddToRoleAsync(user, model.Name);
 
             if (result.Succeeded)
-                return new Response(true, $"{model.Email} has been added to the {model.RoleName} Successful!");
+                return new Response(true, $"{model.Email} has been added to the {model.Name} Successful!");
 
-            return new Response(false, $"Adding {model.Email} to the Role {model.RoleName} failed!");
+            return new Response(false, $"Adding {model.Email} to the Role {model.Name} failed!");
         }
 
         public async Task<Response> DeleteRole(string name)
@@ -184,69 +182,210 @@ namespace Wallet.Services.Services
             if(existingBill != null)
                 return new Response(false, "Bill Name already Exist");
 
-            var bill = new BillPayment
-            {
-                BillName = model.BillName,
-                Amount = model.Amount,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-            await _billRepo.AddAsync(bill);
+            var billDto = _mapper.Map<BillPayment>(model);
+                        
+            await _billRepo.AddAsync(billDto);
 
             return new Response(true, $"Bill Name {model.BillName} and Amount {model.Amount} has been added Successfully!");
         }
 
         public async Task<Response> AddAirTime(AddNetworkProviderDto model)
         {
-            var existingAirTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == model.NetworkName.Trim().ToLower());
+            var existingAirTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if(existingAirTime != null)
                 return new Response(false, "Network Provider name already Exist");
 
-            var airTime = new AirTime
-            {
-                NetworkProvider = model.NetworkName,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-            await _airTimeRepo.AddAsync(airTime);
+            var airTimeDdto = _mapper.Map<AirTime>(model);
 
-            return new Response(true, $"{model.NetworkName} has been added Successfully!");
+            await _airTimeRepo.AddAsync(airTimeDdto);
+
+            return new Response(true, $"{model.NetworkProvider} has been added Successfully!");
         }
 
         public async Task<Response> AddData(AddNetworkProviderDto model)
         {
-            var existingData = _dataRepo.GetSingleByCondition(predicate: d => d.NetworkProvider == model.NetworkName.Trim().ToLower());
+            var existingData = _dataRepo.GetSingleByCondition(predicate: d => d.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if(existingData != null)
                 return new Response(false, "Network Provider name already Exist");
 
-            var data = new BuyData
+            var dataDto = _mapper.Map<BuyData>(model);
+
+            await _dataRepo.AddAsync(dataDto);
+
+            return new Response(true, $"Network Provider Name {model.NetworkProvider} has been added Successfully!");
+        }
+
+        public async Task<Response> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
+        {
+            var user = await _userRepo.GetByIdAsync(Id);
+            if (user == null)
+                return new Response(false, $"User with ID {Id} not found");
+
+            //var userDto = _mapper.Map<PatchUserDto>(user);
+
+            var userDto = new PatchUserDto
             {
-                NetworkProvider = model.NetworkName,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
             };
-            await _dataRepo.AddAsync(data);
 
-            return new Response(true, $"Network Provider Name {model.NetworkName} has been added Successfully!");
+            model.ApplyTo(userDto);
+
+            _mapper.Map(userDto, user);
+
+            _userRepo.Update(user);
+
+            return new Response(true, $"User Updated Successfully, see Details below\n Fullname : {user.FullName} \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber}");
         }
 
-        
-        public string DeleteUser(string Id)
+        public async Task<Response> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
         {
-            throw new NotImplementedException();
+            var role = await _roleManager.FindByIdAsync(Id);
+
+            if (role is null)
+                return new Response(false, "Role does not exist");
+
+            var roleDto = new PatchRoleDto
+            {
+                Name = role.Name
+            };
+
+            model.ApplyTo(roleDto);
+
+            _mapper.Map(roleDto, role);
+
+            await _roleManager.UpdateAsync(role);
+
+            return new Response(true, $"Role Updated Successfully, see Details below\nRole Name : {role.Name}");
         }
 
-        public string DeleteUser(User user)
+        public async Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
         {
-            throw new NotImplementedException();
+            var bill = await _billRepo.GetByIdAsync(Id);
+
+            if (bill is null)
+                return new Response(false, "Bill does not Exist");
+
+            var billDto = new PatchBillDto
+            {
+                BillName = bill.BillName,
+                Amount = bill.Amount
+            };
+
+            model.ApplyTo(billDto);
+
+            _mapper.Map(billDto, bill);
+
+            _billRepo.Update(bill);
+
+            return new Response(true, $"Bill Updated Successfully, see Details below\nBill Name : {bill.BillName} \nAmount : {bill.Amount}");
         }
 
-        public Task<User> GetUserByID(object Id)
+        public async Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
         {
-            throw new NotImplementedException();
+            var airTime = await _airTimeRepo.GetByIdAsync(Id);
+
+            if (airTime is null)
+                return new Response(false, "ArTime does not Exist");
+
+            var airTimeDto = new PatchAirTimeDto
+            {
+                NetworkProvider = airTime.NetworkProvider
+            };
+
+            model.ApplyTo(airTimeDto);
+
+            _mapper.Map(airTimeDto, airTime);
+
+            _airTimeRepo.Update(airTime);
+
+            return new Response(true, $"AirTime Updated Successfully, see Details below \nNetwork Name : {airTime.NetworkProvider}");
         }
 
-        public Task<User> UpdateUser(User user)
+        public async Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
+        {
+            var data = await _dataRepo.GetByIdAsync(Id);
+
+            if (data is null)
+                return new Response(false, "Data does not Exist");
+
+            var dataDto = new PatchDataDto
+            {
+                NetworkProvider = data.NetworkProvider
+            };
+
+            model.ApplyTo(dataDto);
+
+            _mapper.Map(dataDto, data);
+
+            _dataRepo.Update(data);
+
+            return new Response(true, $"Data Updated Successfully, see Details below \nNetwork Name : {data.NetworkProvider}");
+        }
+
+        public async Task<Response> DeleteUserByName(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+                return new Response(false, "User does not Exist");
+
+            await _userManager.DeleteAsync(user);
+
+            return new Response(true, $"User with details below Deleted Successfully!\nFull Name : {user.FullName} \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber} ");
+        }
+
+        public async Task<Response> DeleteRoleByName(string name)
+        {
+            var role = await _roleManager.FindByNameAsync(name);
+
+            if (role is null)
+                return new Response(false, "Role does not Exist");
+
+            await _roleManager.DeleteAsync(role);
+
+            return new Response(true, $"Role with Name {role.Name} has been deleted Successfully");
+        }
+
+        public async Task<Response> DeleteBillByName(string name)
+        {
+            var bill = _billRepo.GetSingleByCondition(b => b.BillName == name);
+
+            if (bill is null)
+                return new Response(false, "Bill does not Exist");
+
+            _billRepo.Delete(bill);
+
+            return new Response(true, $"Bill with Name {bill.BillName} And Amount {bill.Amount} has been deleted Successfully");
+        }
+
+        public async Task<Response> DeleteAirTimeByName(string name)
+        {
+            var airTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == name);
+
+            if (airTime is null)
+                return new Response(false, "AirTime does not Exist");
+
+           _airTimeRepo.Delete(airTime);
+
+            return new Response(true, $"Bill with Name {airTime.NetworkProvider} has been deleted Successfully");
+        }
+
+        public async Task<Response> DeleteDataByName(string name)
+        {
+            var data = _dataRepo.GetSingleByCondition(d => d.NetworkProvider == name);
+
+            if (data is null)
+                return new Response(false, "Data does not Exist");
+
+            _dataRepo.Delete(data);
+
+            return new Response(true, $"Bill with Name {data.NetworkProvider} has been deleted Successfully");
+        }
+
+        public Task<Response> DeleteUserById(string Id)
         {
             throw new NotImplementedException();
         }

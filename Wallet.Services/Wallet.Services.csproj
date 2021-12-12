@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Wallet.Entities\Wallet.Entities.csproj" />
     <ProjectReference Include="..\Wallet.Logger\Wallet.Logger.csproj" />
     <ProjectReference Include="..\Wallet.Repository\Wallet.Repository.csproj" />
