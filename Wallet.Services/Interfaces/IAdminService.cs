@@ -30,7 +30,7 @@ namespace Wallet.Services.Interfaces
         Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model);
         Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model);
         Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model);
-        Task<Response> DeleteUserByName(string email);
+        Task<Response> DeleteUserByEmail(string email);
         Task<Response> DeleteRoleByName(string name);
         Task<Response> DeleteBillByName(string name);
         Task<Response> DeleteAirTimeByName(string name);

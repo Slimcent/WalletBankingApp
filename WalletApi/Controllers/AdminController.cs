@@ -171,6 +171,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpPatch("EditUser")]
+        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
         {
             var user = await _adminService.EditUser(Id, model);
@@ -182,6 +183,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpPatch("EditRole")]
+        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
         {
             var role = await _adminService.EditRole(Id, model);
@@ -193,6 +195,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpPatch("EditBill")]
+        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
         {
             var bill = await _adminService.EditBill(Id, model);
@@ -204,6 +207,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpPatch("EditAirtime")]
+        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
         {
             var airTime = await _adminService.EditAirTime(Id, model);
@@ -218,6 +222,61 @@ namespace WalletApi.Controllers
         public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
         {
             var data = await _adminService.EditData(Id, model);
+
+            if (data.Success)
+                return Ok(data.Message);
+
+            return BadRequest(data.Message);
+        }
+
+        [HttpDelete("DeleteUserByEmail")]
+        public async Task<IActionResult> DeleteUserByEmail(string email)
+        {
+            var user = await _adminService.DeleteUserByEmail(email);
+
+            if (user.Success)
+                return Ok(user.Message);
+
+            return BadRequest(user.Message);
+        }
+
+        [HttpDelete("DeleteRoleByName")]
+        public async Task<IActionResult> DeleteRoleByName(string name)
+        {
+            var role = await _adminService.DeleteRoleByName(name);
+
+            if (role.Success)
+                return Ok(role.Message);
+
+            return BadRequest(role.Message);
+        }
+
+        [HttpDelete("DeleteBillByName")]
+        public async Task<IActionResult> DeleteBillByName(string name)
+        {
+            var bill = await _adminService.DeleteBillByName(name);
+
+            if (bill.Success)
+                return Ok(bill.Message);
+
+            return BadRequest(bill.Message);
+        }
+
+        [HttpDelete("DeleteAirTimeByName")]
+        public async Task<IActionResult> DeleteAirTimeByName(string name)
+        {
+            var airTime = await _adminService.DeleteAirTimeByName(name);
+
+            if (airTime.Success)
+                return Ok(airTime.Message);
+
+            return BadRequest(airTime.Message);
+        }
+
+        [HttpDelete("DeleteDataByName")]
+        public async Task<IActionResult> DeleteDataByName(string name)
+        {
+            var data = await _adminService.DeleteDataByName(name);
 
             if (data.Success)
                 return Ok(data.Message);

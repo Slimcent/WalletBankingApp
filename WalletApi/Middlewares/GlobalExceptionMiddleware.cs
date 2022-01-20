@@ -24,7 +24,7 @@ namespace WalletApi.Middlewares
                         await context.Response.WriteAsync(new ErrorDetails()
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = contextFeature.Error.Message
+                            Message = contextFeature.Error.InnerException.Message
                         }.ToString());
                     }
                 });

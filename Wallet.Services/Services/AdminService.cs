@@ -325,9 +325,9 @@ namespace Wallet.Services.Services
             return new Response(true, $"Data Updated Successfully, see Details below \nNetwork Name : {data.NetworkProvider}");
         }
 
-        public async Task<Response> DeleteUserByName(string email)
+        public async Task<Response> DeleteUserByEmail(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email.Trim().ToLower());
 
             if (user is null)
                 return new Response(false, "User does not Exist");
@@ -339,7 +339,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> DeleteRoleByName(string name)
         {
-            var role = await _roleManager.FindByNameAsync(name);
+            var role = await _roleManager.FindByNameAsync(name.Trim().ToLower());
 
             if (role is null)
                 return new Response(false, "Role does not Exist");
@@ -351,7 +351,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> DeleteBillByName(string name)
         {
-            var bill = _billRepo.GetSingleByCondition(b => b.BillName == name);
+            var bill = _billRepo.GetSingleByCondition(b => b.BillName == name.Trim().ToLower());
 
             if (bill is null)
                 return new Response(false, "Bill does not Exist");
@@ -363,26 +363,26 @@ namespace Wallet.Services.Services
 
         public async Task<Response> DeleteAirTimeByName(string name)
         {
-            var airTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == name);
+            var airTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == name.Trim().ToLower());
 
             if (airTime is null)
                 return new Response(false, "AirTime does not Exist");
 
            _airTimeRepo.Delete(airTime);
 
-            return new Response(true, $"Bill with Name {airTime.NetworkProvider} has been deleted Successfully");
+            return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been deleted Successfully");
         }
 
         public async Task<Response> DeleteDataByName(string name)
         {
-            var data = _dataRepo.GetSingleByCondition(d => d.NetworkProvider == name);
+            var data = _dataRepo.GetSingleByCondition(d => d.NetworkProvider == name.Trim().ToLower());
 
             if (data is null)
                 return new Response(false, "Data does not Exist");
 
             _dataRepo.Delete(data);
 
-            return new Response(true, $"Bill with Name {data.NetworkProvider} has been deleted Successfully");
+            return new Response(true, $"Data with Name {data.NetworkProvider} has been deleted Successfully");
         }
 
         public Task<Response> DeleteUserById(string Id)

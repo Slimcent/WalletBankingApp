@@ -102,6 +102,7 @@ namespace Wallet.Repository.Repositories
         public void Delete(T obj)
         {
             _dbSet.Remove(obj);
+            _dbContext.SaveChanges();
         }
 
         public void DeleteRange(IList<T> obj)
