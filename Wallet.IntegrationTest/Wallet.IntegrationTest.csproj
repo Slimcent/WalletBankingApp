@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -23,5 +23,20 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WalletApi\WalletApi.csproj" />
+  </ItemGroup>
+
+	<Target Name="CopyDebJsonFiles" AfterTargets="Publish">
+		<ItemGroup>
+			<DebsJsonFiles Include="$(Target)*.debs.json"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(DebsJsonFiles)" DestinationFolder="$(PublishDir)" />
+	</Target>
+
+	<PreserveCompilationContext>
+		true
+	</PreserveCompilationContext>
 
 </Project>

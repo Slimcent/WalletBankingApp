@@ -18,6 +18,7 @@ using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using System.Linq;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Microsoft.AspNetCore.JsonPatch;
+using Wallet.Services.Exceptions;
 
 namespace Wallet.Services.Services
 {
@@ -56,34 +57,33 @@ namespace Wallet.Services.Services
 
         public async Task<(IdentityResult, User)> Add(AddUserDto dto)
         {
-            //var emailExists = await _userManager.FindByEmailAsync(dto.Email.ToLower().Trim());
-            
-            var password = "123456";
-            var user = _mapper.Map<User>(dto);
+            var emailExists = await _userManager.FindByEmailAsync(dto.Email.ToLower().Trim());
 
-            //var user = new User
-            //{
-            //    FullName = $"{dto.FirstName} {dto.LastName}",
-            //    UserName = dto.UserName,
-            //    Email = dto.Email,
-            //    EmailConfirmed = true
-            //};
-                
-            var result = await _userManager.CreateAsync(user, password);
-            if (!_roleManager.RoleExistsAsync("Manager").Result)
+            if (emailExists == null)
             {
-                var role = new Role
+                var password = "123456";
+                var user = _mapper.Map<User>(dto);
+
+                var result = await _userManager.CreateAsync(user, password);
+                if (!_roleManager.RoleExistsAsync("Manager").Result)
                 {
+                    var role = new Role
+                    {
                         Name = "Manager"
-                };
-                var roleResult = _roleManager.CreateAsync(role).Result;
-                if (!roleResult.Succeeded)
-                {
-                    Message = "Error while creating Role";
+                    };
+                    var roleResult = _roleManager.CreateAsync(role).Result;
+                    if (!roleResult.Succeeded)
+                    {
+                        Message = "Error while creating Role";
+                    }
                 }
+                await _userManager.AddToRoleAsync(user, "Manager");
+                return (result, user);
             }
-            await _userManager.AddToRoleAsync(user, "Manager");
-            return (result, user);            
+            else
+            {
+                throw new UserExistException(dto.Email);
+            }
         }
 
         public async Task<(IdentityResult, User)> CreateCustomerAsUser(IdentityModel model)

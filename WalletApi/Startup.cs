@@ -108,5 +108,7 @@ namespace WalletApi
             SeedAdmin.EnsurePopulated(app);
             SeedUser.EnsurePopulated(app);
         }
+
+        public partial class Program { }
     }
 }
