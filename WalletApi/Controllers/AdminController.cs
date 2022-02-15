@@ -165,10 +165,10 @@ namespace WalletApi.Controllers
         {
             var allTransactions = await _userService.GetAllTransactions();
 
-            if (allTransactions.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
+            if (allTransactions.Any())
+                return Ok(allTransactions);
 
-            return Ok(allTransactions);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
         }
 
         [HttpPatch("EditUser")]

@@ -47,10 +47,10 @@ namespace WalletApi.Controllers
         {
             var allUsers = await _userService.GetAllUsers();
 
-            if (allUsers.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
+            if (allUsers.Any())
+                return Ok(allUsers);
 
-            return Ok(allUsers);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
         }
 
         [HttpGet("GetAllCustomers")]
@@ -58,10 +58,10 @@ namespace WalletApi.Controllers
         {
             var allCustomers = await _userService.GetAllCustomers();
 
-            if (allCustomers.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Customers found" });
+            if (allCustomers.Any())
+                return Ok(allCustomers);
 
-            return Ok(allCustomers);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Customers found" });
         }
 
         [HttpGet("GetCustomers")]
@@ -69,10 +69,10 @@ namespace WalletApi.Controllers
         {
             var allCustomers = await _userService.GetCustomers();
 
-            if (allCustomers.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Customers found" });
+            if (allCustomers.Any())
+                return Ok(allCustomers);
 
-            return Ok(allCustomers);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Customers found" });
         }
 
         [HttpGet("GetAllAccounts")]
@@ -80,10 +80,10 @@ namespace WalletApi.Controllers
         {
             var allAccounts = await _accountService.GetAccounts();
 
-            if (allAccounts.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Accounts found" });
+            if (allAccounts.Any())
+                return Ok(allAccounts);
 
-            return Ok(allAccounts);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Accounts found" });
         }
 
         [HttpGet("GetUserByID")]
@@ -129,10 +129,10 @@ namespace WalletApi.Controllers
         {
             var allTransactions = await _userService.GetAllTransactions();
 
-            if (allTransactions.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
+            if (allTransactions.Any())
+                return Ok(allTransactions);
 
-            return Ok(allTransactions);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
         }
 
         [HttpGet("GetTotalNumberOfTransactions")]
@@ -151,10 +151,10 @@ namespace WalletApi.Controllers
         {
             var allRoles = await _userService.GetAllRoles();
 
-            if (allRoles.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Roles found" });
+            if (allRoles.Any())
+                return Ok(allRoles);
 
-            return Ok(allRoles);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Roles found" });
         }
 
         [HttpGet("Get Total Number of Roles")]
@@ -173,10 +173,10 @@ namespace WalletApi.Controllers
         {
             var allBills = await _userService.GetAllBills();
 
-            if (allBills.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Bills found" });
+            if (allBills.Any())
+                return Ok(allBills);
 
-            return Ok(allBills);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Bills found" });
         }
 
         [HttpGet("Get Total Number of Bills")]
@@ -195,10 +195,10 @@ namespace WalletApi.Controllers
         {
             var allAirTime = await _userService.GetAllAirTime();
 
-            if (allAirTime.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
+            if (allAirTime.Any())
+                return Ok(allAirTime);
 
-            return Ok(allAirTime);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
         }
 
         [HttpGet("Get Total Number of AirTime")]
@@ -217,10 +217,10 @@ namespace WalletApi.Controllers
         {
             var allData = await _userService.GetAllData();
 
-            if (allData.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Data found" });
+            if (allData.Any())
+                return Ok(allData);
 
-            return Ok(allData);
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Data found" });
         }
 
         [HttpGet("Get Total Number of Data")]

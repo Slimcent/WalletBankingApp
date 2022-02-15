@@ -36,6 +36,7 @@ namespace WalletApi.Controllers
 
             if (result.Success)
                 return Ok(result.Message);
+
             return BadRequest(result.Message);
         }
 
@@ -49,6 +50,7 @@ namespace WalletApi.Controllers
 
             if (result.Success)
                 return Ok(result.Message);
+
             return BadRequest(result.Message);
         }
 
@@ -60,6 +62,7 @@ namespace WalletApi.Controllers
 
             if (result.Success)
                 return Ok(result.Message);
+
             return BadRequest(result.Message);
         }
 
@@ -71,6 +74,7 @@ namespace WalletApi.Controllers
 
             if (result.Success)
                 return Ok(result.Message);
+
             return BadRequest(result.Message);
         }
 
@@ -82,6 +86,7 @@ namespace WalletApi.Controllers
 
             if (result.Success)
                 return Ok(result.Message);
+
             return BadRequest(result.Message);
         }
 
@@ -93,16 +98,22 @@ namespace WalletApi.Controllers
 
             if (result.Success)
                 return Ok(result.Message);
+
             return BadRequest(result.Message);
         }
 
-        //[HttpGet]
-        //public IActionResult GetUserTransactions(string id)
-        //{
-        //    var userId = _userManager.FindByIdAsync(HttpContext.User.GetUserId());
-        //    var transaction = _transactionService.GetTramsctionByAUser(userId.ToString());
+        [HttpGet]
+        public async Task<IActionResult> GetUserTransactions(string id)
+        {
+            //var userId = await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
 
-        //}
+            var transaction = _transactionService.GetTramsctionByAUser(id);
+
+            return Ok(transaction);
+
+
+
+        }
 
 
     }
