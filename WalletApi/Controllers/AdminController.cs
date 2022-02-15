@@ -11,6 +11,7 @@ using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.DataTransferObjects.IdentityUsers;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
+using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
 using Wallet.Entities.Models.CustomerToUser;
 using Wallet.Entities.Models.Domain;
@@ -55,7 +56,7 @@ namespace WalletApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(new ErrorDetails {StatusCode = 200, Message = $"User, {user.UserName} was Created Successfully" } );
+            return Ok(new ErrorDetails {Status = ResponseStatus.OK, Message = $"User, {user.UserName} was Created Successfully" } );
         }
 
         [HttpPost("CreateCustomer")]
@@ -72,7 +73,7 @@ namespace WalletApi.Controllers
             {
                 await _adminService.CreateCustomer(user.Id.ToString());
 
-                return Ok(new ErrorDetails { StatusCode = 200, Message = $"User, {user.UserName} was Created Successfully" });
+                return Ok(new ErrorDetails { Status = ResponseStatus.OK, Message = $"User, {user.UserName} was Created Successfully" });
             }
             return BadRequest(ModelState);
         }
@@ -143,7 +144,7 @@ namespace WalletApi.Controllers
             var allUsers = _userService.GetTotalNumberOfUsers().Count();
 
             if (allUsers <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Users found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
 
             return Ok(allUsers + " " + "Users");
         }
@@ -154,7 +155,7 @@ namespace WalletApi.Controllers
             var allUsers = await _userService.GetAllUsers();
 
             if (allUsers.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Users found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
 
             return Ok(allUsers);
         }
@@ -165,7 +166,7 @@ namespace WalletApi.Controllers
             var allTransactions = await _userService.GetAllTransactions();
 
             if (allTransactions.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Transactiions found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
 
             return Ok(allTransactions);
         }

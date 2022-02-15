@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
@@ -36,7 +37,7 @@ namespace WalletApi.Controllers
             var allUsers = _userService.GetTotalNumberOfUsers().Count();
 
             if (allUsers <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Users found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
 
             return Ok(allUsers + " " + "Users");
         }
@@ -47,7 +48,7 @@ namespace WalletApi.Controllers
             var allUsers = await _userService.GetAllUsers();
 
             if (allUsers.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Users found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
 
             return Ok(allUsers);
         }
@@ -58,7 +59,7 @@ namespace WalletApi.Controllers
             var allCustomers = await _userService.GetAllCustomers();
 
             if (allCustomers.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Customers found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Customers found" });
 
             return Ok(allCustomers);
         }
@@ -69,7 +70,7 @@ namespace WalletApi.Controllers
             var allCustomers = await _userService.GetCustomers();
 
             if (allCustomers.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 400, Message = $"0 Customers found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Customers found" });
 
             return Ok(allCustomers);
         }
@@ -80,7 +81,7 @@ namespace WalletApi.Controllers
             var allAccounts = await _accountService.GetAccounts();
 
             if (allAccounts.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 400, Message = $"0 Accounts found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Accounts found" });
 
             return Ok(allAccounts);
         }
@@ -129,7 +130,7 @@ namespace WalletApi.Controllers
             var allTransactions = await _userService.GetAllTransactions();
 
             if (allTransactions.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Transactiions found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
 
             return Ok(allTransactions);
         }
@@ -140,7 +141,7 @@ namespace WalletApi.Controllers
             var numberOfTransactions = _userService.GetTotalNumberOfTransactions().Count();
 
             if (numberOfTransactions <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Transactiions found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
 
             return Ok(numberOfTransactions +" " + "Transactions");
         }
@@ -151,7 +152,7 @@ namespace WalletApi.Controllers
             var allRoles = await _userService.GetAllRoles();
 
             if (allRoles.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Roles found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Roles found" });
 
             return Ok(allRoles);
         }
@@ -162,7 +163,7 @@ namespace WalletApi.Controllers
             var numberOfRoles = _userService.GetTotalNumberOfRoles().Count();
 
             if (numberOfRoles <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Roles found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Roles found" });
 
             return Ok(numberOfRoles + " " + "Roles");
         }
@@ -173,7 +174,7 @@ namespace WalletApi.Controllers
             var allBills = await _userService.GetAllBills();
 
             if (allBills.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Bills found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Bills found" });
 
             return Ok(allBills);
         }
@@ -184,7 +185,7 @@ namespace WalletApi.Controllers
             var numberOfBills = _userService.GetTotalNumberOfBills().Count();
 
             if (numberOfBills <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Bills found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Bills found" });
 
             return Ok(numberOfBills + " " + "Bills");
         }
@@ -195,7 +196,7 @@ namespace WalletApi.Controllers
             var allAirTime = await _userService.GetAllAirTime();
 
             if (allAirTime.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 AirTime found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
 
             return Ok(allAirTime);
         }
@@ -206,7 +207,7 @@ namespace WalletApi.Controllers
             var numberOfAirTime = _userService.GetTotalNumberOfAirTime().Count();
 
             if (numberOfAirTime <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 AirTime found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
 
             return Ok(numberOfAirTime + " " + "AirTime");
         }
@@ -217,7 +218,7 @@ namespace WalletApi.Controllers
             var allData = await _userService.GetAllData();
 
             if (allData.Count() <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Data found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Data found" });
 
             return Ok(allData);
         }
@@ -228,7 +229,7 @@ namespace WalletApi.Controllers
             var numberOfData = _userService.GetTotalNumberOfData().Count();
 
             if (numberOfData <= 0)
-                return BadRequest(new ErrorDetails { StatusCode = 404, Message = $"0 Data found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Data found" });
 
             return Ok(numberOfData + " " + "Data");
         }
