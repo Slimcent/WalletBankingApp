@@ -73,7 +73,12 @@ namespace WalletApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WalletApi v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WalletApi v1");
+                    c.InjectStylesheet("/css/swagger-dark-theme.css");
+                });
+                
             }
             else
             {
@@ -103,6 +108,10 @@ namespace WalletApi
             {
                 endpoints.MapControllers();
             });
+
+            app.UseStaticFiles();
+
+            //app.InitialSwagger();
 
             SeedRole.EnsurePopulated(app);
             SeedAdmin.EnsurePopulated(app);

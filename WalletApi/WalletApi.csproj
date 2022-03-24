@@ -25,4 +25,9 @@
     <ProjectReference Include="..\Wallet.Services\Wallet.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>
