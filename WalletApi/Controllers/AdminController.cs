@@ -38,13 +38,10 @@ namespace WalletApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("CreateUser")]
+        [HttpPost("create-user")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        //[ServiceFilter(typeof(ExistingEmailValidation))]
         public async Task<IActionResult> CreateUser([FromBody] AddUserDto user)
         {
-            //var existingEmail = HttpContext.Items["email"] as User;
-
             var result = await _adminService.Add(user);
 
             if (!result.Item1.Succeeded)
@@ -59,7 +56,7 @@ namespace WalletApi.Controllers
             return Ok(new ErrorDetails {Status = ResponseStatus.OK, Message = $"User, {user.UserName} was Created Successfully" } );
         }
 
-        [HttpPost("CreateCustomer")]
+        [HttpPost("create-customer")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> CreateCustomer([FromBody] AddCustomerDto model)
         {
@@ -78,7 +75,7 @@ namespace WalletApi.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPost("AddRole")]
+        [HttpPost("create-role")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddRole([FromBody] AddRoleDto model)
         {
@@ -90,7 +87,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("AddUserToRole")]
+        [HttpPost("add-user-to-role")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddUserToRole([FromBody] AddUserToRoleDto model)
         {
@@ -102,7 +99,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("AddBill")]
+        [HttpPost("create-bill")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddBill([FromBody] AddBillDto model)
         {
@@ -114,7 +111,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("AddAirTime")]
+        [HttpPost("create-airtime")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddAirTime([FromBody] AddNetworkProviderDto model)
         {
@@ -126,7 +123,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("AddData")]
+        [HttpPost("create-data")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddData([FromBody] AddNetworkProviderDto model)
         {
@@ -138,29 +135,29 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet("GetTotalNumberOfUsers")]
+        [HttpGet("total-number-of-users")]
         public IActionResult GetTotalNumberOfUsers()
         {
             var allUsers = _userService.GetTotalNumberOfUsers().Count();
 
             if (allUsers <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 User found" });
 
-            return Ok(allUsers + " " + "Users");
+            return Ok($"{allUsers} Users");
         }
 
-        [HttpGet("GetAllUsers")]
+        [HttpGet("all-users")]
         public async Task<IActionResult> GetAllUsers()
         {
             var allUsers = await _userService.GetAllUsers();
 
-            if (allUsers.Count() <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
+            if (allUsers.Any())
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Users found" });
 
             return Ok(allUsers);
         }
 
-        [HttpGet("GetAllTransactions")]
+        [HttpGet("all-transactions")]
         public async Task<IActionResult> GetAllTransactions()
         {
             var allTransactions = await _userService.GetAllTransactions();
@@ -168,10 +165,10 @@ namespace WalletApi.Controllers
             if (allTransactions.Any())
                 return Ok(allTransactions);
 
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Transactiions found" });
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Transactiions found" });
         }
 
-        [HttpPatch("EditUser")]
+        [HttpPatch("edit-user")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
         {
@@ -183,7 +180,7 @@ namespace WalletApi.Controllers
             return BadRequest(user.Message);
         }
 
-        [HttpPatch("EditRole")]
+        [HttpPatch("edit-role")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
         {
@@ -195,7 +192,7 @@ namespace WalletApi.Controllers
             return BadRequest(role.Message);
         }
 
-        [HttpPatch("EditBill")]
+        [HttpPatch("edit-bill")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
         {
@@ -207,7 +204,7 @@ namespace WalletApi.Controllers
             return BadRequest(bill.Message);
         }
 
-        [HttpPatch("EditAirtime")]
+        [HttpPatch("edit-airtime")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
         {
@@ -219,7 +216,7 @@ namespace WalletApi.Controllers
             return BadRequest(airTime.Message);
         }
 
-        [HttpPatch("EditData")]
+        [HttpPatch("edit-data")]
         public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
         {
             var data = await _adminService.EditData(Id, model);
@@ -230,7 +227,7 @@ namespace WalletApi.Controllers
             return BadRequest(data.Message);
         }
 
-        [HttpDelete("DeleteUserByEmail")]
+        [HttpDelete("delete-user-by-email")]
         public async Task<IActionResult> DeleteUserByEmail(string email)
         {
             var user = await _adminService.DeleteUserByEmail(email);
@@ -241,7 +238,7 @@ namespace WalletApi.Controllers
             return BadRequest(user.Message);
         }
 
-        [HttpDelete("DeleteRoleByName")]
+        [HttpDelete("delete-role-by-name")]
         public async Task<IActionResult> DeleteRoleByName(string name)
         {
             var role = await _adminService.DeleteRoleByName(name);
@@ -252,7 +249,7 @@ namespace WalletApi.Controllers
             return BadRequest(role.Message);
         }
 
-        [HttpDelete("DeleteBillByName")]
+        [HttpDelete("delete-bill-by-name")]
         public async Task<IActionResult> DeleteBillByName(string name)
         {
             var bill = await _adminService.DeleteBillByName(name);
@@ -263,7 +260,7 @@ namespace WalletApi.Controllers
             return BadRequest(bill.Message);
         }
 
-        [HttpDelete("DeleteAirTimeByName")]
+        [HttpDelete("delete-airtime-by-name")]
         public async Task<IActionResult> DeleteAirTimeByName(string name)
         {
             var airTime = await _adminService.DeleteAirTimeByName(name);
@@ -274,7 +271,7 @@ namespace WalletApi.Controllers
             return BadRequest(airTime.Message);
         }
 
-        [HttpDelete("DeleteDataByName")]
+        [HttpDelete("delete-data-by-name")]
         public async Task<IActionResult> DeleteDataByName(string name)
         {
             var data = await _adminService.DeleteDataByName(name);

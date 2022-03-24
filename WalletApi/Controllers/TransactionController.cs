@@ -13,7 +13,7 @@ using WalletApi.Middlewares;
 
 namespace WalletApi.Controllers
 {
-    [Route("api/Customer")]
+    [Route("api/customer")]
     [ApiController]
     public class TransactionController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace WalletApi.Controllers
             _transactionService = customerService;
         }
 
-        [HttpPost("Deposit")]
+        [HttpPost("deposit")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> Deposit([FromBody] DepositDto model)
         {
@@ -40,7 +40,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Withdraw")]
+        [HttpPost("withdraw")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> Withdraw([FromBody] WithdrawalDto model)
         {
@@ -54,7 +54,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Transfer")]
+        [HttpPost("transfer")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> Transfer([FromBody] TransferDto model)
         {
@@ -66,7 +66,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Pay Bill")]
+        [HttpPost("pay-bill")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> PayBill([FromBody] PayBillDto model)
         {
@@ -78,7 +78,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Buy AirTime")]
+        [HttpPost("buy-airTime")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> BuyAirTime([FromBody] BuyAirTimeDto model)
         {
@@ -90,7 +90,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("Buy Data")]
+        [HttpPost("buy-data")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> BuyData([FromBody] BuyDataDto model)
         {
