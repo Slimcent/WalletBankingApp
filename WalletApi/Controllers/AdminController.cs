@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -11,7 +10,6 @@ using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
 using Wallet.Entities.Models.CustomerToUser;
-using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Services.Interfaces;
 using WalletApi.ActionFilters;
