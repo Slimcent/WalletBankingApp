@@ -15,12 +15,12 @@ namespace WalletApi.Controllers
 {
     [Route("api/login")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class Authentication : ControllerBase
     {
         private readonly ILoggerMessage _logger;
         private readonly UserManager<User> _userManager;
         private readonly IAuthenticationManager _authManager;
-        public LoginController(ILoggerMessage logger, UserManager<User> userManager, IAuthenticationManager authManager)
+        public Authentication(ILoggerMessage logger, UserManager<User> userManager, IAuthenticationManager authManager)
         {
             _logger = logger;
             _userManager = userManager;
@@ -29,11 +29,11 @@ namespace WalletApi.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> Authenticate([FromBody] LoginDto user)
+        public async Task<IActionResult> Login([FromBody] LoginDto user)
         {
             if (!await _authManager.ValidateUser(user))
             {
-                _logger.LogWarn($"{nameof(Authenticate)}: Authentication failed. Invalid user name or password.");
+                _logger.LogWarn($"{nameof(Login)}: Authentication failed. Invalid user name or password.");
 
                 return Unauthorized();
             }

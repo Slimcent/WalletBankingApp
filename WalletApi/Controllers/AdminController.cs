@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects;
@@ -25,17 +22,13 @@ namespace WalletApi.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly IAdminService _adminService;
         private readonly IUserService _userService;
-        private readonly ILoggerMessage _logger;
         
-        public AdminController(UserManager<User> userManager, IAdminService adminService, IUserService userService, ILoggerMessage logger)
+        public AdminController(IAdminService adminService, IUserService userService, ILoggerMessage logger)
         {
-            _userManager = userManager;
             _adminService = adminService;
             _userService = userService;
-            _logger = logger;
         }
 
         [HttpPost("create-user")]

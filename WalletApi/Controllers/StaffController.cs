@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Enumerators;
@@ -10,7 +7,6 @@ using Wallet.Entities.GobalError;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Services.Interfaces;
-using WalletApi.ActionFilters;
 
 namespace WalletApi.Controllers
 {
@@ -18,17 +14,14 @@ namespace WalletApi.Controllers
     [ApiController]
     public class StaffController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         private readonly IAccountService _accountService;
-        private readonly ILoggerMessage _logger;
-        public StaffController(UserManager<User> userManager, IUserService userService,
+       
+        public StaffController(IUserService userService,
            IAccountService accountService, ILoggerMessage logger)
         {
-            _userManager = userManager;
             _userService = userService;
             _accountService = accountService;
-            _logger = logger;
         }
 
         [HttpGet("total-number-of-users")]

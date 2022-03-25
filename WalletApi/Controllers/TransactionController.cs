@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Interfaces;
 using WalletApi.ActionFilters;
-using WalletApi.Middlewares;
 
 namespace WalletApi.Controllers
 {
@@ -17,12 +12,10 @@ namespace WalletApi.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly ITransactionService _transactionService;
 
-        public TransactionController(UserManager<User> userManager, ITransactionService customerService)
+        public TransactionController(ITransactionService customerService)
         {
-            _userManager = userManager;
             _transactionService = customerService;
         }
 
@@ -110,9 +103,6 @@ namespace WalletApi.Controllers
             var transaction = _transactionService.GetTramsctionByAUser(id);
 
             return Ok(transaction);
-
-
-
         }
 
 
