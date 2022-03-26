@@ -103,18 +103,7 @@ namespace WalletApi.Controllers
         }
 
         
-        [HttpPost("create-data")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddData([FromBody] AddNetworkProviderDto model)
-        {
-            var result = await _adminService.AddData(model);
-
-            if (result.Success)
-                return Ok(result.Message);
-
-            return BadRequest(result.Message);
-        }
-
+        
         [HttpGet("total-number-of-users")]
         public IActionResult GetTotalNumberOfUsers()
         {
@@ -174,17 +163,7 @@ namespace WalletApi.Controllers
         }
 
         
-        [HttpPatch("edit-data")]
-        public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
-        {
-            var data = await _adminService.EditData(Id, model);
-
-            if (data.Success)
-                return Ok(data.Message);
-
-            return BadRequest(data.Message);
-        }
-
+        
         [HttpDelete("delete-user-by-email")]
         public async Task<IActionResult> DeleteUserByEmail(string email)
         {
@@ -216,18 +195,6 @@ namespace WalletApi.Controllers
                 return Ok(bill.Message);
 
             return BadRequest(bill.Message);
-        }
-
-       
-        [HttpDelete("delete-data-by-name")]
-        public async Task<IActionResult> DeleteDataByName(string name)
-        {
-            var data = await _adminService.DeleteDataByName(name);
-
-            if (data.Success)
-                return Ok(data.Message);
-
-            return BadRequest(data.Message);
         }
     }
 }

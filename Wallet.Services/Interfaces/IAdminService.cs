@@ -23,17 +23,17 @@ namespace Wallet.Services.Interfaces
         Task<Response> DeleteRole(string name);
         Task<Response> AddBill(AddBillDto model);
        
-        Task<Response> AddData(AddNetworkProviderDto model);
+        
         Task CreateCustomer(string userId);
         Task<Response> EditUser(string Id, JsonPatchDocument<PatchUserDto> model);
         Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model);
        
-        Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model);
+        
         Task<Response> DeleteUserByEmail(string email);
         Task<Response> DeleteRoleByName(string name);
         Task<Response> DeleteBillByName(string name);
         
-        Task<Response> DeleteDataByName(string name);
+       
         Task<Response> DeleteUserById(string Id);
     }
 }

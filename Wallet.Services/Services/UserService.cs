@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.GobalMessage;
@@ -16,11 +13,9 @@ namespace Wallet.Services.Services
     public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepo;
-        private readonly IRepository<Role> _roleRepo;
         private readonly IRepository<Transaction> _transactionRepo;
         private readonly IRepository<BillPayment> _billRepo;
-        private readonly IRepository<AirTime> _airTimeRepo;
-        private readonly IRepository<BuyData> _dataRepo;
+        private readonly IRepository<Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IRepository<Account> _accountRepo;
         private readonly IServiceFactory _serviceFactory;
@@ -30,13 +25,11 @@ namespace Wallet.Services.Services
         {
             
             _userRepo = unitOfWork.GetRepository<User>();
-            _roleRepo = unitOfWork.GetRepository<Role>();
             _customerRepo = unitOfWork.GetRepository<Customer>();
             _accountRepo = unitOfWork.GetRepository<Account>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<BillPayment>();
-            _airTimeRepo = unitOfWork.GetRepository<AirTime>();
-            _dataRepo = unitOfWork.GetRepository<BuyData>();
+            _dataRepo = unitOfWork.GetRepository<Data>();
             _serviceFactory = serviceFactory;
             _mapper = mapper;
         }
@@ -85,19 +78,6 @@ namespace Wallet.Services.Services
             return _billRepo.GetAll();
         }
 
-        public async Task<IEnumerable<AllDataDto>> GetAllData()
-        {
-            var allData = await _dataRepo.GetAllAsync();
-
-            var dataDto = _mapper.Map<IEnumerable<AllDataDto>>(allData);
-
-            return dataDto;
-        }
-
-        public IEnumerable<BuyData> GetTotalNumberOfData()
-        {
-            return _dataRepo.GetAll();
-        }
         public Task<IEnumerable<Customer>> GetCustomersAsync()
         {
             throw new NotImplementedException();

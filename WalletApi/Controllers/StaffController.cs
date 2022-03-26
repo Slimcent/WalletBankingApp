@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
-using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Services.Interfaces;
 
@@ -160,29 +158,6 @@ namespace WalletApi.Controllers
                 return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Bills found" });
 
             return Ok($"{numberOfBills} Bills");
-        }
-
-       
-        [HttpGet("all-data")]
-        public async Task<IActionResult> GetAllData()
-        {
-            var allData = await _userService.GetAllData();
-
-            if (allData.Any())
-                return Ok(allData);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Data found" });
-        }
-
-        [HttpGet("total-number-of-data")]
-        public IActionResult GetTotalNumberOfData()
-        {
-            var numberOfData = _userService.GetTotalNumberOfData().Count();
-
-            if (numberOfData <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Data found" });
-
-            return Ok($"{numberOfData} Data");
         }
     }
 }

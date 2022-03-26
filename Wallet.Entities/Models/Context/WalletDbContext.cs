@@ -73,7 +73,7 @@ namespace Wallet.Entities.Models.Context
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<BillPayment> Bills { get; set; }
         public DbSet<AirTime> AirTimes { get; set; }
-        public DbSet<BuyData> Data { get; set; }
+        public DbSet<Domain.Data> Data { get; set; }
         public DbSet<StampDutyCharge> StampDutyCharges { get; set; }
     }
 }

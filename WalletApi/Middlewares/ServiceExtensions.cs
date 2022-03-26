@@ -15,6 +15,7 @@ using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Repository.Interfaces;
 using Wallet.Repository.Repositories;
+using Wallet.Services;
 using Wallet.Services.Interfaces;
 using Wallet.Services.Services;
 
@@ -47,6 +48,7 @@ namespace WalletApi.Middlewares
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAirTimeService, AirTimeService>();
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IDataService, DataService>();
             services.AddTransient<IServiceFactory, ServiceFactory>();
 
             return services;

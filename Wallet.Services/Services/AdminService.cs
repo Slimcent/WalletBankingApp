@@ -1,21 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wallet.Entities.Models.Domain;
 using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
-using Wallet.Logger;
 using Wallet.Entities.DataTransferObjects;
-using Wallet.Entities.GobalError;
 using Wallet.Entities.Models.CustomerToUser;
 using Wallet.Services.Helpers;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.DataTransferObjects.IdentityUsers;
 using Wallet.Entities.DataTransferObjects.Transaction;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
-using System.Linq;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Microsoft.AspNetCore.JsonPatch;
 using Wallet.Services.Exceptions;
@@ -28,10 +23,8 @@ namespace Wallet.Services.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
-        private readonly IRepository<Transaction> _transactionRepo;
         private readonly IRepository<BillPayment> _billRepo;
-        private readonly IRepository<AirTime> _airTimeRepo;
-        private readonly IRepository<BuyData> _dataRepo;
+        private readonly IRepository<Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
@@ -47,10 +40,8 @@ namespace Wallet.Services.Services
             _userRepo = unitOfWork.GetRepository<User>();
             _roleRepo = unitOfWork.GetRepository<Role>();
             _customerRepo = unitOfWork.GetRepository<Customer>();
-            _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<BillPayment>();
-            _airTimeRepo = unitOfWork.GetRepository<AirTime>();
-            _dataRepo = unitOfWork.GetRepository<BuyData>();
+            _dataRepo = unitOfWork.GetRepository<Data>();
             _serviceFactory = serviceFactory;
             _mapper = mapper;
         }
@@ -190,19 +181,7 @@ namespace Wallet.Services.Services
         }
 
         
-        public async Task<Response> AddData(AddNetworkProviderDto model)
-        {
-            var existingData = _dataRepo.GetSingleByCondition(predicate: d => d.NetworkProvider == model.NetworkProvider.Trim().ToLower());
-            if(existingData != null)
-                return new Response(false, "Network Provider name already Exist");
-
-            var dataDto = _mapper.Map<BuyData>(model);
-
-            await _dataRepo.AddAsync(dataDto);
-
-            return new Response(true, $"Network Provider Name {model.NetworkProvider} has been added Successfully!");
-        }
-
+        
         public async Task<Response> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
         {
             var user = await _userRepo.GetByIdAsync(Id);
@@ -251,26 +230,7 @@ namespace Wallet.Services.Services
         }
 
         
-        public async Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
-        {
-            var data = await _dataRepo.GetByIdAsync(Id);
-
-            if (data is null)
-                return new Response(false, "Data does not Exist");
-
-            var dataDto = new PatchDataDto
-            {
-                NetworkProvider = data.NetworkProvider
-            };
-
-            model.ApplyTo(dataDto);
-
-            _mapper.Map(dataDto, data);
-
-            _dataRepo.Update(data);
-
-            return new Response(true, $"Data Updated Successfully, see Details below \nNetwork Name : {data.NetworkProvider}");
-        }
+       
 
         public async Task<Response> DeleteUserByEmail(string email)
         {
@@ -309,18 +269,7 @@ namespace Wallet.Services.Services
         }
 
         
-        public async Task<Response> DeleteDataByName(string name)
-        {
-            var data = _dataRepo.GetSingleByCondition(d => d.NetworkProvider == name.Trim().ToLower());
-
-            if (data is null)
-                return new Response(false, "Data does not Exist");
-
-            _dataRepo.Delete(data);
-
-            return new Response(true, $"Data with Name {data.NetworkProvider} has been deleted Successfully");
-        }
-
+        
         public Task<Response> DeleteUserById(string Id)
         {
             throw new NotImplementedException();
