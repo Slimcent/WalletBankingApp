@@ -19,8 +19,6 @@ namespace Wallet.Services.Interfaces
         Task<IEnumerable<CustomerAccountDto>> GetCustomers();
         Task<IEnumerable<AllTransactionsDto>> GetAllTransactions();
         IEnumerable<Transaction> GetTotalNumberOfTransactions();       
-        Task<IEnumerable<AllBillsDto>> GetAllBills();
-        IEnumerable<BillPayment> GetTotalNumberOfBills();
         Task<IEnumerable<Customer>> GetCustomersAsync();
         Task<Customer> GetSingleCustomer(Guid id);
     }

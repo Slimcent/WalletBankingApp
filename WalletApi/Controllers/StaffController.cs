@@ -136,28 +136,5 @@ namespace WalletApi.Controllers
 
             return Ok($"{numberOfTransactions} Transactions");
         }
-
-               
-        [HttpGet("all-bills")]
-        public async Task<IActionResult> GetAllBills()
-        {
-            var allBills = await _userService.GetAllBills();
-
-            if (allBills.Any())
-                return Ok(allBills);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Bills found" });
-        }
-
-        [HttpGet("total-number-of-bills")]
-        public IActionResult GetTotalNumberOfBills()
-        {
-            var numberOfBills = _userService.GetTotalNumberOfBills().Count();
-
-            if (numberOfBills <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Bills found" });
-
-            return Ok($"{numberOfBills} Bills");
-        }
     }
 }

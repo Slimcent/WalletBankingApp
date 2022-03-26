@@ -90,19 +90,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("create-bill")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddBill([FromBody] AddBillDto model)
-        {
-            var result = await _adminService.AddBill(model);
-
-            if (result.Success)
-                return Ok(result.Message);
-
-            return BadRequest(result.Message);
-        }
-
-        
+              
         
         [HttpGet("total-number-of-users")]
         public IActionResult GetTotalNumberOfUsers()
@@ -147,22 +135,7 @@ namespace WalletApi.Controllers
                 return Ok(user.Message);
 
             return BadRequest(user.Message);
-        }
-
-        
-        [HttpPatch("edit-bill")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
-        {
-            var bill = await _adminService.EditBill(Id, model);
-
-            if (bill.Success)
-                return Ok(bill.Message);
-
-            return BadRequest(bill.Message);
-        }
-
-        
+        }      
         
         [HttpDelete("delete-user-by-email")]
         public async Task<IActionResult> DeleteUserByEmail(string email)
@@ -184,17 +157,6 @@ namespace WalletApi.Controllers
                 return Ok(role.Message);
 
             return BadRequest(role.Message);
-        }
-
-        [HttpDelete("delete-bill-by-name")]
-        public async Task<IActionResult> DeleteBillByName(string name)
-        {
-            var bill = await _adminService.DeleteBillByName(name);
-
-            if (bill.Success)
-                return Ok(bill.Message);
-
-            return BadRequest(bill.Message);
         }
     }
 }

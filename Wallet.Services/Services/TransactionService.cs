@@ -16,7 +16,7 @@ namespace Wallet.Services.Services
         private readonly IServiceFactory _serviceFactory;
         private readonly IRepository<Transaction> _transactionRepo;
         private readonly IRepository<Account> _accountRepo;
-        private readonly IRepository<BillPayment> _billRepo;
+        private readonly IRepository<Bill> _billRepo;
         private readonly IRepository<AirTime> _airTimeRepo;
         private readonly IMapper _mapper;
 
@@ -24,7 +24,7 @@ namespace Wallet.Services.Services
         {
             _accountRepo = unitOfWork.GetRepository<Account>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
-            _billRepo = unitOfWork.GetRepository<BillPayment>();
+            _billRepo = unitOfWork.GetRepository<Bill>();
             _airTimeRepo = unitOfWork.GetRepository<AirTime>();
             _mapper = mapper;
             _serviceFactory = serviceFactory;

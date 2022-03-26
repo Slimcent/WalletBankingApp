@@ -14,7 +14,7 @@ namespace Wallet.Services.Services
     {
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Transaction> _transactionRepo;
-        private readonly IRepository<BillPayment> _billRepo;
+        private readonly IRepository<Bill> _billRepo;
         private readonly IRepository<Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IRepository<Account> _accountRepo;
@@ -28,7 +28,7 @@ namespace Wallet.Services.Services
             _customerRepo = unitOfWork.GetRepository<Customer>();
             _accountRepo = unitOfWork.GetRepository<Account>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
-            _billRepo = unitOfWork.GetRepository<BillPayment>();
+            _billRepo = unitOfWork.GetRepository<Bill>();
             _dataRepo = unitOfWork.GetRepository<Data>();
             _serviceFactory = serviceFactory;
             _mapper = mapper;
@@ -64,20 +64,7 @@ namespace Wallet.Services.Services
             return _transactionRepo.GetAll();
         }
 
-        public async Task<IEnumerable<AllBillsDto>> GetAllBills()
-        {
-            var allBills = await _billRepo.GetAllAsync();
-
-            var billsDto = _mapper.Map<IEnumerable<AllBillsDto>>(allBills);
-
-            return billsDto;
-        }
-
-        public IEnumerable<BillPayment> GetTotalNumberOfBills()
-        {
-            return _billRepo.GetAll();
-        }
-
+        
         public Task<IEnumerable<Customer>> GetCustomersAsync()
         {
             throw new NotImplementedException();

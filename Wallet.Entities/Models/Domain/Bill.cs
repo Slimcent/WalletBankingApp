@@ -5,7 +5,7 @@ using Wallet.Entities.Interfaces;
 
 namespace Wallet.Entities.Models.Domain
 {
-    public class BillPayment : ITracker
+    public class Bill : ITracker
     {
         [Key]
         public Guid Id { get; set; }

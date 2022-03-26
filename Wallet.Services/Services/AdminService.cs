@@ -23,7 +23,7 @@ namespace Wallet.Services.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
-        private readonly IRepository<BillPayment> _billRepo;
+        private readonly IRepository<Bill> _billRepo;
         private readonly IRepository<Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IMapper _mapper;
@@ -40,7 +40,7 @@ namespace Wallet.Services.Services
             _userRepo = unitOfWork.GetRepository<User>();
             _roleRepo = unitOfWork.GetRepository<Role>();
             _customerRepo = unitOfWork.GetRepository<Customer>();
-            _billRepo = unitOfWork.GetRepository<BillPayment>();
+            _billRepo = unitOfWork.GetRepository<Bill>();
             _dataRepo = unitOfWork.GetRepository<Data>();
             _serviceFactory = serviceFactory;
             _mapper = mapper;
@@ -167,20 +167,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"Role, {role.Name} has been deleted successfully!");
         }
 
-        public async Task<Response> AddBill(AddBillDto model)
-        {
-            var existingBill = _billRepo.GetSingleByCondition(b => b.BillName == model.BillName.Trim().ToLower());
-            if(existingBill != null)
-                return new Response(false, "Bill Name already Exist");
-
-            var billDto = _mapper.Map<BillPayment>(model);
-                        
-            await _billRepo.AddAsync(billDto);
-
-            return new Response(true, $"Bill Name {model.BillName} and Amount {model.Amount} has been added Successfully!");
-        }
-
-        
+                
         
         public async Task<Response> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
         {
@@ -207,29 +194,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"User Updated Successfully, see Details below\n Fullname : {user.FullName} \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber}");
         }
 
-        public async Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
-        {
-            var bill = await _billRepo.GetByIdAsync(Id);
-
-            if (bill is null)
-                return new Response(false, "Bill does not Exist");
-
-            var billDto = new PatchBillDto
-            {
-                BillName = bill.BillName,
-                Amount = bill.Amount
-            };
-
-            model.ApplyTo(billDto);
-
-            _mapper.Map(billDto, bill);
-
-            _billRepo.Update(bill);
-
-            return new Response(true, $"Bill Updated Successfully, see Details below\nBill Name : {bill.BillName} \nAmount : {bill.Amount}");
-        }
-
-        
+              
        
 
         public async Task<Response> DeleteUserByEmail(string email)
@@ -256,19 +221,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"Role with Name {role.Name} has been deleted Successfully");
         }
 
-        public async Task<Response> DeleteBillByName(string name)
-        {
-            var bill = _billRepo.GetSingleByCondition(b => b.BillName == name.Trim().ToLower());
-
-            if (bill is null)
-                return new Response(false, "Bill does not Exist");
-
-            _billRepo.Delete(bill);
-
-            return new Response(true, $"Bill with Name {bill.BillName} And Amount {bill.Amount} has been deleted Successfully");
-        }
-
-        
+               
         
         public Task<Response> DeleteUserById(string Id)
         {

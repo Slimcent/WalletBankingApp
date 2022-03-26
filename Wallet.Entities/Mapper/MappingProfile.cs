@@ -17,7 +17,7 @@ namespace Wallet.Entities.Mapper
             CreateMap<User, AllUsersDto>();
             CreateMap<Transaction, AllTransactionsDto>();
             CreateMap<Role, AllRolesDto>();
-            CreateMap<BillPayment, AllBillsDto>();
+            CreateMap<Bill, AllBillsDto>();
             CreateMap<AirTime, AllAirTimeDto>();
             CreateMap<Models.Domain.Data, AllDataDto>();
             CreateMap<Customer, CustomerAccountDto>()
@@ -29,13 +29,13 @@ namespace Wallet.Entities.Mapper
                 .ForMember(dest => dest.WalletID, opt => opt.MapFrom(src => src.Account.WalletID))
                 .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.Account.Balance));
             CreateMap<AddRoleDto, Role>();
-            CreateMap<AddBillDto, BillPayment>();
+            CreateMap<AddBillDto, Bill>();
             CreateMap<AddNetworkProviderDto, Models.Domain.Data>();
             CreateMap<AddNetworkProviderDto, AirTime>();
             CreateMap<DepositTransactionDto, Transaction>();
             CreateMap<PatchUserDto, User>();
             CreateMap<PatchRoleDto, Role>();
-            CreateMap<PatchBillDto, BillPayment>();
+            CreateMap<PatchBillDto, Bill>();
             CreateMap<PatchAirTimeDto, AirTime>();
             CreateMap<PatchDataDto, Models.Domain.Data>();
         }
