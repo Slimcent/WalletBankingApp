@@ -45,6 +45,8 @@ namespace WalletApi.Middlewares
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAirTimeService, AirTimeService>();
+            services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IServiceFactory, ServiceFactory>();
 
             return services;

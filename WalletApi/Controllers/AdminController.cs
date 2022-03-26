@@ -102,18 +102,7 @@ namespace WalletApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("create-airtime")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddAirTime([FromBody] AddNetworkProviderDto model)
-        {
-            var result = await _adminService.AddAirTime(model);
-
-            if (result.Success)
-                return Ok(result.Message);
-
-            return BadRequest(result.Message);
-        }
-
+        
         [HttpPost("create-data")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> AddData([FromBody] AddNetworkProviderDto model)
@@ -171,18 +160,7 @@ namespace WalletApi.Controllers
             return BadRequest(user.Message);
         }
 
-        [HttpPatch("edit-role")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
-        {
-            var role = await _adminService.EditRole(Id, model);
-
-            if (role.Success)
-                return Ok(role.Message);
-
-            return BadRequest(role.Message);
-        }
-
+        
         [HttpPatch("edit-bill")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
@@ -195,18 +173,7 @@ namespace WalletApi.Controllers
             return BadRequest(bill.Message);
         }
 
-        [HttpPatch("edit-airtime")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
-        {
-            var airTime = await _adminService.EditAirTime(Id, model);
-
-            if (airTime.Success)
-                return Ok(airTime.Message);
-
-            return BadRequest(airTime.Message);
-        }
-
+        
         [HttpPatch("edit-data")]
         public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
         {
@@ -251,17 +218,7 @@ namespace WalletApi.Controllers
             return BadRequest(bill.Message);
         }
 
-        [HttpDelete("delete-airtime-by-name")]
-        public async Task<IActionResult> DeleteAirTimeByName(string name)
-        {
-            var airTime = await _adminService.DeleteAirTimeByName(name);
-
-            if (airTime.Success)
-                return Ok(airTime.Message);
-
-            return BadRequest(airTime.Message);
-        }
-
+       
         [HttpDelete("delete-data-by-name")]
         public async Task<IActionResult> DeleteDataByName(string name)
         {

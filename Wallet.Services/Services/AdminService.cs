@@ -189,19 +189,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"Bill Name {model.BillName} and Amount {model.Amount} has been added Successfully!");
         }
 
-        public async Task<Response> AddAirTime(AddNetworkProviderDto model)
-        {
-            var existingAirTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
-            if(existingAirTime != null)
-                return new Response(false, "Network Provider name already Exist");
-
-            var airTimeDdto = _mapper.Map<AirTime>(model);
-
-            await _airTimeRepo.AddAsync(airTimeDdto);
-
-            return new Response(true, $"{model.NetworkProvider} has been added Successfully!");
-        }
-
+        
         public async Task<Response> AddData(AddNetworkProviderDto model)
         {
             var existingData = _dataRepo.GetSingleByCondition(predicate: d => d.NetworkProvider == model.NetworkProvider.Trim().ToLower());
@@ -240,27 +228,6 @@ namespace Wallet.Services.Services
             return new Response(true, $"User Updated Successfully, see Details below\n Fullname : {user.FullName} \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber}");
         }
 
-        public async Task<Response> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
-        {
-            var role = await _roleManager.FindByIdAsync(Id);
-
-            if (role is null)
-                return new Response(false, "Role does not exist");
-
-            var roleDto = new PatchRoleDto
-            {
-                Name = role.Name
-            };
-
-            model.ApplyTo(roleDto);
-
-            _mapper.Map(roleDto, role);
-
-            await _roleManager.UpdateAsync(role);
-
-            return new Response(true, $"Role Updated Successfully, see Details below\nRole Name : {role.Name}");
-        }
-
         public async Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)
         {
             var bill = await _billRepo.GetByIdAsync(Id);
@@ -283,27 +250,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"Bill Updated Successfully, see Details below\nBill Name : {bill.BillName} \nAmount : {bill.Amount}");
         }
 
-        public async Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
-        {
-            var airTime = await _airTimeRepo.GetByIdAsync(Id);
-
-            if (airTime is null)
-                return new Response(false, "ArTime does not Exist");
-
-            var airTimeDto = new PatchAirTimeDto
-            {
-                NetworkProvider = airTime.NetworkProvider
-            };
-
-            model.ApplyTo(airTimeDto);
-
-            _mapper.Map(airTimeDto, airTime);
-
-            _airTimeRepo.Update(airTime);
-
-            return new Response(true, $"AirTime Updated Successfully, see Details below \nNetwork Name : {airTime.NetworkProvider}");
-        }
-
+        
         public async Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
         {
             var data = await _dataRepo.GetByIdAsync(Id);
@@ -361,18 +308,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"Bill with Name {bill.BillName} And Amount {bill.Amount} has been deleted Successfully");
         }
 
-        public async Task<Response> DeleteAirTimeByName(string name)
-        {
-            var airTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == name.Trim().ToLower());
-
-            if (airTime is null)
-                return new Response(false, "AirTime does not Exist");
-
-           _airTimeRepo.Delete(airTime);
-
-            return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been deleted Successfully");
-        }
-
+        
         public async Task<Response> DeleteDataByName(string name)
         {
             var data = _dataRepo.GetSingleByCondition(d => d.NetworkProvider == name.Trim().ToLower());

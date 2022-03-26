@@ -65,20 +65,7 @@ namespace Wallet.Services.Services
             return transactionsDto;
         }
 
-        public async Task<IEnumerable<AllRolesDto>> GetAllRoles()
-        {
-            var allRoles = await _roleRepo.GetAllAsync();
-
-            var rolesDto = _mapper.Map<IEnumerable<AllRolesDto>>(allRoles);
-
-            return rolesDto;
-        }
-
-        public IEnumerable<Role> GetTotalNumberOfRoles()
-        {
-            return _roleRepo.GetAll();
-        }
-
+       
         public IEnumerable<Transaction> GetTotalNumberOfTransactions()
         {
             return _transactionRepo.GetAll();
@@ -96,20 +83,6 @@ namespace Wallet.Services.Services
         public IEnumerable<BillPayment> GetTotalNumberOfBills()
         {
             return _billRepo.GetAll();
-        }
-
-        public async Task<IEnumerable<AllAirTimeDto>> GetAllAirTime()
-        {
-            var allAirTime = await _airTimeRepo.GetAllAsync();
-
-            var airTimeDto = _mapper.Map<IEnumerable<AllAirTimeDto>>(allAirTime);
-
-            return airTimeDto;
-        }
-
-        public IEnumerable<AirTime> GetTotalNumberOfAirTime()
-        {
-            return _airTimeRepo.GetAll();
         }
 
         public async Task<IEnumerable<AllDataDto>> GetAllData()

@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Request;
+using Wallet.Entities.Enumerators;
+using Wallet.Entities.GobalError;
 using Wallet.Services.Interfaces;
+using WalletApi.ActionFilters;
 
 namespace WalletApi.Controllers
 {
@@ -32,9 +38,21 @@ namespace WalletApi.Controllers
         [HttpPut("update-role")]
         public async Task<IActionResult> UpdateRole(string id, RoleDto request)
         {
-            await _roleService.EditRole(id, request);
+            await _roleService.UpdateRole(id, request);
 
             return Ok();
+        }
+
+        [HttpPatch("edit-role")]
+        [ServiceFilter(typeof(ModelStateValidation))]
+        public async Task<IActionResult> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
+        {
+            var role = await _roleService.EditRole(Id, model);
+
+            if (role.Success)
+                return Ok(role.Message);
+
+            return BadRequest(role.Message);
         }
 
         [HttpPost("add-user-to-role")]
@@ -60,6 +78,28 @@ namespace WalletApi.Controllers
             var role = await _roleService.DeleteRole(request);
 
             return Ok(role);
+        }
+
+        [HttpGet("all-roles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var allRoles = await _roleService.GetAllRoles();
+
+            if (allRoles.Any())
+                return Ok(allRoles);
+
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Roles found" });
+        }
+
+        [HttpGet("total-number-of-roles")]
+        public IActionResult GetTotalNumberOfRoles()
+        {
+            var numberOfRoles = _roleService.GetTotalNumberOfRoles().Count();
+
+            if (numberOfRoles <= 0)
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Roles found" });
+
+            return Ok($"{numberOfRoles} Roles");
         }
     }
 }

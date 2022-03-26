@@ -139,28 +139,7 @@ namespace WalletApi.Controllers
             return Ok($"{numberOfTransactions} Transactions");
         }
 
-        [HttpGet("all-roles")]
-        public async Task<IActionResult> GetAllRoles()
-        {
-            var allRoles = await _userService.GetAllRoles();
-
-            if (allRoles.Any())
-                return Ok(allRoles);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Roles found" });
-        }
-
-        [HttpGet("total-number-of-roles")]
-        public IActionResult GetTotalNumberOfRoles()
-        {
-            var numberOfRoles = _userService.GetTotalNumberOfRoles().Count();
-
-            if (numberOfRoles <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Roles found" });
-
-            return Ok($"{numberOfRoles} Roles");
-        }
-
+               
         [HttpGet("all-bills")]
         public async Task<IActionResult> GetAllBills()
         {
@@ -183,28 +162,7 @@ namespace WalletApi.Controllers
             return Ok($"{numberOfBills} Bills");
         }
 
-        [HttpGet("all-airTime")]
-        public async Task<IActionResult> GetAllAirTime()
-        {
-            var allAirTime = await _userService.GetAllAirTime();
-
-            if (allAirTime.Any())
-                return Ok(allAirTime);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No AirTime found" });
-        }
-
-        [HttpGet("total-number-of-airTime")]
-        public IActionResult GetTotalNumberOfAirTime()
-        {
-            var numberOfAirTime = _userService.GetTotalNumberOfAirTime().Count();
-
-            if (numberOfAirTime <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
-
-            return Ok($"{numberOfAirTime} AirTime");
-        }
-
+       
         [HttpGet("all-data")]
         public async Task<IActionResult> GetAllData()
         {

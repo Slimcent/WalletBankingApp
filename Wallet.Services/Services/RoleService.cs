@@ -1,17 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
+using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Request;
+using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
 using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 
 namespace Wallet.Services.Services
 {
-    public class RoleService : IRoleservice
+    public class RoleService : IRoleService
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
@@ -71,7 +75,7 @@ namespace Wallet.Services.Services
             return $"Role with Name {role.Name} has been deleted Successfully";
         }
 
-        public async Task EditRole(string id, RoleDto request)
+        public async Task UpdateRole(string id, RoleDto request)
         {
             var role = await _roleManager.FindByIdAsync(id);
             if (role == null)
@@ -80,6 +84,41 @@ namespace Wallet.Services.Services
             var roleUpdate = _mapper.Map(request, role);
 
             await _roleManager.UpdateAsync(roleUpdate);
+        }
+
+        public async Task<Response> EditRole(string Id, JsonPatchDocument<PatchRoleDto> model)
+        {
+            var role = await _roleManager.FindByIdAsync(Id);
+
+            if (role is null)
+                return new Response(false, "Role does not exist");
+
+            var roleDto = new PatchRoleDto
+            {
+                Name = role.Name
+            };
+
+            model.ApplyTo(roleDto);
+
+            _mapper.Map(roleDto, role);
+
+            await _roleManager.UpdateAsync(role);
+
+            return new Response(true, $"Role Updated Successfully, see Details below\nRole Name : {role.Name}");
+        }
+
+        public async Task<IEnumerable<AllRolesDto>> GetAllRoles()
+        {
+            var allRoles = await _roleRepo.GetAllAsync();
+
+            var rolesDto = _mapper.Map<IEnumerable<AllRolesDto>>(allRoles);
+
+            return rolesDto;
+        }
+
+        public IEnumerable<Role> GetTotalNumberOfRoles()
+        {
+            return _roleRepo.GetAll();
         }
 
         public async Task<IList<string>> GetUserRoles(string userName)
