@@ -14,6 +14,7 @@ using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Microsoft.AspNetCore.JsonPatch;
 using Wallet.Services.Exceptions;
+using System.Security.Claims;
 
 namespace Wallet.Services.Services
 {
@@ -28,104 +29,74 @@ namespace Wallet.Services.Services
         private readonly IRepository<Customer> _customerRepo;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private string Message { get; set; }
-
-
-        public AdminService(UserManager<User> userManager, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, 
-            IServiceFactory serviceFactory, IMapper mapper)
+        public AdminService(IServiceFactory serviceFactory)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _userRepo = unitOfWork.GetRepository<User>();
-            _roleRepo = unitOfWork.GetRepository<Role>();
-            _customerRepo = unitOfWork.GetRepository<Customer>();
-            _billRepo = unitOfWork.GetRepository<Bill>();
-            _dataRepo = unitOfWork.GetRepository<Data>();
             _serviceFactory = serviceFactory;
-            _mapper = mapper;
+            _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
+            _userManager = _serviceFactory.GetServices<UserManager<User>>();
+            _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
+            _roleRepo = _unitOfWork.GetRepository<Role>();
+            _customerRepo = _unitOfWork.GetRepository<Customer>();
+            _billRepo = _unitOfWork.GetRepository<Bill>();
+            _dataRepo = _unitOfWork.GetRepository<Data>();
+            _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
-        public async Task<(IdentityResult, User)> Add(AddUserDto dto)
+
+        public async Task<string> CreateCustomer(AddUserDto model)
         {
-            var emailExists = await _userManager.FindByEmailAsync(dto.Email.ToLower().Trim());
+            User emailExists = await _userManager.FindByEmailAsync(model.Email);
+            if (emailExists != null)
+                return  "customer already exists";
 
-            if (emailExists == null)
-            {
-                var password = "123456";
-                var user = _mapper.Map<User>(dto);
+            User userNameExists = await _userManager.FindByNameAsync(model.UserName);
+            if (userNameExists != null)
+                return "Username already exists";
 
-                var result = await _userManager.CreateAsync(user, password);
-                if (!_roleManager.RoleExistsAsync("Manager").Result)
-                {
-                    var role = new Role
-                    {
-                        Name = "Manager"
-                    };
-                    var roleResult = _roleManager.CreateAsync(role).Result;
-                    if (!roleResult.Succeeded)
-                    {
-                        Message = "Error while creating Role";
-                    }
-                }
-                await _userManager.AddToRoleAsync(user, "Manager");
-                return (result, user);
-            }
-            else
-            {
-                throw new UserExistException(dto.Email);
-            }
-        }
+            var user = _mapper.Map<User>(model);
+            user.EmailConfirmed = true;
 
-        public async Task<(IdentityResult, User)> CreateCustomerAsUser(IdentityModel model)
-        {
-            var user = new User
-            {
-                FullName = model.FullName,
-                UserName = model.Email,
-                Email = model.Email,
-                EmailConfirmed = true
-            };
             var password = "123456";
-            var result = await _userManager.CreateAsync(user, password);
-            if (result.Succeeded)
-            {
-                if (!_roleManager.RoleExistsAsync("Customer").Result)
-                {
-                    var role = new Role
-                    {
-                        Name = "Customer"
-                    };
-                    var roleResult = _roleManager.CreateAsync(role).Result;
-                    if (!roleResult.Succeeded)
-                    {
-                        Message = "Error while creating Role";
-                    }
-                }
-                await _userManager.AddToRoleAsync(user, "Customer");
-            }
-            return (result, user);
-        }
+            IdentityResult result = await _userManager.CreateAsync(user, password);
 
-        public async Task CreateCustomer(string userId)
-        {
-            
-            var customer = new Customer
+            if (!result.Succeeded)
+                return "User creation failed";
+
+            if (!_roleManager.RoleExistsAsync("Customer").Result)
             {
-                UserId = userId,
-                
-                Account = new Account()
+                Role role = new Role { Name = "Customer" };
+                IdentityResult roleResult = _roleManager.CreateAsync(role).Result;
+
+                if (!roleResult.Succeeded)
+                    return "Error while creating role";
+            }
+            await _userManager.AddToRoleAsync(user, "Customer");
+
+            await _serviceFactory.GetServices<IUserService>().CreateUserClaims(model.Email, ClaimTypes.Role, model.ClaimValue);
+
+            Customer customer = new Customer
+            {
+                UserId = user.Id,
+                PhoneNumber = model.MobileNo,
+                Account = new Account
                 {
                     WalletID = WalletIdGenerator.GenerateWalletId(),
-                    //CreatedBy = dto.FirstName,
                     Balance = 0,
                     IsActive = true,
-                    UserId = userId
+                    UserId = user.Id,
                 }
             };
-            await _customerRepo.AddAsync(customer);
-        }
 
+            await _customerRepo.AddAsync(customer);
+            var add = await _unitOfWork.SaveChangesAsync();
+
+            if (add > 0) return "student created";
+                       
+            return $"Customer with email {model.Email} created successfully";
+        }
+        
         public async Task<Response> AddRole(AddRoleDto model)
         {
             if (await _roleManager.RoleExistsAsync(model.Name.Trim().ToLower()))
@@ -166,8 +137,6 @@ namespace Wallet.Services.Services
 
             return new Response(true, $"Role, {role.Name} has been deleted successfully!");
         }
-
-                
         
         public async Task<Response> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
         {
@@ -221,8 +190,6 @@ namespace Wallet.Services.Services
             return new Response(true, $"Role with Name {role.Name} has been deleted Successfully");
         }
 
-               
-        
         public Task<Response> DeleteUserById(string Id)
         {
             throw new NotImplementedException();

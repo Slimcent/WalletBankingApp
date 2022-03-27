@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Request;
 using Wallet.Entities.DataTransferObjects.Response;
@@ -11,6 +12,7 @@ namespace Wallet.Services.Interfaces
 {
     public interface IUserService
     {
+        Task<string> CreateUser(AddUserDto model);
         Task<IEnumerable<AllUsersDto>> GetAllUsers();
         IEnumerable<User> GetTotalNumberOfUsers();
         Task<AllUsersDto> GetUserById(string id);

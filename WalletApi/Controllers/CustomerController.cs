@@ -16,54 +16,27 @@ using WalletApi.ActionFilters;
 
 namespace WalletApi.Controllers
 {
-    [Route("api/admin")]
+    [Route("api/customer")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         private readonly IAdminService _adminService;
         private readonly IUserService _userService;
         
-        public AdminController(IAdminService adminService, IUserService userService, ILoggerMessage logger)
+        public CustomerController(IAdminService adminService, IUserService userService, ILoggerMessage logger)
         {
             _adminService = adminService;
             _userService = userService;
         }
 
-        [HttpPost("create-user")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> CreateUser([FromBody] AddUserDto user)
-        {
-            var result = await _adminService.Add(user);
-
-            if (!result.Item1.Succeeded)
-            {
-                foreach (var error in result.Item1.Errors)
-                {
-                    ModelState.TryAddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
-            }
-
-            return Ok(new ErrorDetails {Status = ResponseStatus.OK, Message = $"User, {user.UserName} was Created Successfully" } );
-        }
-
+       
         [HttpPost("create-customer")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> CreateCustomer([FromBody] AddCustomerDto model)
+        public async Task<IActionResult> CreateCustomer([FromBody] AddUserDto model)
         {
-            var (result, user) = await _adminService.CreateCustomerAsUser(new IdentityModel
-            { 
-                Email = model.Email, 
-                FullName = $"{model.FirstName} {model.LastName}"
-            });
+            var customer = await _adminService.CreateCustomer(model);
 
-            if (result.Succeeded)
-            {
-                await _adminService.CreateCustomer(user.Id.ToString());
-
-                return Ok(new ErrorDetails { Status = ResponseStatus.OK, Message = $"User, {user.UserName} was Created Successfully" });
-            }
-            return BadRequest(ModelState);
+            return Ok(customer);
         }
 
         [HttpPost("create-role")]

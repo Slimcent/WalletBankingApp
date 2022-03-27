@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DataTransferObjects\Transaction\GetDto\**" />
-    <EmbeddedResource Remove="DataTransferObjects\Transaction\GetDto\**" />
-    <None Remove="DataTransferObjects\Transaction\GetDto\**" />
+    <Compile Remove="Dto\Transaction\GetDto\**" />
+    <EmbeddedResource Remove="Dto\Transaction\GetDto\**" />
+    <None Remove="Dto\Transaction\GetDto\**" />
   </ItemGroup>
 
   <ItemGroup>

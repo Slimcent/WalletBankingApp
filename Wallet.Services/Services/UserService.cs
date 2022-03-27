@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Request;
 using Wallet.Entities.DataTransferObjects.Response;
@@ -19,6 +20,7 @@ namespace Wallet.Services.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Transaction> _transactionRepo;
         private readonly IRepository<Bill> _billRepo;
@@ -31,6 +33,7 @@ namespace Wallet.Services.Services
         public UserService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
         {
             _userManager = serviceFactory.GetServices<UserManager<User>>();
+            _roleManager = serviceFactory.GetServices<RoleManager<Role>>();
             _userRepo = unitOfWork.GetRepository<User>();
             _customerRepo = unitOfWork.GetRepository<Customer>();
             _accountRepo = unitOfWork.GetRepository<Account>();
@@ -40,6 +43,45 @@ namespace Wallet.Services.Services
             _serviceFactory = serviceFactory;
             _mapper = mapper;
         }
+
+        public async Task<string> CreateUser(AddUserDto model)
+        {
+            if (model == null)
+                return "Invalid data sent";
+
+            var existingEmail = await _userManager.FindByEmailAsync(model.Email.Trim().ToLower());
+            if (existingEmail != null)
+                throw new UserExistException(model.Email);
+
+            var existingUserName = await _userManager.FindByNameAsync(model.UserName.Trim().ToLower());
+            if (existingUserName != null)
+                return "Username already exist";
+
+            var user = _mapper.Map<User>(model);
+            user.EmailConfirmed = true;
+
+            var password = "123456";
+            var res = await _userManager.CreateAsync(user, password);
+
+            if (!res.Succeeded)
+                throw new InvalidOperationException($"User creation failed");
+
+
+            if (!_roleManager.RoleExistsAsync("Staff").Result)
+            {
+                var role = new Role { Name = "Staff" };
+                var roleResult = _roleManager.CreateAsync(role).Result;
+                if (!roleResult.Succeeded)
+                    throw new InvalidOperationException($"Role creation failed");
+
+            }
+            await _userManager.AddToRoleAsync(user, "Staff");
+
+            await CreateUserClaims(user.Email, ClaimTypes.Role, model.ClaimValue);
+
+            return $"User with email {user.Email} created successfully";
+        }
+
         public async Task<IEnumerable<AllUsersDto>> GetAllUsers()
         {
             var allUsers = await _userRepo.GetAllAsync();
@@ -50,7 +92,6 @@ namespace Wallet.Services.Services
         }
 
         
-
         public IEnumerable<User> GetTotalNumberOfUsers()
         {
             return _userRepo.GetAll();

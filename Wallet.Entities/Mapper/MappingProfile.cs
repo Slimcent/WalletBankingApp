@@ -13,7 +13,9 @@ namespace Wallet.Entities.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<AddUserDto, User>();
+            CreateMap<AddUserDto, User>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName}"));
+
             CreateMap<User, AllUsersDto>();
             CreateMap<Transaction, AllTransactionsDto>();
             CreateMap<Role, AllRolesDto>();

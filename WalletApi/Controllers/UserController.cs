@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
 using Wallet.Logger;
@@ -8,18 +9,26 @@ using Wallet.Services.Interfaces;
 
 namespace WalletApi.Controllers
 {
-    [Route("api/User")]
+    [Route("api/user")]
     [ApiController]
-    public class StaffController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IAccountService _accountService;
        
-        public StaffController(IUserService userService,
+        public UserController(IUserService userService,
            IAccountService accountService, ILoggerMessage logger)
         {
             _userService = userService;
             _accountService = accountService;
+        }
+
+        [HttpPost("create-user")]
+        public async Task<IActionResult> CreateUser([FromBody] AddUserDto model)
+        {
+            var user = await _userService.CreateUser(model);
+
+            return Ok(user);
         }
 
         [HttpGet("total-number-of-users")]
