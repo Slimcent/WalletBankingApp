@@ -26,7 +26,7 @@ namespace Wallet.Services.Services
         private readonly IRepository<Bill> _billRepo;
         private readonly IRepository<Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
-        private readonly IRepository<Account> _accountRepo;
+        private readonly IRepository<Entities.Models.Domain.Wallet> _accountRepo;
         private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
 
@@ -36,7 +36,7 @@ namespace Wallet.Services.Services
             _roleManager = serviceFactory.GetServices<RoleManager<Role>>();
             _userRepo = unitOfWork.GetRepository<User>();
             _customerRepo = unitOfWork.GetRepository<Customer>();
-            _accountRepo = unitOfWork.GetRepository<Account>();
+            _accountRepo = unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<Bill>();
             _dataRepo = unitOfWork.GetRepository<Data>();
@@ -91,7 +91,7 @@ namespace Wallet.Services.Services
             return userDto;
         }
 
-        
+
         public IEnumerable<User> GetTotalNumberOfUsers()
         {
             return _userRepo.GetAll();
@@ -106,13 +106,13 @@ namespace Wallet.Services.Services
             return transactionsDto;
         }
 
-       
+
         public IEnumerable<Transaction> GetTotalNumberOfTransactions()
         {
             return _transactionRepo.GetAll();
         }
 
-        
+
         public Task<IEnumerable<Customer>> GetCustomersAsync()
         {
             throw new NotImplementedException();
@@ -154,15 +154,15 @@ namespace Wallet.Services.Services
 
         public async Task<Response> GetUserByAccountNumber(string walletId)
         {
-            var account = _accountRepo.GetSingleByCondition(a => a.WalletID == walletId);
+            var account = _accountRepo.GetSingleByCondition(a => a.WalletNo == walletId);
             if (account == null)
                 return new Response(false, "Account not found");
 
-            var user = _userRepo.GetSingleByCondition(u => u.Id == account.UserId);
-            if(user == null)
+            var user = _userRepo.GetSingleByCondition(u => u.Id == account.CustomerId);
+            if (user == null)
                 return new Response(false, "User not found");
 
-            return new Response(true, $"Account : {account.WalletID} \nFullName : {user.FullName} \nBalance : {account.Balance}" +
+            return new Response(true, $"Account : {account.WalletNo} \nFullName : {user.FullName} \nBalance : {account.Balance}" +
                 $"\nIsActive : {account.IsActive} \nUserName : {user.UserName} \nEmail : {user.Email} ");
         }
 
@@ -173,9 +173,9 @@ namespace Wallet.Services.Services
             return customers;
         }
 
-        public  async Task<IEnumerable<CustomerAccountDto>> GetCustomers()
+        public async Task<IEnumerable<CustomerAccountDto>> GetCustomers()
         {
-            var customers = await _customerRepo.GetAllAndInclude(c => c.User, c => c.Account);
+            var customers = await _customerRepo.GetAllAndInclude(c => c.User, c => c.Wallet);
 
             var dto = _mapper.Map<IEnumerable<CustomerAccountDto>>(customers);
 

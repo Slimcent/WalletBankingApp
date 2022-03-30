@@ -6,14 +6,11 @@ using Wallet.Entities.Models.Domain;
 using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 using Wallet.Entities.DataTransferObjects;
-using Wallet.Entities.Models.CustomerToUser;
 using Wallet.Services.Helpers;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.DataTransferObjects.IdentityUsers;
-using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Microsoft.AspNetCore.JsonPatch;
-using Wallet.Services.Exceptions;
 using System.Security.Claims;
 
 namespace Wallet.Services.Services
@@ -24,8 +21,6 @@ namespace Wallet.Services.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
-        private readonly IRepository<Bill> _billRepo;
-        private readonly IRepository<Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
@@ -39,8 +34,6 @@ namespace Wallet.Services.Services
             _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
             _roleRepo = _unitOfWork.GetRepository<Role>();
             _customerRepo = _unitOfWork.GetRepository<Customer>();
-            _billRepo = _unitOfWork.GetRepository<Bill>();
-            _dataRepo = _unitOfWork.GetRepository<Data>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -76,16 +69,17 @@ namespace Wallet.Services.Services
 
             await _serviceFactory.GetServices<IUserService>().CreateUserClaims(model.Email, ClaimTypes.Role, model.ClaimValue);
 
-            Customer customer = new Customer
+            Customer customer = new()
             {
                 UserId = user.Id,
                 PhoneNumber = model.MobileNo,
-                Account = new Account
+
+                Wallet = new Entities.Models.Domain.Wallet
                 {
-                    WalletID = WalletIdGenerator.GenerateWalletId(),
+                    WalletNo = WalletIdGenerator.GenerateWalletId(),
                     Balance = 0,
                     IsActive = true,
-                    UserId = user.Id,
+                    CustomerId = user.Id,
                 }
             };
 

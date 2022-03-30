@@ -11,11 +11,11 @@ namespace Wallet.Services.Services
     public class AccountService : IAccountService
     {
         
-        private readonly IRepository<Account> _accountRepo;
+        private readonly IRepository<Entities.Models.Domain.Wallet> _accountRepo;
 
         public AccountService(IUnitOfWork unitOfWork)
         {
-            _accountRepo = unitOfWork.GetRepository<Account>();
+            _accountRepo = unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
         }
 
         public Task<decimal> GetAccountBalance(string accountNumber)
@@ -23,14 +23,14 @@ namespace Wallet.Services.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Account> GetAccountNumber(string accountNumber)
+        public async Task<Entities.Models.Domain.Wallet> GetAccountNumber(string accountNumber)
         {
-            var acconut = _accountRepo.GetSingleByCondition(a => a.WalletID == accountNumber);
+            var acconut = _accountRepo.GetSingleByCondition(a => a.WalletNo == accountNumber);
 
             return acconut;
         }
 
-        public async Task<IEnumerable<Account>> GetAccounts()
+        public async Task<IEnumerable<Entities.Models.Domain.Wallet>> GetAccounts()
         {
             var allAccounts = await _accountRepo.GetAllAsync();
 

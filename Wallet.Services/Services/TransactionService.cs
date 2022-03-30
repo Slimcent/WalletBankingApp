@@ -15,14 +15,14 @@ namespace Wallet.Services.Services
     {
         private readonly IServiceFactory _serviceFactory;
         private readonly IRepository<Transaction> _transactionRepo;
-        private readonly IRepository<Account> _accountRepo;
+        private readonly IRepository<Entities.Models.Domain.Wallet> _accountRepo;
         private readonly IRepository<Bill> _billRepo;
         private readonly IRepository<AirTime> _airTimeRepo;
         private readonly IMapper _mapper;
 
         public TransactionService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
         {
-            _accountRepo = unitOfWork.GetRepository<Account>();
+            _accountRepo = unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<Bill>();
             _airTimeRepo = unitOfWork.GetRepository<AirTime>();
@@ -34,7 +34,7 @@ namespace Wallet.Services.Services
         {
             //IAccountService _accountService = _serviceFactory.GetServices<AccountService>();
             //var account = _accountService.GetAccountNumber(model.WalletID);
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.WalletID);
+            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletID);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -51,9 +51,9 @@ namespace Wallet.Services.Services
                 Amount = model.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Credit,
-                ReceiverWalletId = wallet.WalletID,
+                ReceiverWalletId = wallet.WalletNo,
                 TransactionMode = TransactionMode.Deposit,
-                UserId = wallet.UserId
+                //UserId = wallet.UserId
             };
             await  _transactionRepo.AddAsync(deposit);
 
@@ -63,7 +63,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> Withdraw(WithdrawalDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.WalletID);
+            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletID);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -82,9 +82,9 @@ namespace Wallet.Services.Services
                 Amount = model.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Debit,
-                ReceiverWalletId = wallet.WalletID,
+                ReceiverWalletId = wallet.WalletNo,
                 TransactionMode = TransactionMode.Withdraw,
-                UserId = wallet.UserId
+                //UserId = wallet.UserId
             };
             await _transactionRepo.AddAsync(withdraw);
 
@@ -93,11 +93,11 @@ namespace Wallet.Services.Services
 
         public async Task<Response> Transfer(TransferDto model)
         {
-            var senderWallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.SenderWalletID);
+            var senderWallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.SenderWalletID);
             if (senderWallet == null)
                 return new Response(false, "Please, Indicate Sending Wallet");
 
-            var receiverWallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.ReceiverWalletID);
+            var receiverWallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.ReceiverWalletID);
             if (receiverWallet == null)
                 return new Response(false, "Please, Indicate Recipient Wallet");
 
@@ -121,9 +121,9 @@ namespace Wallet.Services.Services
                 Amount = model.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Debit,
-                SenderWalletId = senderWallet.WalletID,
+                SenderWalletId = senderWallet.WalletNo,
                 TransactionMode = TransactionMode.Transfer,
-                UserId = senderWallet.UserId
+                //UserId = senderWallet.UserId
             };
 
             var transferReceiver = new Transaction()
@@ -131,9 +131,9 @@ namespace Wallet.Services.Services
                 Amount = model.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Credit,
-                ReceiverWalletId = receiverWallet.WalletID,
+                ReceiverWalletId = receiverWallet.WalletNo,
                 TransactionMode = TransactionMode.Transfer,
-                UserId = receiverWallet.UserId
+                //UserId = receiverWallet.UserId
             };
             await _transactionRepo.AddAsync(transferReceiver);
 
@@ -142,7 +142,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> PayBill(PayBillDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.WalletId);
+            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -164,11 +164,11 @@ namespace Wallet.Services.Services
                 Amount = bill.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Debit,
-                SenderWalletId = wallet.WalletID,
+                SenderWalletId = wallet.WalletNo,
                 TransactionMode = TransactionMode.Bill,
                 BillName = bill.BillName,
                 StampDuty = 100,
-                UserId = wallet.UserId
+                //UserId = wallet.UserId
             };
             await _transactionRepo.AddAsync(billPayment);
 
@@ -178,7 +178,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> BuyAirTime(BuyAirTimeDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.WalletId);
+            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -203,11 +203,11 @@ namespace Wallet.Services.Services
                 Amount = model.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Debit,
-                SenderWalletId = wallet.WalletID,
+                SenderWalletId = wallet.WalletNo,
                 PhoneNumber = model.PhoneNumber,
                 NetworkProvider = airTime.NetworkProvider,
                 TransactionMode = TransactionMode.AirTime,
-                UserId = wallet.UserId
+                //UserId = wallet.UserId
             };
             await _transactionRepo.AddAsync(airTimePurchase);
 
@@ -216,7 +216,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> BuyData(BuyDataDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletID == model.WalletId);
+            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -241,11 +241,11 @@ namespace Wallet.Services.Services
                 Amount = model.Amount,
                 TimeStamp = DateTime.Now,
                 TransactionType = TransactionType.Debit,
-                SenderWalletId = wallet.WalletID,
+                SenderWalletId = wallet.WalletNo,
                 PhoneNumber = model.PhoneNumber,
                 NetworkProvider = data.NetworkProvider,
                 TransactionMode = TransactionMode.Data,
-                UserId = wallet.UserId
+                //UserId = wallet.UserId
             };
             await _transactionRepo.AddAsync(dataPurchase);
 
@@ -254,7 +254,12 @@ namespace Wallet.Services.Services
 
         public IEnumerable<Transaction> GetTramsctionByAUser(string id)
         {
-            return _transactionRepo.GetByCondition(t => t.UserId == id);
+            throw new NotImplementedException();
         }
+
+        //public IEnumerable<Transaction> GetTramsctionByAUser(string id)
+        //{
+        //    return _transactionRepo.GetByCondition(t => t.UserId == id);
+        //}
     }
 }

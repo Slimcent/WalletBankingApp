@@ -7,8 +7,8 @@ namespace Wallet.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<IEnumerable<Account>> GetAccounts();
-        Task<Account> GetAccountNumber(string accountNumber);
+        Task<IEnumerable<Entities.Models.Domain.Wallet>> GetAccounts();
+        Task<Entities.Models.Domain.Wallet> GetAccountNumber(string accountNumber);
         Task<decimal> GetAccountBalance(string accountNumber);
                 
         //Task<ViewAccountDto> GetByAccountNumber(string accountNumber);

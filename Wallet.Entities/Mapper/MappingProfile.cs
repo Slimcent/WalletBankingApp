@@ -22,14 +22,14 @@ namespace Wallet.Entities.Mapper
             CreateMap<Bill, AllBillsDto>();
             CreateMap<AirTime, AllAirTimeDto>();
             CreateMap<Models.Domain.Data, AllDataDto>();
-            CreateMap<Customer, CustomerAccountDto>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
-                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Account.IsActive))
-                .ForMember(dest => dest.WalletID, opt => opt.MapFrom(src => src.Account.WalletID))
-                .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.Account.Balance));
+            //CreateMap<Customer, CustomerAccountDto>()
+            //    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+            //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+            //    .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+            //    .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Account.IsActive))
+            //    .ForMember(dest => dest.WalletID, opt => opt.MapFrom(src => src.Account.WalletID))
+            //    .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.Account.Balance));
             CreateMap<AddRoleDto, Role>();
             CreateMap<AddBillDto, Bill>();
             CreateMap<AddNetworkProviderDto, Models.Domain.Data>();

@@ -53,16 +53,16 @@ namespace WalletApi.Controllers
             return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No User found" });
         }
 
-        [HttpGet("all-customers")]
-        public async Task<IActionResult> GetAllCustomers()
-        {
-            var allCustomers = await _userService.GetAllCustomers();
+        //[HttpGet("all-customers")]
+        //public async Task<IActionResult> GetAllCustomers()
+        //{
+        //    var allCustomers = await _userService.GetAllCustomers();
 
-            if (allCustomers.Any())
-                return Ok(allCustomers);
+        //    if (allCustomers.Any())
+        //        return Ok(allCustomers);
 
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Customer found" });
-        }
+        //    return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Customer found" });
+        //}
 
         [HttpGet("customers")]
         public async Task<IActionResult> GetCustomers()
