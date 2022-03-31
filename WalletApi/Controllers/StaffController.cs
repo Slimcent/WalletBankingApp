@@ -11,12 +11,12 @@ namespace WalletApi.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class StaffController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IAccountService _accountService;
        
-        public UserController(IUserService userService,
+        public StaffController(IUserService userService,
            IAccountService accountService, ILoggerMessage logger)
         {
             _userService = userService;

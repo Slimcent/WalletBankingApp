@@ -66,12 +66,13 @@ namespace Wallet.Entities.Models.Context
         }
 
 
-
+        public DbSet<Address> Address { get; set; }
         public DbSet<AirTime> AirTimes { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Domain.Data> Data { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Staff> StaffProfile { get; set; }
         public DbSet<StampDutyCharge> StampDutyCharges { get; set; }
         public DbSet<TransactionStampDutyCharge> TransactionStampDutyCharges { get; set; }
         public DbSet<Domain.Wallet> Wallets { get; set; }
