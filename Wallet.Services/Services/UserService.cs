@@ -148,7 +148,7 @@ namespace Wallet.Services.Services
             if (user == null)
                 return new Response(false, "User not found");
 
-            return new Response(true, $"Full Name: {user.FullName} \nUsername : {user.UserName} \nEmail : {user.Email} " +
+            return new Response(true, $"Full Name: \nUsername : {user.UserName} \nEmail : {user.Email} " +
                 $"\nCreated At : {user.CreatedAt} ");
         }
 
@@ -158,11 +158,11 @@ namespace Wallet.Services.Services
             if (account == null)
                 return new Response(false, "Account not found");
 
-            var user = _userRepo.GetSingleByCondition(u => u.Id == account.CustomerId);
+            var user = _userRepo.GetSingleByCondition(u => u.Id == account.CustomerId.ToString());
             if (user == null)
                 return new Response(false, "User not found");
 
-            return new Response(true, $"Account : {account.WalletNo} \nFullName : {user.FullName} \nBalance : {account.Balance}" +
+            return new Response(true, $"Account : {account.WalletNo} \nFullName : \nBalance : {account.Balance}" +
                 $"\nIsActive : {account.IsActive} \nUserName : {user.UserName} \nEmail : {user.Email} ");
         }
 

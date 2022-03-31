@@ -42,11 +42,11 @@ namespace Wallet.Services.Services
         {
             User emailExists = await _userManager.FindByEmailAsync(model.Email);
             if (emailExists != null)
-                return  "customer already exists";
+                return  $"customer with email {model.Email} already exists";
 
             User userNameExists = await _userManager.FindByNameAsync(model.UserName);
             if (userNameExists != null)
-                return "Username already exists";
+                return $"Username {model.UserName} already exists";
 
             var user = _mapper.Map<User>(model);
             user.EmailConfirmed = true;
@@ -73,13 +73,13 @@ namespace Wallet.Services.Services
             {
                 UserId = user.Id,
                 PhoneNumber = model.MobileNo,
-
+                FullName = $"{model.LastName} {model.FirstName}",
                 Wallet = new Entities.Models.Domain.Wallet
                 {
                     WalletNo = WalletIdGenerator.GenerateWalletId(),
                     Balance = 0,
                     IsActive = true,
-                    CustomerId = user.Id,
+                    CustomerId = Guid.Parse(user.Id)
                 }
             };
 
@@ -88,7 +88,7 @@ namespace Wallet.Services.Services
 
             if (add > 0) return "student created";
                        
-            return $"Customer with email {model.Email} created successfully";
+            return $"Customer with email {model.Email} was created successfully";
         }
         
         public async Task<Response> AddRole(AddRoleDto model)
@@ -142,7 +142,6 @@ namespace Wallet.Services.Services
 
             var userDto = new PatchUserDto
             {
-                FullName = user.FullName,
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber
@@ -154,7 +153,7 @@ namespace Wallet.Services.Services
 
             _userRepo.Update(user);
 
-            return new Response(true, $"User Updated Successfully, see Details below\n Fullname : {user.FullName} \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber}");
+            return new Response(true, $"User Updated Successfully, see Details below\n Fullname : \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber}");
         }
 
               
@@ -169,7 +168,7 @@ namespace Wallet.Services.Services
 
             await _userManager.DeleteAsync(user);
 
-            return new Response(true, $"User with details below Deleted Successfully!\nFull Name : {user.FullName} \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber} ");
+            return new Response(true, $"User with details below Deleted Successfully!\nFull Name : \nUserName : {user.UserName} \nEmail : {user.Email} \nPhone Number : {user.PhoneNumber} ");
         }
 
         public async Task<Response> DeleteRoleByName(string name)

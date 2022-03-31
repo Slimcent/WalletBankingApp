@@ -20,14 +20,13 @@ namespace Wallet.Services.Services
         private readonly IRepository<AirTime> _airTimeRepo;
         private readonly IMapper _mapper;
 
-        public TransactionService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
+        public TransactionService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
         {
             _accountRepo = unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<Bill>();
             _airTimeRepo = unitOfWork.GetRepository<AirTime>();
-            _mapper = mapper;
-            _serviceFactory = serviceFactory;
+            _mapper = serviceFactory.GetServices<IMapper>();
         }
 
         public async Task<Response> Deposit(DepositDto model)
@@ -53,7 +52,7 @@ namespace Wallet.Services.Services
                 TransactionType = TransactionType.Credit,
                 ReceiverWalletId = wallet.WalletNo,
                 TransactionMode = TransactionMode.Deposit,
-                //UserId = wallet.UserId
+                CustomerId = wallet.CustomerId
             };
             await  _transactionRepo.AddAsync(deposit);
 
@@ -84,7 +83,7 @@ namespace Wallet.Services.Services
                 TransactionType = TransactionType.Debit,
                 ReceiverWalletId = wallet.WalletNo,
                 TransactionMode = TransactionMode.Withdraw,
-                //UserId = wallet.UserId
+                CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(withdraw);
 
@@ -123,7 +122,7 @@ namespace Wallet.Services.Services
                 TransactionType = TransactionType.Debit,
                 SenderWalletId = senderWallet.WalletNo,
                 TransactionMode = TransactionMode.Transfer,
-                //UserId = senderWallet.UserId
+                CustomerId = senderWallet.CustomerId
             };
 
             var transferReceiver = new Transaction()
@@ -133,7 +132,7 @@ namespace Wallet.Services.Services
                 TransactionType = TransactionType.Credit,
                 ReceiverWalletId = receiverWallet.WalletNo,
                 TransactionMode = TransactionMode.Transfer,
-                //UserId = receiverWallet.UserId
+                CustomerId = receiverWallet.CustomerId
             };
             await _transactionRepo.AddAsync(transferReceiver);
 
@@ -168,7 +167,7 @@ namespace Wallet.Services.Services
                 TransactionMode = TransactionMode.Bill,
                 BillName = bill.BillName,
                 StampDuty = 100,
-                //UserId = wallet.UserId
+                CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(billPayment);
 
@@ -207,7 +206,7 @@ namespace Wallet.Services.Services
                 PhoneNumber = model.PhoneNumber,
                 NetworkProvider = airTime.NetworkProvider,
                 TransactionMode = TransactionMode.AirTime,
-                //UserId = wallet.UserId
+                CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(airTimePurchase);
 
@@ -245,7 +244,7 @@ namespace Wallet.Services.Services
                 PhoneNumber = model.PhoneNumber,
                 NetworkProvider = data.NetworkProvider,
                 TransactionMode = TransactionMode.Data,
-                //UserId = wallet.UserId
+                CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(dataPurchase);
 

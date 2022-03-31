@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Wallet.Entities.Interfaces;
 
 namespace Wallet.Entities.Models.Domain
 {
-    public class Customer
+    public class Customer : ITracker
     {
         [Key]
         public Guid Id { get; set; }

@@ -52,7 +52,7 @@ namespace Wallet.Services.Services
 
             await _airTimeRepo.AddAsync(airTimeDdto);
 
-            return new Response(true, $"{model.NetworkProvider} has been added Successfully!");
+            return new Response(true, $" AiiTime {model.NetworkProvider} has been created Successfully!");
         }
 
         public async Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)

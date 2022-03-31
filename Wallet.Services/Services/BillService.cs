@@ -38,7 +38,7 @@ namespace Wallet.Services.Services
 
             await _billRepo.AddAsync(billDto);
 
-            return new Response(true, $"Bill Name {model.BillName} and Amount {model.Amount} has been added Successfully!");
+            return new Response(true, $"Bill Name {model.BillName} and Amount {model.Amount} has been created Successfully!");
         }
 
         public async Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model)

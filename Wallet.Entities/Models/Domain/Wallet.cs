@@ -12,7 +12,7 @@ namespace Wallet.Entities.Models.Domain
 
         [MaxLength(10), MinLength(10)]
         public string WalletNo { get; set; }
-        public string CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
 
         [Column(TypeName = "decimal(38,2)")]
         public decimal Balance { get; set; }
