@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Wallet.Data.Interfaces;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
-using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 
 namespace Wallet.Services.Services

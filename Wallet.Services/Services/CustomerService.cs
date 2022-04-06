@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 using Wallet.Entities.Models.Domain;
-using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 using Wallet.Entities.DataTransferObjects;
 using Wallet.Services.Helpers;
@@ -12,6 +11,7 @@ using Wallet.Entities.DataTransferObjects.IdentityUsers;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Security.Claims;
+using Wallet.Data.Interfaces;
 
 namespace Wallet.Services.Services
 {

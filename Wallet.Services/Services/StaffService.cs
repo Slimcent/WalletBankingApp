@@ -6,11 +6,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Wallet.Data.Interfaces;
 using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Models.Domain;
-using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 
 namespace Wallet.Services.Services
@@ -101,7 +101,7 @@ namespace Wallet.Services.Services
 
         public async Task<StaffResponseDto> GetStaff(Guid id)
         {
-            var staff = await _staffRepo.GetASingleByAsync(x => x.Id == id);
+            var staff = await _staffRepo.GetSingleByAsync(x => x.Id == id);
             throw new NotImplementedException();
         }
 

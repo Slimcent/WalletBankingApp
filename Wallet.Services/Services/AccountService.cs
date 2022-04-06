@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Wallet.Data.Interfaces;
 using Wallet.Entities.Models.Domain;
-using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 
 namespace Wallet.Services.Services

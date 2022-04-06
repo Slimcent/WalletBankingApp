@@ -11,13 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallet.Logger", "Wallet.Log
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallet.Services", "Wallet.Services\Wallet.Services.csproj", "{AFC40601-6006-4436-AAD3-F428979E777B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallet.Repository", "Wallet.Repository\Wallet.Repository.csproj", "{A875C19E-DB87-4989-B2EC-074C04F445B3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallet.UnitTest", "Wallet.UnitTest\Wallet.UnitTest.csproj", "{C3003FC4-7EE0-4428-A770-85FB507F7065}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallet.IntegrationTesting", "Wallet.IntegrationTesting\Wallet.IntegrationTesting.csproj", "{89ED7D73-1375-43D0-A249-8A02565BEB20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallet.Data", "Wallet.Data\Wallet.Data.csproj", "{7B9B241E-B35B-46DD-892D-35265E772744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallet.Data", "Wallet.Data\Wallet.Data.csproj", "{7B9B241E-B35B-46DD-892D-35265E772744}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{AFC40601-6006-4436-AAD3-F428979E777B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFC40601-6006-4436-AAD3-F428979E777B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFC40601-6006-4436-AAD3-F428979E777B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A875C19E-DB87-4989-B2EC-074C04F445B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A875C19E-DB87-4989-B2EC-074C04F445B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A875C19E-DB87-4989-B2EC-074C04F445B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A875C19E-DB87-4989-B2EC-074C04F445B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3003FC4-7EE0-4428-A770-85FB507F7065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3003FC4-7EE0-4428-A770-85FB507F7065}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3003FC4-7EE0-4428-A770-85FB507F7065}.Release|Any CPU.ActiveCfg = Release|Any CPU

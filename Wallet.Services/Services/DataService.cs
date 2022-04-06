@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Wallet.Data.Interfaces;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
-using Wallet.Repository.Interfaces;
 using Wallet.Services.Interfaces;
 
 namespace Wallet.Services
@@ -17,14 +17,14 @@ namespace Wallet.Services
     {
         private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
-        private readonly IRepository<Data> _dataRepo;
+        private readonly IRepository<Entities.Models.Domain.Data> _dataRepo;
         private readonly IUnitOfWork _unitOfWork;
 
         public DataService(IServiceFactory serviceFactory)
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _dataRepo = _unitOfWork.GetRepository<Data>();
+            _dataRepo = _unitOfWork.GetRepository<Entities.Models.Domain.Data>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -34,7 +34,7 @@ namespace Wallet.Services
             if (existingData != null)
                 return new Response(false, "Network Provider name already Exist");
 
-            var dataDto = _mapper.Map<Data>(model);
+            var dataDto = _mapper.Map<Entities.Models.Domain.Data>(model);
 
             await _dataRepo.AddAsync(dataDto);
 
@@ -83,7 +83,7 @@ namespace Wallet.Services
             return dataDto;
         }
 
-        public IEnumerable<Data> GetTotalNumberOfData()
+        public IEnumerable<Entities.Models.Domain.Data> GetTotalNumberOfData()
         {
             return _dataRepo.GetAll();
         }

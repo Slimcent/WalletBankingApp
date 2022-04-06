@@ -16,6 +16,6 @@ namespace Wallet.Services.Interfaces
         Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model);
         Task<Response> DeleteDataByName(string name);
         Task<IEnumerable<AllDataDto>> GetAllData();
-        IEnumerable<Data> GetTotalNumberOfData();
+        IEnumerable<Entities.Models.Domain.Data> GetTotalNumberOfData();
     }
 }

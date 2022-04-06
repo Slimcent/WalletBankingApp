@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Wallet.Data.Interfaces;
 using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Request;
 using Wallet.Entities.DataTransferObjects.Response;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
-using Wallet.Repository.Interfaces;
 using Wallet.Services.Exceptions;
 using Wallet.Services.Interfaces;
 
@@ -24,7 +24,7 @@ namespace Wallet.Services.Services
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Transaction> _transactionRepo;
         private readonly IRepository<Bill> _billRepo;
-        private readonly IRepository<Data> _dataRepo;
+        private readonly IRepository<Entities.Models.Domain.Data> _dataRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IRepository<Entities.Models.Domain.Wallet> _accountRepo;
         private readonly IServiceFactory _serviceFactory;
@@ -39,7 +39,7 @@ namespace Wallet.Services.Services
             _accountRepo = unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
             _transactionRepo = unitOfWork.GetRepository<Transaction>();
             _billRepo = unitOfWork.GetRepository<Bill>();
-            _dataRepo = unitOfWork.GetRepository<Data>();
+            _dataRepo = unitOfWork.GetRepository<Entities.Models.Domain.Data>();
             _serviceFactory = serviceFactory;
             _mapper = mapper;
         }
