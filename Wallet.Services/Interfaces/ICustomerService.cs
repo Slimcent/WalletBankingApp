@@ -7,7 +7,7 @@ using Wallet.Entities.GobalMessage;
 
 namespace Wallet.Services.Interfaces
 {
-    public interface IAdminService
+    public interface ICustomerService
     {
         Task<string> CreateCustomer(AddUserDto model);
         Task<Response> AddRole(AddRoleDto model);

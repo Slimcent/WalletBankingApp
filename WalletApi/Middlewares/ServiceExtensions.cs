@@ -44,12 +44,13 @@ namespace WalletApi.Middlewares
             services.AddTransient<IUnitOfWork, UnitOfWork<WalletDbContext>>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITransactionService, TransactionService>();
-            services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAirTimeService, AirTimeService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IDataService, DataService>();
             services.AddTransient<IBillService, BillService>();
+            services.AddTransient<IStaffService, StaffService>();
             services.AddTransient<IServiceFactory, ServiceFactory>();
 
             return services;

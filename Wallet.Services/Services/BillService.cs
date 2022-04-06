@@ -30,7 +30,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> AddBill(AddBillDto model)
         {
-            var existingBill = _billRepo.GetSingleByCondition(b => b.BillName == model.BillName.Trim().ToLower());
+            var existingBill = await _billRepo.GetSingleByAsync(b => b.BillName == model.BillName.Trim().ToLower());
             if (existingBill != null)
                 return new Response(false, "Bill Name already Exist");
 
@@ -65,7 +65,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> DeleteBillByName(string name)
         {
-            var bill = _billRepo.GetSingleByCondition(b => b.BillName == name.Trim().ToLower());
+            var bill = await _billRepo.GetSingleByAsync(b => b.BillName == name.Trim().ToLower());
 
             if (bill is null)
                 return new Response(false, "Bill does not Exist");

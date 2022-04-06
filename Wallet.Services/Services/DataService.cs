@@ -30,7 +30,7 @@ namespace Wallet.Services
 
         public async Task<Response> AddData(AddNetworkProviderDto model)
         {
-            var existingData = _dataRepo.GetSingleByCondition(predicate: d => d.NetworkProvider == model.NetworkProvider.Trim().ToLower());
+            var existingData = await _dataRepo.GetSingleByAsync(predicate: d => d.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if (existingData != null)
                 return new Response(false, "Network Provider name already Exist");
 
@@ -64,7 +64,7 @@ namespace Wallet.Services
 
         public async Task<Response> DeleteDataByName(string name)
         {
-            var data = _dataRepo.GetSingleByCondition(d => d.NetworkProvider == name.Trim().ToLower());
+            var data = await _dataRepo.GetSingleByAsync(d => d.NetworkProvider == name.Trim().ToLower());
 
             if (data is null)
                 return new Response(false, "Data does not Exist");

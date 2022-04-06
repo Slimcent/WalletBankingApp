@@ -50,7 +50,6 @@ namespace WalletApi
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();
             services.AddScoped<ModelStateValidation>();
             services.AddScoped<MediaTypeValidation>();
-            services.AddScoped<ExistingEmailValidation>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication();
             services.AddControllers(config =>

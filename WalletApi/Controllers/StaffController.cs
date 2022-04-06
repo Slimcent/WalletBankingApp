@@ -1,26 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects;
+using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
-using Wallet.Logger;
 using Wallet.Services.Interfaces;
 
 namespace WalletApi.Controllers
 {
-    [Route("api/user")]
+    [Route("api/staff")]
     [ApiController]
     public class StaffController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IAccountService _accountService;
+        private readonly IStaffService _staffService;
        
         public StaffController(IUserService userService,
-           IAccountService accountService, ILoggerMessage logger)
+           IAccountService accountService, IStaffService staffService)
         {
             _userService = userService;
             _accountService = accountService;
+            _staffService = staffService;
+        }
+
+        [HttpPost("create-staff")]
+        public async Task<IActionResult> CreateStaff([FromBody] AddUserDto model)
+        {
+            var staff = await _staffService.CreateStaff(model);
+
+            return Ok(staff);
+        }
+
+        [HttpPut("update-staff")]
+        public async Task<IActionResult> UpdateteStaff([FromQuery] Guid id, AddressRequestDto model)
+        {
+            var staff = await _staffService.UpdateStaff(id, model);
+
+            return Ok(staff);
         }
 
         [HttpPost("create-user")]

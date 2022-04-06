@@ -44,7 +44,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> AddAirTime(AddNetworkProviderDto model)
         {
-            var existingAirTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
+            var existingAirTime = await _airTimeRepo.GetSingleByAsync(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if (existingAirTime != null)
                 return new Response(false, "Network Provider name already Exist");
 
@@ -78,7 +78,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> DeleteAirTimeByName(string name)
         {
-            var airTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == name.Trim().ToLower());
+            var airTime = await _airTimeRepo.GetSingleByAsync(a => a.NetworkProvider == name.Trim().ToLower());
 
             if (airTime is null)
                 return new Response(false, "AirTime does not Exist");

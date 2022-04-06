@@ -134,7 +134,7 @@ namespace Wallet.Services.Services
 
         public async Task<AllUsersDto> GetUserByEmail(string email)
         {
-            var user = _userRepo.GetSingleByCondition(e => e.Email == email);
+            var user = await _userRepo.GetSingleByAsync(e => e.Email == email);
 
             var userDto = _mapper.Map<AllUsersDto>(user);
 
@@ -143,7 +143,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> GetByUsernme(string username)
         {
-            var user = _userRepo.GetSingleByCondition(u => u.UserName == username);
+            var user = await _userRepo.GetSingleByAsync(u => u.UserName == username);
 
             if (user == null)
                 return new Response(false, "User not found");
@@ -154,16 +154,16 @@ namespace Wallet.Services.Services
 
         public async Task<Response> GetUserByAccountNumber(string walletId)
         {
-            var account = _accountRepo.GetSingleByCondition(a => a.WalletNo == walletId);
+            var account = await _accountRepo.GetSingleByAsync(a => a.WalletNo == walletId);
             if (account == null)
                 return new Response(false, "Account not found");
 
-            var user = _userRepo.GetSingleByCondition(u => u.Id == account.CustomerId.ToString());
+            var user = _userRepo.GetSingleByAsync(u => u.Id == account.CustomerId.ToString());
             if (user == null)
                 return new Response(false, "User not found");
 
             return new Response(true, $"Account : {account.WalletNo} \nFullName : \nBalance : {account.Balance}" +
-                $"\nIsActive : {account.IsActive} \nUserName : {user.UserName} \nEmail : {user.Email} ");
+                $"\nIsActive : {account.IsActive} \nUserName : \nEmail : ");
         }
 
         public async Task<IEnumerable<Customer>> GetAllCustomers()

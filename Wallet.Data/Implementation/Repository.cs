@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Wallet.Repository.Interfaces;
+using Wallet.Data.Extensions;
+using Wallet.Data.Interfaces;
 
-namespace Wallet.Repository.Repositories
+namespace Wallet.Data.Implementation
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -293,7 +290,7 @@ namespace Wallet.Repository.Repositories
             return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
-        public virtual async Task<T> GetASingleByAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? skip = null, int? take = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool tracking = false)
+        public virtual async Task<T> GetSingleByAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? skip = null, int? take = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool tracking = false)
         {
             try
             {
@@ -364,29 +361,29 @@ namespace Wallet.Repository.Repositories
         //    return new PagedList<T>(items, count, parameters.PageNumber, parameters.PageSize);
         //}
 
-        //private IQueryable<T> ConstructQueryable(Expression<Func<T, bool>> predicate = null, string orderBy = null, int? skip = null, int? take = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        //{
-        //    try
-        //    {
-        //        IQueryable<T> query = _dbSet;
-        //        if (predicate != null)
-        //            query = _dbSet.Where(predicate);
+        private IQueryable<T> ConstructQueryable(Expression<Func<T, bool>> predicate = null, string orderBy = null, int? skip = null, int? take = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            try
+            {
+                IQueryable<T> query = _dbSet;
+                if (predicate != null)
+                    query = _dbSet.Where(predicate);
 
-        //        if (!string.IsNullOrWhiteSpace(orderBy))
-        //            query = query.Sort(orderBy);
+                if (!string.IsNullOrWhiteSpace(orderBy))
+                    query = query.Sort(orderBy);
 
-        //        if (include != null)
-        //            query = include(query);
+                if (include != null)
+                    query = include(query);
 
-        //        if (take != null && skip != null)
-        //            return query.Skip(skip.Value).Take(take.Value);
-        //        return query;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+                if (take != null && skip != null)
+                    return query.Skip(skip.Value).Take(take.Value);
+                return query;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         private IQueryable<T> GetAllIncluding(Expression<Func<T, object>>[] includeProperties)
         {

@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace Wallet.Services.Services
 {
-    public class AdminService : IAdminService
+    public class CustomerService : ICustomerService
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
@@ -26,7 +26,7 @@ namespace Wallet.Services.Services
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AdminService(IServiceFactory serviceFactory)
+        public CustomerService(IServiceFactory serviceFactory)
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();

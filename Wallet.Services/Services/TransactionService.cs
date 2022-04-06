@@ -33,7 +33,7 @@ namespace Wallet.Services.Services
         {
             //IAccountService _accountService = _serviceFactory.GetServices<AccountService>();
             //var account = _accountService.GetAccountNumber(model.WalletID);
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletID);
+            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletID);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -62,7 +62,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> Withdraw(WithdrawalDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletID);
+            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletID);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -92,11 +92,11 @@ namespace Wallet.Services.Services
 
         public async Task<Response> Transfer(TransferDto model)
         {
-            var senderWallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.SenderWalletID);
+            var senderWallet =  await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.SenderWalletID);
             if (senderWallet == null)
                 return new Response(false, "Please, Indicate Sending Wallet");
 
-            var receiverWallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.ReceiverWalletID);
+            var receiverWallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.ReceiverWalletID);
             if (receiverWallet == null)
                 return new Response(false, "Please, Indicate Recipient Wallet");
 
@@ -141,11 +141,11 @@ namespace Wallet.Services.Services
 
         public async Task<Response> PayBill(PayBillDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletId);
+            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
-            var bill = _billRepo.GetSingleByCondition(a => a.BillName == model.Bill.Trim().ToLower());
+            var bill = await _billRepo.GetSingleByAsync(a => a.BillName == model.Bill.Trim().ToLower());
             if (bill == null)
                 return new Response(false, "Please, indicate The Bill you want to pay for");
 
@@ -177,11 +177,11 @@ namespace Wallet.Services.Services
 
         public async Task<Response> BuyAirTime(BuyAirTimeDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletId);
+            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
-            var airTime = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
+            var airTime = await _airTimeRepo.GetSingleByAsync(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if (airTime == null)
                 return new Response(false, "Please, indicate the Network Provider");
 
@@ -215,11 +215,11 @@ namespace Wallet.Services.Services
 
         public async Task<Response> BuyData(BuyDataDto model)
         {
-            var wallet = _accountRepo.GetSingleByCondition(a => a.WalletNo == model.WalletId);
+            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
-            var data = _airTimeRepo.GetSingleByCondition(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
+            var data = await _airTimeRepo.GetSingleByAsync(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if (data == null)
                 return new Response(false, "Please, indicate the Network Provider");
 

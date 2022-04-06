@@ -17,10 +17,10 @@ namespace WalletApi.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly IAdminService _adminService;
+        private readonly ICustomerService _adminService;
         private readonly IUserService _userService;
         
-        public CustomerController(IAdminService adminService, IUserService userService, ILoggerMessage logger)
+        public CustomerController(ICustomerService adminService, IUserService userService, ILoggerMessage logger)
         {
             _adminService = adminService;
             _userService = userService;

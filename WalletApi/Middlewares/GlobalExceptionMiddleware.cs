@@ -50,7 +50,7 @@ namespace WalletApi.Middlewares
                         await context.Response.WriteAsync(new ErrorDetails()
                         {
                             Status = status,
-                            Message = contextFeature.Error.Message
+                            Message = contextFeature.Error.InnerException.Message
                             //StatusCode = context.Response.StatusCode,
                             //Message = contextFeature.Error.InnerException.Message
                         }.ToString());

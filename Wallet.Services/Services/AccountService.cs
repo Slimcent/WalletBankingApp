@@ -23,12 +23,17 @@ namespace Wallet.Services.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Entities.Models.Domain.Wallet> GetAccountNumber(string accountNumber)
+        public Task<Entities.Models.Domain.Wallet> GetAccountNumber(string accountNumber)
         {
-            var acconut = _accountRepo.GetSingleByCondition(a => a.WalletNo == accountNumber);
-
-            return acconut;
+            throw new NotImplementedException();
         }
+
+        //public async Task<Entities.Models.Domain.Wallet> GetAccountNumber(string accountNumber)
+        //{
+        //    var acconut = _accountRepo.GetSingleByAsync(a => a.WalletNo == accountNumber);
+
+        //    return acconut;
+        //}
 
         public async Task<IEnumerable<Entities.Models.Domain.Wallet>> GetAccounts()
         {
