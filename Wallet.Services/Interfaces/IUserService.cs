@@ -13,8 +13,6 @@ namespace Wallet.Services.Interfaces
     public interface IUserService
     {
         Task<string> CreateUser(AddUserDto model);
-        Task<IEnumerable<AllUsersDto>> GetAllUsers();
-        IEnumerable<User> GetTotalNumberOfUsers();
         Task<AllUsersDto> GetUserById(string id);
         Task<AllUsersDto> GetUserByEmail(string email);
         Task<Response> GetByUsernme(string username);

@@ -26,6 +26,27 @@ namespace WalletApi.Controllers
             _staffService = staffService;
         }
 
+
+        [HttpGet("all-staff")]
+        public async Task<IActionResult> GetAllStaff()
+        {
+            var allStaff = await _staffService.GetAllStaff();
+
+            if (allStaff.Any())
+                return Ok(allStaff);
+
+            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No User found" });
+        }
+
+
+        [HttpGet("staff-by-id")]
+        public async Task<IActionResult> GetStaffById(Guid id)
+        {
+            var staff = await _staffService.GetStaff(id);
+
+            return Ok(staff);
+        }
+
         [HttpPost("create-staff")]
         public async Task<IActionResult> CreateStaff([FromBody] AddUserDto model)
         {
@@ -42,34 +63,16 @@ namespace WalletApi.Controllers
             return Ok(staff);
         }
 
-        [HttpPost("create-user")]
-        public async Task<IActionResult> CreateUser([FromBody] AddUserDto model)
+
+        [HttpGet("total-number-of-staff")]
+        public IActionResult GetTotalNumberOfStaff()
         {
-            var user = await _userService.CreateUser(model);
+            var staff = _staffService.GetTotalNumberOfStaff().Count();
 
-            return Ok(user);
-        }
+            if (staff <= 0)
+                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Staff found" });
 
-        [HttpGet("total-number-of-users")]
-        public IActionResult GetTotalNumberOfUsers()
-        {
-            var allUsers = _userService.GetTotalNumberOfUsers().Count();
-
-            if (allUsers <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 Users found" });
-
-            return Ok($"{allUsers} Users");
-        }
-
-        [HttpGet("all-users")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var allUsers = await _userService.GetAllUsers();
-
-            if (allUsers.Any())
-                return Ok(allUsers);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No User found" });
+            return Ok($"{staff} Staff");
         }
 
         //[HttpGet("all-customers")]

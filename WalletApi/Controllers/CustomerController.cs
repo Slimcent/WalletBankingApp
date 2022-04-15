@@ -36,54 +36,6 @@ namespace WalletApi.Controllers
             return Ok(customer);
         }
 
-        [HttpPost("create-role")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddRole([FromBody] AddRoleDto model)
-        {
-            var result = await _adminService.AddRole(model);
-
-            if (result.Success)
-                return Ok(result.Message);
-
-            return BadRequest(result.Message);
-        }
-
-        [HttpPost("add-user-to-role")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddUserToRole([FromBody] AddUserToRoleDto model)
-        {
-            var result = await _adminService.AddUserToRole(model);
-
-            if (result.Success)
-                return Ok(result.Message);
-
-            return BadRequest(result.Message);
-        }
-
-              
-        
-        [HttpGet("total-number-of-users")]
-        public IActionResult GetTotalNumberOfUsers()
-        {
-            var allUsers = _userService.GetTotalNumberOfUsers().Count();
-
-            if (allUsers <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 User found" });
-
-            return Ok($"{allUsers} Users");
-        }
-
-        [HttpGet("all-users")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var allUsers = await _userService.GetAllUsers();
-
-            if (allUsers.Any())
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Users found" });
-
-            return Ok(allUsers);
-        }
-
         [HttpGet("all-transactions")]
         public async Task<IActionResult> GetAllTransactions()
         {
@@ -93,40 +45,6 @@ namespace WalletApi.Controllers
                 return Ok(allTransactions);
 
             return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Transactiions found" });
-        }
-
-        [HttpPatch("edit-user")]
-        [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> EditUser(string Id, JsonPatchDocument<PatchUserDto> model)
-        {
-            var user = await _adminService.EditUser(Id, model);
-
-            if (user.Success)
-                return Ok(user.Message);
-
-            return BadRequest(user.Message);
-        }      
-        
-        [HttpDelete("delete-user-by-email")]
-        public async Task<IActionResult> DeleteUserByEmail(string email)
-        {
-            var user = await _adminService.DeleteUserByEmail(email);
-
-            if (user.Success)
-                return Ok(user.Message);
-
-            return BadRequest(user.Message);
-        }
-
-        [HttpDelete("delete-role-by-name")]
-        public async Task<IActionResult> DeleteRoleByName(string name)
-        {
-            var role = await _adminService.DeleteRoleByName(name);
-
-            if (role.Success)
-                return Ok(role.Message);
-
-            return BadRequest(role.Message);
         }
     }
 }

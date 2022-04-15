@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Wallet.Services.Services
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
-        private Guid id;
+       
 
         public StaffService(IServiceFactory serviceFactory)
         {
@@ -67,7 +68,6 @@ namespace Wallet.Services.Services
             await _userManager.AddToRoleAsync(user, "Staff");
 
             await _serviceFactory.GetServices<IUserService>().CreateUserClaims(model.Email, ClaimTypes.Role, model.ClaimValue);
-
            
             Staff staff = new()
             {
@@ -75,64 +75,64 @@ namespace Wallet.Services.Services
                 PhoneNumber = model.MobileNo,
                 FullName = $"{model.LastName} {model.FirstName}",
             };
-            
-            //var staffId = await _staffRepo.GetSingleByAsync(x => x.Id == id && x.UserId == user.Id);
-            //var addressId = await _addressRepo.GetSingleByAsync(x => x.Id == staffId.AddressId
-
             await _staffRepo.AddAsync(staff);
-            //var add = await _unitOfWork.SaveChangesAsync();
-            //if (add > 0) return "Staff created successfully";
 
-            //Address address = new() { StaffId = staff.Id };
-            //await _addressRepo.AddAsync(address);
+            var add = await _unitOfWork.SaveChangesAsync();
+            if (add > 0) return "Staff created successfully";
 
-            //staff.AddressId = address.Id;
-                        
-
-            //var addressId = await _addressRepo.GetByIdAsync(address.Id);
+            Address address = new() { StaffId = staff.Id };
+            await _addressRepo.AddAsync(address);
 
             return $"Staff with email {model.Email} was created successfully";
         }
 
-        public Task<IEnumerable<StaffResponseDto>> GetAllStaff()
+        public async Task<IEnumerable<StaffResponseDto>> GetAllStaff()
+        { 
+            var all = await _staffRepo.GetAllAndInclude(x => x.Address, x => x.User);
+
+            var staff = all.Select(x => new StaffResponseDto
+            {
+                FullName = x.FullName,
+                Email = x.User.Email,
+                PhoneNumber = x.PhoneNumber,
+                Address = $" {x.Address.PlotNo} {x.Address.StreetName} {x.Address.State} ",
+            });
+
+            return staff;
+        }
+
+        public async Task<string> UpdateStaff(Guid id, AddressRequestDto model)
         {
-            throw new NotImplementedException();
+            var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == id);
+
+            var update = _mapper.Map(model, staff);
+            await _addressRepo.UpdateAsync(update);
+            await _unitOfWork.SaveChangesAsync();
+
+            return "Success";
         }
 
         public async Task<StaffResponseDto> GetStaff(Guid id)
         {
-            var staff = await _staffRepo.GetSingleByAsync(x => x.Id == id);
-            throw new NotImplementedException();
+            var staff = await _staffRepo.GetSingleByAsync(x => x.Id == id, include: x => x.Include(x => x.Address).Include(x => x.User));
+
+            if (staff == null)
+                throw new InvalidOperationException("Staff not found");
+
+            return new StaffResponseDto
+            {
+                FullName = staff.FullName,
+                Email = staff.User.Email,
+                PhoneNumber = staff.PhoneNumber,
+                Address = $"{staff.Address.PlotNo} {staff.Address.StreetName} {staff.Address.State}, {staff.Address.Nationality}"
+            };
         }
 
-        public async Task<string> UpdateStaff(Guid id,AddressRequestDto model)
+        public IEnumerable<Staff> GetTotalNumberOfStaff()
         {
-            var staff = await _staffRepo.GetByIdAsync(id);
-
-             Address address = new()
-             {
-                PlotNo = model.PlotNo,
-                StreetName = model.StreetName,
-                City = model.City,
-                State = model.State,
-                Nationality = model.Nationality,
-                StaffId = staff.Id,
-             };
-
-             //staff.AddressId = address.Id;
-
-            staff.Address = address;
-            //staff.AddressId = id;
-
-            await _addressRepo.AddAsync(address);
-
-            var addressId = await _addressRepo.GetByIdAsync(address.Id);
-            var staffAddressId = await _addressRepo.GetSingleByAsync(x => x.Id == addressId.Id);
-                
-             return "successful";
-           
-
-           
+            return _staffRepo.GetAll();
         }
+
+
     }
 }

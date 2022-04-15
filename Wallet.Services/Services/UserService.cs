@@ -82,21 +82,6 @@ namespace Wallet.Services.Services
             return $"User with email {user.Email} created successfully";
         }
 
-        public async Task<IEnumerable<AllUsersDto>> GetAllUsers()
-        {
-            var allUsers = await _userRepo.GetAllAsync();
-
-            var userDto = _mapper.Map<IEnumerable<AllUsersDto>>(allUsers);
-
-            return userDto;
-        }
-
-
-        public IEnumerable<User> GetTotalNumberOfUsers()
-        {
-            return _userRepo.GetAll();
-        }
-
         public async Task<IEnumerable<AllTransactionsDto>> GetAllTransactions()
         {
             var allTransactions = await _transactionRepo.GetAllAsync();

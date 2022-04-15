@@ -5,6 +5,7 @@ using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
 using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.DataTransferObjects.Transaction.PostDto;
+using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Models.Domain;
 
 namespace Wallet.Entities.Mapper
@@ -39,6 +40,8 @@ namespace Wallet.Entities.Mapper
             CreateMap<PatchBillDto, Bill>();
             CreateMap<PatchAirTimeDto, AirTime>();
             CreateMap<PatchDataDto, Models.Domain.Data>();
+
+            CreateMap<AddressRequestDto, Address> ();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects;
 using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Dto.Response;
+using Wallet.Entities.Models.Domain;
 
 namespace Wallet.Services.Interfaces
 {
@@ -13,5 +14,6 @@ namespace Wallet.Services.Interfaces
         Task<string> UpdateStaff(Guid id, AddressRequestDto model);
         Task<IEnumerable<StaffResponseDto>> GetAllStaff();
         Task<StaffResponseDto> GetStaff(Guid id);
+        IEnumerable<Staff> GetTotalNumberOfStaff();
     }
 }
