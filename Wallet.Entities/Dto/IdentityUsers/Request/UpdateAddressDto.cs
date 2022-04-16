@@ -1,13 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Wallet.Entities.Models.Domain;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Wallet.Entities.Dto.IdentityUsers.Request
 {
-    public class AddressRequestDto
+    public class UpdateAddressDto
     {
         [Required(ErrorMessage = "Plot Number cannot be empty")]
-        public int PlotNo { get; set; }
+        public int? PlotNo { get; set; }
 
         [Required(ErrorMessage = "Street Name cannot be empty"), MaxLength(20), MinLength(2)]
         public string StreetName { get; set; }

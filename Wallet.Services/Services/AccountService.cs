@@ -35,13 +35,7 @@ namespace Wallet.Services.Services
         //    return acconut;
         //}
 
-        public async Task<IEnumerable<Entities.Models.Domain.Wallet>> GetAccounts()
-        {
-            var allAccounts = await _accountRepo.GetAllAsync();
-
-            return allAccounts;
-            
-        }
+        
 
         //public IEnumerable<Account> GetAccountsAndUser()
         //{

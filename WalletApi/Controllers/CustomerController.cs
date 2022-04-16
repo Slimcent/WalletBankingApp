@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.DataTransferObjects;
-using Wallet.Entities.DataTransferObjects.IdentityUsers;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalError;
 using Wallet.Logger;
@@ -20,7 +18,7 @@ namespace WalletApi.Controllers
         private readonly ICustomerService _adminService;
         private readonly IUserService _userService;
         
-        public CustomerController(ICustomerService adminService, IUserService userService, ILoggerMessage logger)
+        public CustomerController(ICustomerService adminService, IUserService userService)
         {
             _adminService = adminService;
             _userService = userService;
@@ -36,15 +34,6 @@ namespace WalletApi.Controllers
             return Ok(customer);
         }
 
-        [HttpGet("all-transactions")]
-        public async Task<IActionResult> GetAllTransactions()
-        {
-            var allTransactions = await _userService.GetAllTransactions();
-
-            if (allTransactions.Any())
-                return Ok(allTransactions);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Transactiions found" });
-        }
+        
     }
 }

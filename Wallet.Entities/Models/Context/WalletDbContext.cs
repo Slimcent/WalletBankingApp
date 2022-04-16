@@ -23,6 +23,12 @@ namespace Wallet.Entities.Models.Context
             modelBuilder.ApplyConfiguration(new AirTimeSeed());
             modelBuilder.ApplyConfiguration(new DataSeed());
             modelBuilder.ApplyConfiguration(new BillPaymentSeed());
+
+            modelBuilder.Entity<Staff>()
+                .HasOne(a => a.Address)
+                .WithOne(b => b.Staff)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

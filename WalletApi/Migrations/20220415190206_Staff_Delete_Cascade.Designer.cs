@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,10 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220415190206_Staff_Delete_Cascade")]
+    partial class Staff_Delete_Cascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,16 +195,16 @@ namespace WalletApi.Migrations
                         new
                         {
                             Id = new Guid("1da5eb5f-04cc-4f0e-afa6-52b3c78bedf9"),
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8270),
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5077),
                             NetworkProvider = "Mtn",
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8270)
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5078)
                         },
                         new
                         {
                             Id = new Guid("d584f98c-4a22-482d-bc9e-c1899aedcc57"),
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8272),
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5084),
                             NetworkProvider = "Airtel",
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8272)
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5084)
                         });
                 });
 
@@ -240,16 +242,16 @@ namespace WalletApi.Migrations
                             Id = new Guid("f1179901-af52-4774-b8e5-76e76b55c8c5"),
                             Amount = 6500m,
                             BillName = "DSTV",
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8396),
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8397)
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5298),
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5300)
                         },
                         new
                         {
                             Id = new Guid("637c3058-f4c2-45aa-a30c-301cc5d2d101"),
                             Amount = 3000m,
                             BillName = "GOTV",
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8399),
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8400)
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5303),
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5303)
                         });
                 });
 
@@ -331,16 +333,16 @@ namespace WalletApi.Migrations
                         new
                         {
                             Id = new Guid("ce185a95-533e-425c-adf4-a5770766564b"),
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8328),
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5161),
                             NetworkProvider = "Mtn",
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8329)
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5163)
                         },
                         new
                         {
                             Id = new Guid("9806f26b-e013-4dff-812a-afba47d2fbe0"),
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8330),
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5168),
                             NetworkProvider = "Airtel",
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8331)
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(5168)
                         });
                 });
 
@@ -385,21 +387,21 @@ namespace WalletApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "37b75c9d-94af-4f55-a317-e173d4f11c4e",
-                            ConcurrencyStamp = "e4d476d2-5f61-4d27-aa3d-1021737dbd30",
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8077),
+                            Id = "018dd14d-b73e-47a5-802f-49d19bbf774e",
+                            ConcurrencyStamp = "74a66f36-3609-48ab-8481-a027fc492765",
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(4697),
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8088)
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(4724)
                         },
                         new
                         {
-                            Id = "c23a4b92-6bc4-49f5-a929-5b61a88ca47b",
-                            ConcurrencyStamp = "fc92ca81-ac7e-4223-ba56-4742c4a453ee",
-                            CreatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8092),
+                            Id = "b830ac33-f7c0-459d-8ed6-649f9adb4030",
+                            ConcurrencyStamp = "c87a2388-575f-45d4-81cd-853c0fb6e699",
+                            CreatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(4729),
                             Name = "Manager",
                             NormalizedName = "MANAGER",
-                            UpdatedAt = new DateTime(2022, 4, 15, 21, 21, 9, 460, DateTimeKind.Local).AddTicks(8093)
+                            UpdatedAt = new DateTime(2022, 4, 15, 20, 2, 6, 62, DateTimeKind.Local).AddTicks(4729)
                         });
                 });
 
@@ -415,14 +417,11 @@ namespace WalletApi.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");

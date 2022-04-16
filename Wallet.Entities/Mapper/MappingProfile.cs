@@ -41,7 +41,14 @@ namespace Wallet.Entities.Mapper
             CreateMap<PatchAirTimeDto, AirTime>();
             CreateMap<PatchDataDto, Models.Domain.Data>();
 
-            CreateMap<AddressRequestDto, Address> ();
+            //CreateMap<Staff, UpdateStaffDto>()
+            //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
+
+            CreateMap<UpdateStaffDto, Staff>()
+                .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.Email));
+
+            CreateMap<UpdateAddressDto, Address> ();
+
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.DataTransferObjects;
@@ -22,6 +22,7 @@ namespace Wallet.Services.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<Staff> _staffRepo;
         private readonly IRepository<Address> _addressRepo;
+        private readonly IRepository<User> _userRepo;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
@@ -35,6 +36,7 @@ namespace Wallet.Services.Services
             _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
             _staffRepo = _unitOfWork.GetRepository<Staff>();
             _addressRepo = _unitOfWork.GetRepository<Address>();
+            _userRepo = _unitOfWork.GetRepository<User>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -73,7 +75,7 @@ namespace Wallet.Services.Services
             {
                 UserId = user.Id,
                 PhoneNumber = model.MobileNo,
-                FullName = $"{model.LastName} {model.FirstName}",
+                //FullName = $"{model.LastName} {model.FirstName}",
             };
             await _staffRepo.AddAsync(staff);
 
@@ -92,7 +94,7 @@ namespace Wallet.Services.Services
 
             var staff = all.Select(x => new StaffResponseDto
             {
-                FullName = x.FullName,
+                //FullName = x.FullName,
                 Email = x.User.Email,
                 PhoneNumber = x.PhoneNumber,
                 Address = $" {x.Address.PlotNo} {x.Address.StreetName} {x.Address.State} ",
@@ -101,15 +103,49 @@ namespace Wallet.Services.Services
             return staff;
         }
 
-        public async Task<string> UpdateStaff(Guid id, AddressRequestDto model)
+        public async Task<string> UpdateStaffAddress(Guid staffId, UpdateAddressDto model)
         {
-            var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == id);
+            var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == staffId);
 
             var update = _mapper.Map(model, staff);
             await _addressRepo.UpdateAsync(update);
             await _unitOfWork.SaveChangesAsync();
 
-            return "Success";
+            return "Address updated successfully";
+        }
+
+        
+        public async Task<string> UpdateStaff(Guid id, JsonPatchDocument<UpdateStaffDto> model)
+        {
+            Staff staff = await _staffRepo.GetSingleByAsync(s => s.Id == id, 
+                include: s => s.Include(u => u.User));
+
+            if (staff == null)
+                return $"staff with id {id} does not exist";
+
+            UpdateStaffDto updateStaff = new()
+            {
+                LastName = staff.LastName,
+                FirstName = staff.FirstName,
+                Email = staff.User.Email,
+                MobileNo = staff.PhoneNumber
+            };
+
+            //var updateStaff = _mapper.Map<UpdateStaffDto>(staff);
+
+            model.ApplyTo(updateStaff);
+
+            _mapper.Map(updateStaff, staff);
+
+            _staffRepo.Update(staff);
+
+            staff.User.NormalizedEmail = staff.User.Email.ToUpper();
+
+            _userRepo.Update(staff.User);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return $"staff with email {staff.User.Email} updated successfully";
         }
 
         public async Task<StaffResponseDto> GetStaff(Guid id)
@@ -121,7 +157,7 @@ namespace Wallet.Services.Services
 
             return new StaffResponseDto
             {
-                FullName = staff.FullName,
+                //FullName = staff.FullName,
                 Email = staff.User.Email,
                 PhoneNumber = staff.PhoneNumber,
                 Address = $"{staff.Address.PlotNo} {staff.Address.StreetName} {staff.Address.State}, {staff.Address.Nationality}"
@@ -133,6 +169,62 @@ namespace Wallet.Services.Services
             return _staffRepo.GetAll();
         }
 
+        public async Task<string> DeleteStaffById(Guid id)
+        {
+            Staff staff = await _staffRepo.GetByIdAsync(id);
+            
+            if (staff == null)
+                return $"Staff with id {id} does not exist";
 
+            await _staffRepo.DeleteAsync(staff);
+
+            return $"Staff with name  deleted successfully";
+        }
+
+        public async Task<StaffResponseDto> GetStaffByEmail(string email)
+        {
+            User user = await _userRepo.GetSingleByAsync(u => u.Email == email, 
+                include: u => u.Include(s => s.Staff).ThenInclude(a => a.Address));
+
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+
+            StaffResponseDto staff = new()
+            {
+                //FullName = user.Staff.FullName,
+                Email = email,
+                PhoneNumber = user.Staff.PhoneNumber,
+                Address = $"{user.Staff.Address.PlotNo} {user.Staff.Address.StreetName} {user.Staff.Address.City} {user.Staff.Address.Nationality}"
+            };
+
+            return staff;
+        }
+
+        public async Task<string> PatchStaffAddress(Guid staffId, JsonPatchDocument<UpdateAddressDto> model)
+        {
+            var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == staffId);
+
+            if (staff == null)
+                return $"staff with id {staffId} does not exist";
+
+            UpdateAddressDto updateAddress = new()
+            {
+                PlotNo = staff.PlotNo,
+                StreetName = staff.StreetName,
+                City = staff.City,
+                State = staff.State,
+                Nationality = staff.Nationality,
+            };
+
+            model.ApplyTo(updateAddress);
+
+            _mapper.Map(updateAddress, staff);
+
+            await _addressRepo.UpdateAsync(staff);
+           
+            await _unitOfWork.SaveChangesAsync();
+
+            return $"staff updated successfully";
+        }
     }
 }
