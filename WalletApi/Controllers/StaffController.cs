@@ -42,7 +42,6 @@ namespace WalletApi.Controllers
 
 
         [HttpGet("staff-by-id")]
-        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> GetStaffById(Guid id)
         {
             var staff = await _staffService.GetStaff(id);
@@ -51,7 +50,6 @@ namespace WalletApi.Controllers
         }
 
         [HttpGet("staff-by-email")]
-        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> GetStaffByEmail(string email)
         {
             var staff = await _staffService.GetStaffByEmail(email);

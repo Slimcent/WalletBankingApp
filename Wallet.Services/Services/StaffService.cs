@@ -75,7 +75,8 @@ namespace Wallet.Services.Services
             {
                 UserId = user.Id,
                 PhoneNumber = model.MobileNo,
-                //FullName = $"{model.LastName} {model.FirstName}",
+                LastName = model.LastName,
+                FirstName = model.FirstName,
             };
             await _staffRepo.AddAsync(staff);
 
@@ -92,20 +93,14 @@ namespace Wallet.Services.Services
         { 
             var all = await _staffRepo.GetAllAndInclude(x => x.Address, x => x.User);
 
-            var staff = all.Select(x => new StaffResponseDto
-            {
-                //FullName = x.FullName,
-                Email = x.User.Email,
-                PhoneNumber = x.PhoneNumber,
-                Address = $" {x.Address.PlotNo} {x.Address.StreetName} {x.Address.State} ",
-            });
-
-            return staff;
+            return _mapper.Map<IEnumerable<StaffResponseDto>>(all);
         }
 
         public async Task<string> UpdateStaffAddress(Guid staffId, UpdateAddressDto model)
         {
             var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == staffId);
+            if (staff == null)
+                return $"staff with id {staffId} does not exist";
 
             var update = _mapper.Map(model, staff);
             await _addressRepo.UpdateAsync(update);
@@ -155,13 +150,7 @@ namespace Wallet.Services.Services
             if (staff == null)
                 throw new InvalidOperationException("Staff not found");
 
-            return new StaffResponseDto
-            {
-                //FullName = staff.FullName,
-                Email = staff.User.Email,
-                PhoneNumber = staff.PhoneNumber,
-                Address = $"{staff.Address.PlotNo} {staff.Address.StreetName} {staff.Address.State}, {staff.Address.Nationality}"
-            };
+            return _mapper.Map<StaffResponseDto>(staff);
         }
 
         public IEnumerable<Staff> GetTotalNumberOfStaff()
@@ -189,15 +178,7 @@ namespace Wallet.Services.Services
             if (user == null)
                 throw new InvalidOperationException("User not found");
 
-            StaffResponseDto staff = new()
-            {
-                //FullName = user.Staff.FullName,
-                Email = email,
-                PhoneNumber = user.Staff.PhoneNumber,
-                Address = $"{user.Staff.Address.PlotNo} {user.Staff.Address.StreetName} {user.Staff.Address.City} {user.Staff.Address.Nationality}"
-            };
-
-            return staff;
+            return _mapper.Map<StaffResponseDto>(user);
         }
 
         public async Task<string> PatchStaffAddress(Guid staffId, JsonPatchDocument<UpdateAddressDto> model)

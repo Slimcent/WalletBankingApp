@@ -6,6 +6,7 @@ using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
 using Wallet.Entities.DataTransferObjects.Transaction;
 using Wallet.Entities.DataTransferObjects.Transaction.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Models.Domain;
 
 namespace Wallet.Entities.Mapper
@@ -48,6 +49,18 @@ namespace Wallet.Entities.Mapper
                 .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.Email));
 
             CreateMap<UpdateAddressDto, Address> ();
+
+            CreateMap<Staff, StaffResponseDto> ()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName}"))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Address.PlotNo} {src.Address.StreetName} {src.Address.State} {src.Address.Nationality}"));
+
+            CreateMap<User, StaffResponseDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.Staff.LastName} {src.Staff.FirstName}"))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Staff.PhoneNumber))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Staff.Address.PlotNo} {src.Staff.Address.StreetName} {src.Staff.Address.State} {src.Staff.Address.Nationality}"));
 
         }
     }
