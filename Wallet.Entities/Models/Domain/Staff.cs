@@ -17,7 +17,7 @@ namespace Wallet.Entities.Models.Domain
         public string UpdatedBy { get; set; }
         public bool IsDeleted { get; set; }
         public string UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public virtual Address Address { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Wallet.Entities.DataTransferObjects;
+using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using WalletApi.ActionFilters;

@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
-using System.Net;
 using Wallet.Entities.Enumerators;
-using Wallet.Entities.GobalError;
+using Wallet.Entities.GobalMessage;
 using Wallet.Logger;
 using Wallet.Services.Exceptions;
 

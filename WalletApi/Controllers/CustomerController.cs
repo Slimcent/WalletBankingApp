@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Wallet.Entities.DataTransferObjects;
-using Wallet.Entities.Enumerators;
-using Wallet.Entities.GobalError;
-using Wallet.Logger;
+using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Services.Interfaces;
 using WalletApi.ActionFilters;
 

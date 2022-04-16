@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.DataTransferObjects.IdentityUsers
+namespace Wallet.Entities.Dto.IdentityUsers.PostDto
 {
     public class AddUserToRoleDto
     {
-        [Required(ErrorMessage = "Role Name cannot be empty"),  MinLength(2), MaxLength(50)]
+        [Required(ErrorMessage = "Role Name cannot be empty"), MinLength(2), MaxLength(50)]
         [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Only Alphabets allowed")]
         public string Name { get; set; }
 

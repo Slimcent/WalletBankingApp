@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Wallet.Entities.Enumerators;
 
-namespace Wallet.Entities.GobalError
+namespace Wallet.Entities.GobalMessage
 {
     public class ErrorDetails
     {

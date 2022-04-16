@@ -4,14 +4,10 @@ using System;
 using System.Threading.Tasks;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Interfaces;
-using Wallet.Entities.DataTransferObjects;
 using Wallet.Services.Helpers;
-using Wallet.Entities.GobalMessage;
-using Wallet.Entities.DataTransferObjects.IdentityUsers;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
-using Microsoft.AspNetCore.JsonPatch;
 using System.Security.Claims;
 using Wallet.Data.Interfaces;
+using Wallet.Entities.Dto.IdentityUsers.PostDto;
 
 namespace Wallet.Services.Services
 {
@@ -22,6 +18,8 @@ namespace Wallet.Services.Services
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
         private readonly IRepository<Customer> _customerRepo;
+        private readonly IRepository<Address> _addressRepo;
+        private readonly IRepository<Entities.Models.Domain.Wallet> _walletRepo;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
@@ -73,21 +71,26 @@ namespace Wallet.Services.Services
             {
                 UserId = user.Id,
                 PhoneNumber = model.MobileNo,
-                FullName = $"{model.LastName} {model.FirstName}",
-                Wallet = new Entities.Models.Domain.Wallet
-                {
-                    WalletNo = WalletIdGenerator.GenerateWalletId(),
-                    Balance = 0,
-                    IsActive = true,
-                    CustomerId = Guid.Parse(user.Id)
-                }
+                //FullName = $"{model.LastName} {model.FirstName}",
+                
+            };
+            await _customerRepo.AddAsync(customer);
+
+            Entities.Models.Domain.Wallet wallet = new()
+            {
+                WalletNo = WalletIdGenerator.GenerateWalletId(),
+                Balance = 0,
+                IsActive = true,
+                
+                CustomerId = customer.Id
             };
 
-            await _customerRepo.AddAsync(customer);
             var add = await _unitOfWork.SaveChangesAsync();
+            if (add > 0) return "Customer created";
 
-            if (add > 0) return "student created";
-                       
+            Address address = new() { CustomerId = customer.Id };
+            await _addressRepo.AddAsync(address);
+
             return $"Customer with email {model.Email} was created successfully";
         }
                 

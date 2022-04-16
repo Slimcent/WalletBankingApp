@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wallet.Entities.DataTransferObjects;
+using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Models.Domain;

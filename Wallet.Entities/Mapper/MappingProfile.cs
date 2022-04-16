@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Wallet.Entities.DataTransferObjects;
-using Wallet.Entities.DataTransferObjects.IdentityUsers;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
-using Wallet.Entities.DataTransferObjects.Transaction;
-using Wallet.Entities.DataTransferObjects.Transaction.PostDto;
+using Wallet.Entities.Dto.IdentityUsers.Patch;
+using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Dto.Response;
+using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.Models.Domain;
 
 namespace Wallet.Entities.Mapper

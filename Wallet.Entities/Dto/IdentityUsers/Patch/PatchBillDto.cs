@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Wallet.Entities.DataTransferObjects.IdentityUsers.Patch
+namespace Wallet.Entities.Dto.IdentityUsers.Patch
 {
     public class PatchBillDto
     {

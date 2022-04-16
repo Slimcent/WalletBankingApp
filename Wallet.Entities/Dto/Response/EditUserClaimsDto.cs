@@ -1,4 +1,4 @@
-﻿namespace Wallet.Entities.DataTransferObjects.Response
+﻿namespace Wallet.Entities.Dto.Response
 {
     public class EditUserClaimsDto
     {

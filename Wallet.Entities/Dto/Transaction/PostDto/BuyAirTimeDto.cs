@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Wallet.Entities.DataTransferObjects.Transaction
+namespace Wallet.Entities.Dto.Transaction.PostDto
 {
     public class BuyAirTimeDto
     {
@@ -9,7 +9,7 @@ namespace Wallet.Entities.DataTransferObjects.Transaction
         public string NetworkProvider { get; set; }
 
         [Display(Name = "Phone Number")]
-        [RegularExpression(@"^[0]\d{10}$", ErrorMessage ="Invalid Phone Number")]
+        [RegularExpression(@"^[0]\d{10}$", ErrorMessage = "Invalid Phone Number")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Amount cannot be empty"), Column(TypeName = "decimal(38,2)")]

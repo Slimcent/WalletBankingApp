@@ -15,7 +15,6 @@ using Wallet.Data.Interfaces;
 using Wallet.Entities.Models.Context;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
-using Wallet.Services;
 using Wallet.Services.Interfaces;
 using Wallet.Services.Services;
 

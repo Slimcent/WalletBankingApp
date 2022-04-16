@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.DataTransferObjects.Transaction
+namespace Wallet.Entities.Dto.Transaction.PostDto
 {
     public class PayBillDto
     {

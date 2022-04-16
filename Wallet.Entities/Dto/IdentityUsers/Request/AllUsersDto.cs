@@ -1,4 +1,4 @@
-﻿namespace Wallet.Entities.DataTransferObjects.IdentityUsers.GetDto
+﻿namespace Wallet.Entities.Dto.IdentityUsers.Request
 {
     public class AllUsersDto
     {

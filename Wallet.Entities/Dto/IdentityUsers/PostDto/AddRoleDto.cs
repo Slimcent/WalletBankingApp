@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.DataTransferObjects.IdentityUsers
+namespace Wallet.Entities.Dto.IdentityUsers.PostDto
 {
     public class AddRoleDto
     {

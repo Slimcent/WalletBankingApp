@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.DataTransferObjects.IdentityUsers.Patch
+namespace Wallet.Entities.Dto.IdentityUsers.Patch
 {
     public class PatchAirTimeDto
     {

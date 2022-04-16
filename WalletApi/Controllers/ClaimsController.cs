@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.Request;
-using Wallet.Entities.DataTransferObjects.Response;
+using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Enumerators;
-using Wallet.Entities.GobalError;
+using Wallet.Entities.GobalMessage;
 using Wallet.Services.Interfaces;
 
 namespace WalletApi.Controllers

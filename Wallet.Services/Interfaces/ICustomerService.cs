@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using System.Threading.Tasks;
-using Wallet.Entities.DataTransferObjects;
-using Wallet.Entities.DataTransferObjects.IdentityUsers.Patch;
-using Wallet.Entities.GobalMessage;
+﻿using System.Threading.Tasks;
+using Wallet.Entities.Dto.IdentityUsers.PostDto;
 
 namespace Wallet.Services.Interfaces
 {
