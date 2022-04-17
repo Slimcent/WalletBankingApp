@@ -19,15 +19,14 @@ namespace Wallet.Entities.Models.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new RoleSeed());
-            modelBuilder.ApplyConfiguration(new AirTimeSeed());
-            modelBuilder.ApplyConfiguration(new DataSeed());
-            modelBuilder.ApplyConfiguration(new BillPaymentSeed());
+            //modelBuilder.ApplyConfiguration(new RoleSeed());
+            //modelBuilder.ApplyConfiguration(new AirTimeSeed());
+            //modelBuilder.ApplyConfiguration(new DataSeed());
+            //modelBuilder.ApplyConfiguration(new BillPaymentSeed());
 
             modelBuilder.Entity<Staff>()
                 .HasOne(a => a.Address)
                 .WithOne(b => b.Staff)
-                .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 

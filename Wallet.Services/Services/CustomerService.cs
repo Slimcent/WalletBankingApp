@@ -32,6 +32,8 @@ namespace Wallet.Services.Services
             _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
             _roleRepo = _unitOfWork.GetRepository<Role>();
             _customerRepo = _unitOfWork.GetRepository<Customer>();
+            _addressRepo = _unitOfWork.GetRepository<Address>();
+            _walletRepo = _unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -71,25 +73,26 @@ namespace Wallet.Services.Services
             {
                 UserId = user.Id,
                 PhoneNumber = model.MobileNo,
-                //FullName = $"{model.LastName} {model.FirstName}",
-                
+                LastName = model.LastName,
+                FirstName = model.FirstName,
             };
             await _customerRepo.AddAsync(customer);
+            var add = await _unitOfWork.SaveChangesAsync();
+            if (add > 0) return "Customer created";
+
+            Address address = new() { CustomerId = customer.Id };
+            await _addressRepo.AddAsync(address);
 
             Entities.Models.Domain.Wallet wallet = new()
             {
                 WalletNo = WalletIdGenerator.GenerateWalletId(),
                 Balance = 0,
                 IsActive = true,
-                
                 CustomerId = customer.Id
             };
+            await _walletRepo.AddAsync(wallet);
 
-            var add = await _unitOfWork.SaveChangesAsync();
-            if (add > 0) return "Customer created";
-
-            Address address = new() { CustomerId = customer.Id };
-            await _addressRepo.AddAsync(address);
+            
 
             return $"Customer with email {model.Email} was created successfully";
         }

@@ -18,11 +18,7 @@ namespace Wallet.Entities.Models.Domain
         public bool IsDeleted { get; set; }
         public string UserId { get; set; }
         public virtual User User { get; set; }
-
-        //[ForeignKey(nameof(WalletId))]
         public virtual Wallet Wallet { get; set; }
-
-        //[ForeignKey(nameof(AddressId))]
         public virtual Address Address { get; set; }
     }
 }

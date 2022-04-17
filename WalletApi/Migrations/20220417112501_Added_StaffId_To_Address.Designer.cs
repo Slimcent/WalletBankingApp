@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,10 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220417112501_Added_StaffId_To_Address")]
+    partial class Added_StaffId_To_Address
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -636,14 +638,11 @@ namespace WalletApi.Migrations
                         .WithOne("Address")
                         .HasForeignKey("Wallet.Entities.Models.Domain.Address", "CustomerId");
 
-                    b.HasOne("Wallet.Entities.Models.Domain.Staff", "Staff")
+                    b.HasOne("Wallet.Entities.Models.Domain.Staff", null)
                         .WithOne("Address")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId");
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Customer", b =>

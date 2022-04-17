@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,10 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220417121847_Removed_DeleteCascade_In_Address")]
+    partial class Removed_DeleteCascade_In_Address
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,6 +194,22 @@ namespace WalletApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AirTimes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1da5eb5f-04cc-4f0e-afa6-52b3c78bedf9"),
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9042),
+                            NetworkProvider = "Mtn",
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9042)
+                        },
+                        new
+                        {
+                            Id = new Guid("d584f98c-4a22-482d-bc9e-c1899aedcc57"),
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9044),
+                            NetworkProvider = "Airtel",
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9044)
+                        });
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Bill", b =>
@@ -221,6 +239,24 @@ namespace WalletApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Bills");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f1179901-af52-4774-b8e5-76e76b55c8c5"),
+                            Amount = 6500m,
+                            BillName = "DSTV",
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9162),
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9164)
+                        },
+                        new
+                        {
+                            Id = new Guid("637c3058-f4c2-45aa-a30c-301cc5d2d101"),
+                            Amount = 3000m,
+                            BillName = "GOTV",
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9166),
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9167)
+                        });
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Customer", b =>
@@ -289,6 +325,22 @@ namespace WalletApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Data");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ce185a95-533e-425c-adf4-a5770766564b"),
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9117),
+                            NetworkProvider = "Mtn",
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9118)
+                        },
+                        new
+                        {
+                            Id = new Guid("9806f26b-e013-4dff-812a-afba47d2fbe0"),
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9119),
+                            NetworkProvider = "Airtel",
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(9120)
+                        });
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Role", b =>
@@ -328,6 +380,26 @@ namespace WalletApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "5a983c37-816e-4ed4-95e3-580c095f7c75",
+                            ConcurrencyStamp = "0c2dee79-a1c7-47d7-be9b-3b3e02e1c41c",
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(8885),
+                            Name = "Admin",
+                            NormalizedName = "ADMIN",
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(8896)
+                        },
+                        new
+                        {
+                            Id = "e8b25f23-f93d-4224-8223-9ba5a0f2c1f6",
+                            ConcurrencyStamp = "50a4ceb4-eea6-4296-ba5d-143386880aa5",
+                            CreatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(8901),
+                            Name = "Manager",
+                            NormalizedName = "MANAGER",
+                            UpdatedAt = new DateTime(2022, 4, 17, 13, 18, 47, 316, DateTimeKind.Local).AddTicks(8901)
+                        });
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Staff", b =>
@@ -638,8 +710,7 @@ namespace WalletApi.Migrations
 
                     b.HasOne("Wallet.Entities.Models.Domain.Staff", "Staff")
                         .WithOne("Address")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId");
 
                     b.Navigation("Customer");
 

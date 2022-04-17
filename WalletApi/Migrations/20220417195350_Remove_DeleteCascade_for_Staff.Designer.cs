@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,10 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220417195350_Remove_DeleteCascade_for_Staff")]
+    partial class Remove_DeleteCascade_for_Staff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -638,8 +640,7 @@ namespace WalletApi.Migrations
 
                     b.HasOne("Wallet.Entities.Models.Domain.Staff", "Staff")
                         .WithOne("Address")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId");
 
                     b.Navigation("Customer");
 

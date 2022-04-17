@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,10 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220417185606_Drop_Address_And_Staff")]
+    partial class Drop_Address_And_Staff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,46 +128,6 @@ namespace WalletApi.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Wallet.Entities.Models.Domain.Address", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PlotNo")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("StaffId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique()
-                        .HasFilter("[CustomerId] IS NOT NULL");
-
-                    b.HasIndex("StaffId")
-                        .IsUnique()
-                        .HasFilter("[StaffId] IS NOT NULL");
-
-                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.AirTime", b =>
@@ -328,48 +290,6 @@ namespace WalletApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Wallet.Entities.Models.Domain.Staff", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("StaffProfile");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.StampDutyCharge", b =>
@@ -630,36 +550,11 @@ namespace WalletApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Wallet.Entities.Models.Domain.Address", b =>
-                {
-                    b.HasOne("Wallet.Entities.Models.Domain.Customer", "Customer")
-                        .WithOne("Address")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "CustomerId");
-
-                    b.HasOne("Wallet.Entities.Models.Domain.Staff", "Staff")
-                        .WithOne("Address")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Address", "StaffId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Staff");
-                });
-
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Customer", b =>
                 {
                     b.HasOne("Wallet.Entities.Models.Domain.User", "User")
                         .WithOne("Customer")
                         .HasForeignKey("Wallet.Entities.Models.Domain.Customer", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Wallet.Entities.Models.Domain.Staff", b =>
-                {
-                    b.HasOne("Wallet.Entities.Models.Domain.User", "User")
-                        .WithOne("Staff")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Staff", "UserId");
 
                     b.Navigation("User");
                 });
@@ -699,21 +594,12 @@ namespace WalletApi.Migrations
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Customer", b =>
                 {
-                    b.Navigation("Address");
-
                     b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("Wallet.Entities.Models.Domain.Staff", b =>
-                {
-                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.User", b =>
                 {
                     b.Navigation("Customer");
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

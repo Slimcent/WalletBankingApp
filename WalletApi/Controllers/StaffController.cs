@@ -105,7 +105,6 @@ namespace WalletApi.Controllers
         }
 
         [HttpDelete("delete-staff-by-id")]
-        [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> DeleteStaff([FromQuery] Guid id)
         {
             var staff = await _staffService.DeleteStaffById(id);

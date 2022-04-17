@@ -108,7 +108,7 @@ namespace Wallet.Services.Services
             return "Address updated successfully";
         }
 
-        
+
         public async Task<string> UpdateStaff(Guid id, JsonPatchDocument<UpdateStaffDto> model)
         {
             Staff staff = await _staffRepo.GetSingleByAsync(s => s.Id == id, 
@@ -166,12 +166,12 @@ namespace Wallet.Services.Services
 
             await _staffRepo.DeleteAsync(staff);
 
-            return $"Staff with name  deleted successfully";
+            return $"Staff deleted successfully";
         }
 
         public async Task<StaffResponseDto> GetStaffByEmail(string email)
         {
-            User user = await _userRepo.GetSingleByAsync(u => u.Email == email, 
+            User user = await _userRepo.GetSingleByAsync(u => u.Email == email,
                 include: u => u.Include(s => s.Staff).ThenInclude(a => a.Address));
 
             if (user == null)
@@ -179,6 +179,7 @@ namespace Wallet.Services.Services
 
             return _mapper.Map<StaffResponseDto>(user);
         }
+
 
         public async Task<string> PatchStaffAddress(Guid staffId, JsonPatchDocument<UpdateAddressDto> model)
         {
@@ -201,7 +202,7 @@ namespace Wallet.Services.Services
             _mapper.Map(updateAddress, staff);
 
             await _addressRepo.UpdateAsync(staff);
-           
+
             await _unitOfWork.SaveChangesAsync();
 
             return $"staff updated successfully";
