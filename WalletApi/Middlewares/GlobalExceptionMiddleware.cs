@@ -12,7 +12,7 @@ namespace WalletApi.Middlewares
 {
     public static class GlobalExceptionMiddleware
     {
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILoggerMessage logger)
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(appError =>
             {
@@ -45,11 +45,11 @@ namespace WalletApi.Middlewares
                                 break;
                         }
 
-                        logger.LogError($"Something went wrong: {contextFeature.Error}");
+                        //logger.LogError($"Something went wrong: {contextFeature.Error}");
                         await context.Response.WriteAsync(new ErrorDetails()
                         {
                             Status = status,
-                            Message = contextFeature.Error.InnerException.Message
+                            Message = contextFeature.Error.Message
                             //StatusCode = context.Response.StatusCode,
                             //Message = contextFeature.Error.InnerException.Message
                         }.ToString());

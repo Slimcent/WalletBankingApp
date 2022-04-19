@@ -28,6 +28,11 @@ namespace Wallet.Entities.Models.Context
                 .HasOne(a => a.Address)
                 .WithOne(b => b.Staff)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Customer>()
+                .HasOne(a => a.Address)
+                .WithOne(b => b.Customer)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

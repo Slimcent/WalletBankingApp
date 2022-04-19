@@ -110,7 +110,7 @@ namespace WalletApi
                 app.UseHsts();
             }
 
-            app.ConfigureExceptionHandler(logger);
+            app.ConfigureExceptionHandler();
 
             app.UseHttpsRedirection();
 
