@@ -218,14 +218,16 @@ namespace Wallet.Services.Services
 
         public async Task<string> SoftDeleteCustomer(Guid id)
         {
-            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id);
+            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id, include: x => x.Include(w => w.Wallet));
 
             if (customer is null)
                 return $"customer with Id {id} does not exist";
 
             customer.IsDeleted = true;
+            customer.Wallet.IsActive = false;
 
             await _customerRepo.UpdateAsync(customer);
+            await _walletRepo.UpdateAsync(customer.Wallet);
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -234,14 +236,16 @@ namespace Wallet.Services.Services
 
         public async Task<string> UnDeleteCustomer(Guid id)
         {
-            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id);
+            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id, include: x => x.Include(w => w.Wallet));
 
             if (customer is null)
                 return $"customer with Id {id} does not exist";
 
             customer.IsDeleted = false;
+            customer.Wallet.IsActive = true;
 
             await _customerRepo.UpdateAsync(customer);
+            await _walletRepo.UpdateAsync(customer.Wallet);
 
             await _unitOfWork.SaveChangesAsync();
 

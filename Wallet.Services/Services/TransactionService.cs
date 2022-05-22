@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,19 +14,22 @@ namespace Wallet.Services.Services
 {
     public class TransactionService : ITransactionService
     {
-        private readonly IServiceFactory _serviceFactory;
         private readonly IRepository<Transaction> _transactionRepo;
-        private readonly IRepository<Entities.Models.Domain.Wallet> _accountRepo;
+        private readonly IRepository<Entities.Models.Domain.Wallet> _walletRepo;
         private readonly IRepository<Bill> _billRepo;
         private readonly IRepository<AirTime> _airTimeRepo;
+        private readonly IServiceFactory _serviceFactory;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public TransactionService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
+        public TransactionService(IServiceFactory serviceFactory)
         {
-            _accountRepo = unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
-            _transactionRepo = unitOfWork.GetRepository<Transaction>();
-            _billRepo = unitOfWork.GetRepository<Bill>();
-            _airTimeRepo = unitOfWork.GetRepository<AirTime>();
+            _serviceFactory = serviceFactory;
+            _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
+            _walletRepo = _unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
+            _transactionRepo = _unitOfWork.GetRepository<Transaction>();
+            _billRepo = _unitOfWork.GetRepository<Bill>();
+            _airTimeRepo = _unitOfWork.GetRepository<AirTime>();
             _mapper = serviceFactory.GetServices<IMapper>();
         }
 
@@ -33,17 +37,19 @@ namespace Wallet.Services.Services
         {
             //IAccountService _accountService = _serviceFactory.GetServices<AccountService>();
             //var account = _accountService.GetAccountNumber(model.WalletID);
-            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletID);
+            if (model == null)
+                return new Response(false, "Please, indicate your Wallet No");
+
+            var wallet = await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.WalletID);
             if (wallet == null)
-                return new Response(false, "Please, indicate your Wallet Account");
+                return new Response(false, "Wallet No does not exist, check and try again");
 
             if (!wallet.IsActive) return new Response(false, "Your Wallet Account is not Active for now");
 
-            if (model.Amount <= 0) return new Response(false, "You cannot Deposit below 0 Amount");
+            if (model.Amount <= 0) return new Response(false, "You cannot Deposit 0 Amount");
 
             wallet.Balance += model.Amount;
-
-            //var depositDto = _mapper.Map<Transaction>(model);
+            await _walletRepo.UpdateAsync(wallet);
 
             var deposit = new Transaction()
             {
@@ -55,6 +61,7 @@ namespace Wallet.Services.Services
                 CustomerId = wallet.CustomerId
             };
             await  _transactionRepo.AddAsync(deposit);
+            await _unitOfWork.SaveChangesAsync();
 
             return new Response(true, $"Your Deposit of {model.Amount} was Successful! \nYour new Wallet Ballance is {wallet.Balance}");
         }
@@ -62,11 +69,14 @@ namespace Wallet.Services.Services
 
         public async Task<Response> Withdraw(WithdrawalDto model)
         {
-            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletID);
+            if (model == null)
+                return new Response(false, "Please, indicate your Wallet No");
+
+            var wallet = await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.WalletID);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
-            if (!wallet.IsActive) return new Response(false, "Your Account is not Active for now");
+            if (!wallet.IsActive) return new Response(false, "Your Account is not Active for now, contact the bank");
 
             if (model.Amount < 50) return new Response(false, "You cannot Withdraw below 50");
 
@@ -75,6 +85,7 @@ namespace Wallet.Services.Services
             if (model.Amount >= (wallet.Balance - 1000)) return new Response(false, "You cannot Withdraw above your  Wallet Balance");
 
             wallet.Balance -= model.Amount;
+            await _walletRepo.UpdateAsync(wallet);
 
             var withdraw = new Transaction()
             {
@@ -86,17 +97,21 @@ namespace Wallet.Services.Services
                 CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(withdraw);
+            await _unitOfWork.SaveChangesAsync();
 
             return new Response(true, $"Your Withdrawal of {model.Amount} was Successful! \nYour new Wallet Ballance is {wallet.Balance}");
         }
 
         public async Task<Response> Transfer(TransferDto model)
         {
-            var senderWallet =  await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.SenderWalletID);
+            if (model == null)
+                return new Response(false, "Please, indicate your Wallet No");
+
+            var senderWallet =  await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.SenderWalletID);
             if (senderWallet == null)
                 return new Response(false, "Please, Indicate Sending Wallet");
 
-            var receiverWallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.ReceiverWalletID);
+            var receiverWallet = await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.ReceiverWalletID);
             if (receiverWallet == null)
                 return new Response(false, "Please, Indicate Recipient Wallet");
 
@@ -114,6 +129,8 @@ namespace Wallet.Services.Services
 
             senderWallet.Balance -= model.Amount;
             receiverWallet.Balance += model.Amount;
+            await _walletRepo.UpdateAsync(senderWallet);
+            await _walletRepo.UpdateAsync(receiverWallet);
 
             var transferSender = new Transaction()
             {
@@ -135,13 +152,17 @@ namespace Wallet.Services.Services
                 CustomerId = receiverWallet.CustomerId
             };
             await _transactionRepo.AddAsync(transferReceiver);
+            await _unitOfWork.SaveChangesAsync();
 
-            return new Response(true, $"Your Transfer of {model.Amount} was Successful! \nYour new Wallet Ballance is {senderWallet.Balance}" );
+            return new Response(true, $"Your Transfer of {model.Amount} to {receiverWallet.WalletNo} was Successful! \nYour new Wallet Ballance is {senderWallet.Balance}" );
         }
 
         public async Task<Response> PayBill(PayBillDto model)
         {
-            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
+            if (model == null)
+                return new Response(false, "Please, indicate your Wallet No");
+
+            var wallet = await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -157,6 +178,7 @@ namespace Wallet.Services.Services
 
             wallet.Balance -= bill.Amount;
             wallet.Balance -= 100;
+            await _walletRepo.UpdateAsync(wallet);
 
             var billPayment = new Transaction()
             {
@@ -170,6 +192,7 @@ namespace Wallet.Services.Services
                 CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(billPayment);
+            await _unitOfWork.SaveChangesAsync();
 
             return new Response(true, $"Your {bill.BillName} payment of {bill.Amount} was Successful! \nYour new Wallet Ballance is {wallet.Balance}");
 
@@ -177,7 +200,10 @@ namespace Wallet.Services.Services
 
         public async Task<Response> BuyAirTime(BuyAirTimeDto model)
         {
-            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
+            if (model == null)
+                return new Response(false, "Please, indicate your Wallet No");
+
+            var wallet = await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -194,8 +220,7 @@ namespace Wallet.Services.Services
             if (wallet.Balance <= (wallet.Balance - 1000)) return new Response(false, "Your Wallet Balance is Insufficient");
 
             wallet.Balance -= model.Amount;
-
-            wallet.Balance -= model.Amount;
+            await _walletRepo.UpdateAsync(wallet);           
 
             var airTimePurchase = new Transaction()
             {
@@ -209,13 +234,17 @@ namespace Wallet.Services.Services
                 CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(airTimePurchase);
+            await _unitOfWork.SaveChangesAsync();
 
             return new Response(true, $"Your AirTime Purchase of {airTime.NetworkProvider} {model.Amount} was Successful! \nYour new Wallet Ballance is {wallet.Balance}");
         }
 
         public async Task<Response> BuyData(BuyDataDto model)
         {
-            var wallet = await _accountRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
+            if (model == null)
+                return new Response(false, "Please, indicate your Wallet No");
+
+            var wallet = await _walletRepo.GetSingleByAsync(a => a.WalletNo == model.WalletId);
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
@@ -232,8 +261,7 @@ namespace Wallet.Services.Services
             if (wallet.Balance <= (wallet.Balance - 1000)) return new Response(false, "Your Wallet Balance is Insufficient");
 
             wallet.Balance -= model.Amount;
-
-            wallet.Balance -= model.Amount;
+            await _walletRepo.UpdateAsync(wallet);
 
             var dataPurchase = new Transaction()
             {
@@ -247,6 +275,7 @@ namespace Wallet.Services.Services
                 CustomerId = wallet.CustomerId
             };
             await _transactionRepo.AddAsync(dataPurchase);
+            await _unitOfWork.SaveChangesAsync();
 
             return new Response(true, $"Your Data Purchase of {data.NetworkProvider} {model.Amount} was Successful! \nYour new Wallet Ballance is {wallet.Balance}");
         }

@@ -26,7 +26,7 @@ namespace Wallet.Entities.Models.Domain
         public Guid CustomerId { get; set; }
         public string StampDutyId { get; set; }
 
-        [ForeignKey(nameof(CustomerId))]
+        //[ForeignKey(nameof(CustomerId))]
         public virtual Customer Customer { get; set; }
     }
 }

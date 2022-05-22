@@ -16,7 +16,7 @@ namespace Wallet.Entities.Models.Domain
         public DateTime TimeStamp { get; set; }
         public Guid CustomerId { get; set; }
 
-        [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; }
+        //[ForeignKey(nameof(CustomerId))]
+        public virtual Customer Customer { get; set; }
     }
 }
