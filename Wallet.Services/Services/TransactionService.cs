@@ -20,7 +20,6 @@ namespace Wallet.Services.Services
         private readonly IRepository<AirTime> _airTimeRepo;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
         public TransactionService(IServiceFactory serviceFactory)
         {
@@ -30,7 +29,6 @@ namespace Wallet.Services.Services
             _transactionRepo = _unitOfWork.GetRepository<Transaction>();
             _billRepo = _unitOfWork.GetRepository<Bill>();
             _airTimeRepo = _unitOfWork.GetRepository<AirTime>();
-            _mapper = serviceFactory.GetServices<IMapper>();
         }
 
         public async Task<Response> Deposit(DepositDto model)

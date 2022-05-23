@@ -17,12 +17,10 @@ namespace WalletApi.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        private readonly IUserService _userService;
         
-        public CustomerController(ICustomerService customerService, IUserService userService)
+        public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
-            _userService = userService;
         }
 
 
@@ -74,7 +72,7 @@ namespace WalletApi.Controllers
 
         [HttpPost("create-customer")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> CreateCustomer([FromBody] AddUserDto model)
+        public async Task<IActionResult> CreateCustomer([FromBody] UsersCreateRequestDto model)
         {
             var customer = await _customerService.CreateCustomer(model);
 

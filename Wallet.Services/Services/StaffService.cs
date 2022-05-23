@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
@@ -17,8 +15,6 @@ namespace Wallet.Services.Services
 {
     public class StaffService : IStaffService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<Staff> _staffRepo;
         private readonly IRepository<Address> _addressRepo;
         private readonly IRepository<User> _userRepo;
@@ -31,63 +27,44 @@ namespace Wallet.Services.Services
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _userManager = _serviceFactory.GetServices<UserManager<User>>();
-            _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
             _staffRepo = _unitOfWork.GetRepository<Staff>();
             _addressRepo = _unitOfWork.GetRepository<Address>();
             _userRepo = _unitOfWork.GetRepository<User>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
-        public async Task<string> CreateStaff(AddUserDto model)
+        public async Task<string> CreateStaff(UsersCreateRequestDto model)
         {
-            User emailExists = await _userManager.FindByEmailAsync(model.Email);
-            if (emailExists != null)
-                return $"staff with email {model.Email} already exists";
-
-            User userNameExists = await _userManager.FindByNameAsync(model.UserName);
-            if (userNameExists != null)
-                return $"Username {model.UserName} already exists";
-
-            var user = _mapper.Map<User>(model);
-            user.EmailConfirmed = true;
-
-            var password = "123456";
-            IdentityResult result = await _userManager.CreateAsync(user, password);
-
-            if (!result.Succeeded)
-                return "User creation failed";
-
-            if (!_roleManager.RoleExistsAsync("Staff").Result)
+            AddUserDto user = new()
             {
-                Role role = new() { Name = "Staff" };
-                IdentityResult roleResult = _roleManager.CreateAsync(role).Result;
+                Email = model.Email,
+                FirstName = model.FirstName,
+                UserName = model.UserName,
+                Role = model.Role,
+            };
+            string userId = await _serviceFactory.GetServices<IUserService>().CreateUser(user);
 
-                if (!roleResult.Succeeded)
-                    return "Error while creating role";
-            }
-            await _userManager.AddToRoleAsync(user, "Staff");
-
-            await _serviceFactory.GetServices<IUserService>().CreateUserClaims(model.Email, ClaimTypes.Role, model.ClaimValue);
-           
             Staff staff = new()
             {
-                UserId = user.Id,
-                PhoneNumber = model.MobileNo,
+                UserId = userId,
+                PhoneNumber = model.PhoneNumber,
                 LastName = model.LastName,
                 FirstName = model.FirstName,
+                Gender = model.Gender
             };
             await _staffRepo.AddAsync(staff);
 
-            var add = await _unitOfWork.SaveChangesAsync();
-            if (add > 0) return "Staff created successfully";
-
-            Address address = new() { StaffId = staff.Id };
-            await _addressRepo.AddAsync(address);
-
+            await CreateStaffAddress(staff);
+            
             return $"Staff with email {model.Email} was created successfully";
         }
 
+        private async Task CreateStaffAddress(Staff staff)
+        {
+            Address address = new() { StaffId = staff.Id };
+            await _addressRepo.AddAsync(address);
+        }
+               
         public async Task<IEnumerable<StaffResponseDto>> GetAllStaff()
         { 
             var all = await _staffRepo.GetAllAndInclude(x => x.Address, x => x.User);
@@ -107,7 +84,6 @@ namespace Wallet.Services.Services
 
             return "Address updated successfully";
         }
-
 
         public async Task<string> UpdateStaff(Guid id, JsonPatchDocument<UpdateStaffDto> model)
         {

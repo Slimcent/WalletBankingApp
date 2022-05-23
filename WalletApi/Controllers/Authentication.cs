@@ -8,26 +8,30 @@ using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
+using Wallet.Services.Interfaces;
 using WalletApi.ActionFilters;
 using WalletApi.Authentication;
 
 namespace WalletApi.Controllers
 {
-    [Route("api/login")]
+    [Route("api/[controller]")]
     [ApiController]
     public class Authentication : ControllerBase
     {
         private readonly ILoggerMessage _logger;
         private readonly UserManager<User> _userManager;
         private readonly IAuthenticationManager _authManager;
-        public Authentication(ILoggerMessage logger, UserManager<User> userManager, IAuthenticationManager authManager)
+        private readonly IUserService _userService;
+
+        public Authentication(ILoggerMessage logger, UserManager<User> userManager, IAuthenticationManager authManager, IUserService userService)
         {
             _logger = logger;
             _userManager = userManager;
             _authManager = authManager;
+            _userService = userService;
         }
 
-        [HttpPost]
+        [HttpPost("login", Name = "Login")]
         [ServiceFilter(typeof(ModelStateValidation))]
         public async Task<IActionResult> Login([FromBody] LoginDto user)
         {
@@ -40,6 +44,15 @@ namespace WalletApi.Controllers
             return Ok(new { Token = await _authManager.CreateToken() });
 
             throw new Exception("Exception");
+        }
+
+        [HttpPost("create-user", Name = "Create-User")]
+        [ServiceFilter(typeof(ModelStateValidation))]
+        public async Task<IActionResult> CreateUser([FromBody] AddUserDto model)
+        {
+            string user = await _userService.CreateUser(model);
+
+            return Ok(user);
         }
 
 

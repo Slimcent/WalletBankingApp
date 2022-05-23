@@ -19,8 +19,7 @@ namespace Wallet.Services.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        private readonly IRepository<User> _userRepo;
-        private readonly IMapper _mapper;
+       private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -31,23 +30,19 @@ namespace Wallet.Services.Services
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
             _userManager = _serviceFactory.GetServices<UserManager<User>>();
             _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
-            _userRepo = _unitOfWork.GetRepository<User>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
         
         public async Task<string> CreateUser(AddUserDto model)
         {
-            if (model == null)
-                return "Invalid data sent";
-
             var existingEmail = await _userManager.FindByEmailAsync(model.Email.Trim().ToLower());
             if (existingEmail != null)
                 throw new UserExistException(model.Email);
 
-            var existingUserName = await _userManager.FindByNameAsync(model.UserName.Trim().ToLower());
-            if (existingUserName != null)
-                return "Username already exist";
+            User userNameExists = await _userManager.FindByNameAsync(model.UserName);
+            if (userNameExists != null)
+                return $"Username {model.UserName} already exists";
 
             var user = _mapper.Map<User>(model);
             user.EmailConfirmed = true;
@@ -59,19 +54,17 @@ namespace Wallet.Services.Services
                 throw new InvalidOperationException($"User creation failed");
 
 
-            if (!_roleManager.RoleExistsAsync("Staff").Result)
+            if (!_roleManager.RoleExistsAsync(model.Role).Result)
             {
-                var role = new Role { Name = "Staff" };
+                var role = new Role { Name = model.Role };
                 var roleResult = _roleManager.CreateAsync(role).Result;
                 if (!roleResult.Succeeded)
                     throw new InvalidOperationException($"Role creation failed");
 
             }
-            await _userManager.AddToRoleAsync(user, "Staff");
+            await _userManager.AddToRoleAsync(user, model.Role);
 
-            await CreateUserClaims(user.Email, ClaimTypes.Role, model.ClaimValue);
-
-            return $"User with email {user.Email} created successfully";
+            return user.Id;
         }
         
         public async Task<UserClaimsResponseDto> CreateUserClaims(string email, string claimType, string claimValue)

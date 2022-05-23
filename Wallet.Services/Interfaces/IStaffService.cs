@@ -11,7 +11,7 @@ namespace Wallet.Services.Interfaces
 {
     public interface IStaffService
     {
-        Task<string> CreateStaff(AddUserDto model);
+        Task<string> CreateStaff(UsersCreateRequestDto model);
         Task<string> UpdateStaffAddress(Guid staffId, UpdateAddressDto model);
         Task<IEnumerable<StaffResponseDto>> GetAllStaff();
         Task<StaffResponseDto> GetStaff(Guid id);

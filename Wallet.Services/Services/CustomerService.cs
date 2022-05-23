@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Interfaces;
 using Wallet.Services.Helpers;
-using System.Security.Claims;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
@@ -18,8 +16,6 @@ namespace Wallet.Services.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IRepository<Address> _addressRepo;
@@ -32,8 +28,6 @@ namespace Wallet.Services.Services
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _userManager = _serviceFactory.GetServices<UserManager<User>>();
-            _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
             _customerRepo = _unitOfWork.GetRepository<Customer>();
             _addressRepo = _unitOfWork.GetRepository<Address>();
             _userRepo = _unitOfWork.GetRepository<User>();
@@ -42,51 +36,42 @@ namespace Wallet.Services.Services
         }
 
 
-        public async Task<string> CreateCustomer(AddUserDto model)
+        public async Task<string> CreateCustomer(UsersCreateRequestDto model)
         {
-            User emailExists = await _userManager.FindByEmailAsync(model.Email);
-            if (emailExists != null)
-                return  $"customer with email {model.Email} already exists";
-
-            User userNameExists = await _userManager.FindByNameAsync(model.UserName);
-            if (userNameExists != null)
-                return $"Username {model.UserName} already exists";
-
-            var user = _mapper.Map<User>(model);
-            user.EmailConfirmed = true;
-
-            var password = "123456";
-            IdentityResult result = await _userManager.CreateAsync(user, password);
-
-            if (!result.Succeeded)
-                return "User creation failed";
-
-            if (!_roleManager.RoleExistsAsync("Customer").Result)
+            AddUserDto user = new()
             {
-                Role role = new Role { Name = "Customer" };
-                IdentityResult roleResult = _roleManager.CreateAsync(role).Result;
-
-                if (!roleResult.Succeeded)
-                    return "Error while creating role";
-            }
-            await _userManager.AddToRoleAsync(user, "Customer");
-
-            await _serviceFactory.GetServices<IUserService>().CreateUserClaims(model.Email, ClaimTypes.Role, model.ClaimValue);
+                Email = model.Email,
+                FirstName = model.FirstName,
+                UserName = model.UserName,
+                Role = model.Role,
+            };
+            string userId = await _serviceFactory.GetServices<IUserService>().CreateUser(user);
 
             Customer customer = new()
             {
-                UserId = user.Id,
-                PhoneNumber = model.MobileNo,
+                UserId = userId,
+                PhoneNumber = model.PhoneNumber,
                 LastName = model.LastName,
                 FirstName = model.FirstName,
+                Gender = model.Gender
             };
             await _customerRepo.AddAsync(customer);
-            var add = await _unitOfWork.SaveChangesAsync();
-            if (add > 0) return "Customer created";
+                        
+            await CreateCustomerAddress(customer);
 
+            await CreateCustomerAccount(customer);
+                        
+            return $"Customer with email {model.Email} was created successfully";
+        }
+
+        private async Task CreateCustomerAddress(Customer customer)
+        {
             Address address = new() { CustomerId = customer.Id };
             await _addressRepo.AddAsync(address);
+        }
 
+        private async Task CreateCustomerAccount(Customer customer)
+        {
             Entities.Models.Domain.Wallet wallet = new()
             {
                 WalletNo = WalletIdGenerator.GenerateWalletId(),
@@ -95,8 +80,6 @@ namespace Wallet.Services.Services
                 CustomerId = customer.Id
             };
             await _walletRepo.AddAsync(wallet);
-
-            return $"Customer with email {model.Email} was created successfully";
         }
 
         public async Task<string> DeleteCustomerById(Guid id)

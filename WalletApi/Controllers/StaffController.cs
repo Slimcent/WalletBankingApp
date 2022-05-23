@@ -16,15 +16,10 @@ namespace WalletApi.Controllers
     [ApiController]
     public class StaffController : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IAccountService _accountService;
         private readonly IStaffService _staffService;
        
-        public StaffController(IUserService userService,
-           IAccountService accountService, IStaffService staffService)
+        public StaffController(IStaffService staffService)
         {
-            _userService = userService;
-            _accountService = accountService;
             _staffService = staffService;
         }
 
@@ -59,7 +54,7 @@ namespace WalletApi.Controllers
 
         [HttpPost("create-staff")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> CreateStaff([FromBody] AddUserDto model)
+        public async Task<IActionResult> CreateStaff([FromQuery] UsersCreateRequestDto model)
         {
             var staff = await _staffService.CreateStaff(model);
 

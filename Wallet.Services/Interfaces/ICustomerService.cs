@@ -10,7 +10,7 @@ namespace Wallet.Services.Interfaces
 {
     public interface ICustomerService
     {
-        Task<string> CreateCustomer(AddUserDto model);
+        Task<string> CreateCustomer(UsersCreateRequestDto model);
         Task<string> DeleteCustomerById(Guid id);
         Task<string> UpdateCustomerAddress(Guid customerId, UpdateAddressDto model);
         Task<string> PatchCustomerAddress(Guid customerId, JsonPatchDocument<UpdateAddressDto> model);

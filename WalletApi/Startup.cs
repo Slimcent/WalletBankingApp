@@ -23,6 +23,9 @@ using WalletApi.ActionFilters;
 using WalletApi.Authentication;
 using WalletApi.Data;
 using WalletApi.Middlewares;
+using Newtonsoft.Json.Serialization;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace WalletApi
 {
@@ -52,11 +55,28 @@ namespace WalletApi
             services.AddScoped<MediaTypeValidation>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication();
-            services.AddControllers(config =>
+
+            services.AddControllers(setupAction =>
             {
-                config.RespectBrowserAcceptHeader = true;
-                config.ReturnHttpNotAcceptable = true;
-            }).AddNewtonsoftJson();
+                setupAction.ReturnHttpNotAcceptable = true;
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+            });
+
+            //services.AddControllers(config =>
+            //{
+            //    config.RespectBrowserAcceptHeader = true;
+            //    config.ReturnHttpNotAcceptable = true;
+            //}).AddNewtonsoftJson();
 
             services.AddSwaggerGen(c =>
             {
@@ -71,6 +91,8 @@ namespace WalletApi
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\""
                 });
+
+                
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {

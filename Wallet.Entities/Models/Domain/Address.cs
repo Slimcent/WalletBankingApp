@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Wallet.Entities.Interfaces;
 
 namespace Wallet.Entities.Models.Domain
 {
-    public class Address
+    public class Address : ITracker
     {
         [Key]
         public Guid Id { get; set; }
@@ -14,6 +15,10 @@ namespace Wallet.Entities.Models.Domain
         public string? Nationality { get; set; }
         public Guid? CustomerId { get; set; }
         public Guid? StaffId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Staff Staff { get; set; }
     }
