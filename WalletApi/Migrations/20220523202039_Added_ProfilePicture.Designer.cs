@@ -12,8 +12,8 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    [Migration("20220419103231_Remove_ForeignKey_FromTransactionStampDutyCharge")]
-    partial class Remove_ForeignKey_FromTransactionStampDutyCharge
+    [Migration("20220523202039_Added_ProfilePicture")]
+    partial class Added_ProfilePicture
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,6 +139,12 @@ namespace WalletApi.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
@@ -155,6 +161,12 @@ namespace WalletApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StreetName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -240,6 +252,9 @@ namespace WalletApi.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -291,6 +306,23 @@ namespace WalletApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Data");
+                });
+
+            modelBuilder.Entity("Wallet.Entities.Models.Domain.ProfilePicture", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProfilePictures");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Role", b =>
@@ -346,6 +378,9 @@ namespace WalletApi.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

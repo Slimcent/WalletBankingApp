@@ -86,5 +86,6 @@ namespace Wallet.Entities.Models.Context
         public DbSet<StampDutyCharge> StampDutyCharges { get; set; }
         public DbSet<TransactionStampDutyCharge> TransactionStampDutyCharges { get; set; }
         public DbSet<Domain.Wallet> Wallets { get; set; }
+        public DbSet<ProfilePicture> ProfilePictures { get; set; }
     }
 }

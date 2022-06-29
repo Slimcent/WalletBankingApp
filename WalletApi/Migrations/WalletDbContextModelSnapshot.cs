@@ -306,6 +306,23 @@ namespace WalletApi.Migrations
                     b.ToTable("Data");
                 });
 
+            modelBuilder.Entity("Wallet.Entities.Models.Domain.ProfilePicture", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProfilePictures");
+                });
+
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Role", b =>
                 {
                     b.Property<string>("Id")
