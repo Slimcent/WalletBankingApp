@@ -5,7 +5,7 @@ namespace Wallet.Entities.Dto.IdentityUsers.Patch
 {
     public class PatchBillDto
     {
-        [Required(ErrorMessage = "Bill Name cannot be empty"), Display(Name = "Bill Name"), RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Alphabets allowed")]
+        [Required(ErrorMessage = "Bill Name cannot be empty"), RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Alphabets allowed")]
         public string BillName { get; set; }
 
         [Required(ErrorMessage = "Amount cannot be empty"), Column(TypeName = "decimal(38,2)")]

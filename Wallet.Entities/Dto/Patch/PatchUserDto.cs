@@ -14,7 +14,7 @@ namespace Wallet.Entities.Dto.IdentityUsers.Patch
         [Required(ErrorMessage = "Email canot be empty"), EmailAddress]
         public string Email { get; set; }
 
-        [RegularExpression(@"^[0]\d{10}$", ErrorMessage = "Invalid Phone Number"), Display(Name = "Phone Number")]
+        [RegularExpression(@"^[0]\d{10}$", ErrorMessage = "Invalid Phone Number")]
         public string PhoneNumber { get; set; }
     }
 }

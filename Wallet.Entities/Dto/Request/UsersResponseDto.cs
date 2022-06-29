@@ -1,6 +1,6 @@
 ﻿namespace Wallet.Entities.Dto.IdentityUsers.Request
 {
-    public class AllUsersDto
+    public class UsersResponseDto
     {
         public string FullName { get; set; }
         public string UserName { get; set; }

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Interfaces;
@@ -106,11 +108,11 @@ namespace Wallet.Services.Services
             return new Response(true, $"Role Updated Successfully, see Details below\nRole Name : {role.Name}");
         }
 
-        public async Task<IEnumerable<AllRolesDto>> GetAllRoles()
+        public async Task<IEnumerable<RoleResponseDto>> GetAllRoles()
         {
             var allRoles = await _roleRepo.GetAllAsync();
 
-            var rolesDto = _mapper.Map<IEnumerable<AllRolesDto>>(allRoles);
+            var rolesDto = _mapper.Map<IEnumerable<RoleResponseDto>>(allRoles);
 
             return rolesDto;
         }

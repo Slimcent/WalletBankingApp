@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Wallet.Entities.Dto;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
 using Wallet.Entities.Enumerators;

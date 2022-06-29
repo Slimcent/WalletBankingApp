@@ -9,6 +9,7 @@ namespace Wallet.Entities.Models.Domain
         [Key]
         public Guid Id { get; set; }
         public string NetworkProvider { get; set; }
+        public bool IsDeletd { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }

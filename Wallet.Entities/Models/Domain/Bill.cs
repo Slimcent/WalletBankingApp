@@ -13,6 +13,7 @@ namespace Wallet.Entities.Models.Domain
 
         [Column(TypeName = "decimal(38,2)")]
         public decimal Amount { get; set; }
+        public bool IsDeletd { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }

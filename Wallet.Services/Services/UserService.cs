@@ -6,8 +6,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
-using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Exceptions;
@@ -34,7 +34,7 @@ namespace Wallet.Services.Services
         }
 
         
-        public async Task<string> CreateUser(AddUserDto model)
+        public async Task<string> CreateUser(CreateUserDto model)
         {
             var existingEmail = await _userManager.FindByEmailAsync(model.Email.Trim().ToLower());
             if (existingEmail != null)

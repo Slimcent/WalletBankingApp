@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalMessage;
@@ -25,7 +26,7 @@ namespace WalletApi.Controllers
 
         [HttpPost("create-bill")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddBill([FromBody] AddBillDto model)
+        public async Task<IActionResult> AddBill([FromBody] CreateBillDto model)
         {
             var result = await _billService.AddBill(model);
 

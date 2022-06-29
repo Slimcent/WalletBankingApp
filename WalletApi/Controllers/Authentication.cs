@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Services.Interfaces;
@@ -48,7 +46,7 @@ namespace WalletApi.Controllers
 
         [HttpPost("create-user", Name = "Create-User")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> CreateUser([FromBody] AddUserDto model)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto model)
         {
             string user = await _userService.CreateUser(model);
 

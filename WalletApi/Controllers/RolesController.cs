@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalMessage;
 using Wallet.Services.Interfaces;

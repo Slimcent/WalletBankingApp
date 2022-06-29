@@ -9,6 +9,7 @@ namespace Wallet.Entities.Models.Domain
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public bool IsActive { get; set; }
 
         [Column(TypeName = "decimal(38,2)")]
         public decimal Amount { get; set; }

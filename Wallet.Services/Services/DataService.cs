@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
@@ -28,7 +30,7 @@ namespace Wallet.Services.Services
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
-        public async Task<Response> AddData(AddNetworkProviderDto model)
+        public async Task<Response> AddData(CreateNetworkProviderDto model)
         {
             var existingData = await _dataRepo.GetSingleByAsync(predicate: d => d.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if (existingData != null)
@@ -41,14 +43,14 @@ namespace Wallet.Services.Services
             return new Response(true, $"Network Provider Name {model.NetworkProvider} has been added Successfully!");
         }
 
-        public async Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
+        public async Task<Response> EditData(Guid Id, JsonPatchDocument<PatchNetworkProviderDto> model)
         {
             var data = await _dataRepo.GetByIdAsync(Id);
 
             if (data is null)
                 return new Response(false, "Data does not Exist");
 
-            var dataDto = new PatchDataDto
+            var dataDto = new PatchNetworkProviderDto
             {
                 NetworkProvider = data.NetworkProvider
             };
@@ -74,11 +76,11 @@ namespace Wallet.Services.Services
             return new Response(true, $"Data with Name {data.NetworkProvider} has been deleted Successfully");
         }
 
-        public async Task<IEnumerable<AllDataDto>> GetAllData()
+        public async Task<IEnumerable<NetworkProviderResponseDto>> GetAllData()
         {
             var allData = await _dataRepo.GetAllAsync();
 
-            var dataDto = _mapper.Map<IEnumerable<AllDataDto>>(allData);
+            var dataDto = _mapper.Map<IEnumerable<NetworkProviderResponseDto>>(allData);
 
             return dataDto;
         }

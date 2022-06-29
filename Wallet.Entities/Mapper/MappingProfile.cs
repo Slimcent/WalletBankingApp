@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using System;
+using Wallet.Entities.Dto;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.Enumerators;
@@ -15,25 +17,25 @@ namespace Wallet.Entities.Mapper
         public MappingProfile()
         {
             //Create User
-            CreateMap<AddUserDto, User>();
+            CreateMap<CreateUserDto, User>();
 
             
             CreateMap<Transaction, AllTransactionsDto>();
-            CreateMap<Role, AllRolesDto>();
-            CreateMap<Bill, AllBillsDto>();
-            CreateMap<AirTime, AllAirTimeDto>();
-            CreateMap<Models.Domain.Data, AllDataDto>();
+            CreateMap<Role, RoleResponseDto>();
+            CreateMap<Bill, BillsResponseDto>();
+            CreateMap<AirTime, NetworkProviderResponseDto>();
+            CreateMap<Models.Domain.Data, NetworkProviderResponseDto>();
            
-            CreateMap<AddRoleDto, Role>();
-            CreateMap<AddBillDto, Bill>();
-            CreateMap<AddNetworkProviderDto, Models.Domain.Data>();
-            CreateMap<AddNetworkProviderDto, AirTime>();
+            CreateMap<RoleDto, Role>();
+            CreateMap<CreateBillDto, Bill>();
+            CreateMap<CreateNetworkProviderDto, Models.Domain.Data>();
+            CreateMap<CreateNetworkProviderDto, AirTime>();
             CreateMap<DepositTransactionDto, Transaction>();
             CreateMap<PatchUserDto, User>();
             CreateMap<PatchRoleDto, Role>();
             CreateMap<PatchBillDto, Bill>();
-            CreateMap<PatchAirTimeDto, AirTime>();
-            CreateMap<PatchDataDto, Models.Domain.Data>();
+            CreateMap<PatchNetworkProviderDto, AirTime>();
+            CreateMap<PatchNetworkProviderDto, Models.Domain.Data>();
 
             //CreateMap<Staff, UpdateStaffDto>()
             //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));

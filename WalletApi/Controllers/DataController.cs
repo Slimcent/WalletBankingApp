@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalMessage;
@@ -25,7 +26,7 @@ namespace WalletApi.Controllers
 
         [HttpPost("create-data")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddData([FromBody] AddNetworkProviderDto model)
+        public async Task<IActionResult> AddData([FromBody] CreateNetworkProviderDto model)
         {
             var result = await _dataService.AddData(model);
 
@@ -36,7 +37,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpPatch("edit-data")]
-        public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model)
+        public async Task<IActionResult> EditData(Guid Id, JsonPatchDocument<PatchNetworkProviderDto> model)
         {
             var data = await _dataService.EditData(Id, model);
 

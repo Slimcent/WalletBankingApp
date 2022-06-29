@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
@@ -27,11 +29,11 @@ namespace Wallet.Services.Services
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
-        public async Task<IEnumerable<AllAirTimeDto>> GetAllAirTime()
+        public async Task<IEnumerable<NetworkProviderResponseDto>> GetAllAirTime()
         {
-            var allAirTime = await _airTimeRepo.GetAllAsync();
+            IEnumerable<AirTime> allAirTime = await _airTimeRepo.GetAllAsync();
 
-            var airTimeDto = _mapper.Map<IEnumerable<AllAirTimeDto>>(allAirTime);
+            IEnumerable<NetworkProviderResponseDto> airTimeDto = _mapper.Map<IEnumerable<NetworkProviderResponseDto>>(allAirTime);
 
             return airTimeDto;
         }
@@ -41,7 +43,7 @@ namespace Wallet.Services.Services
             return _airTimeRepo.GetAll();
         }
 
-        public async Task<Response> AddAirTime(AddNetworkProviderDto model)
+        public async Task<Response> AddAirTime(CreateNetworkProviderDto model)
         {
             var existingAirTime = await _airTimeRepo.GetSingleByAsync(a => a.NetworkProvider == model.NetworkProvider.Trim().ToLower());
             if (existingAirTime != null)
@@ -54,14 +56,14 @@ namespace Wallet.Services.Services
             return new Response(true, $" AiiTime {model.NetworkProvider} has been created Successfully!");
         }
 
-        public async Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
+        public async Task<Response> EditAirTime(Guid Id, JsonPatchDocument<PatchNetworkProviderDto> model)
         {
             var airTime = await _airTimeRepo.GetByIdAsync(Id);
 
             if (airTime is null)
                 return new Response(false, "ArTime does not Exist");
 
-            var airTimeDto = new PatchAirTimeDto
+            var airTimeDto = new PatchNetworkProviderDto
             {
                 NetworkProvider = airTime.NetworkProvider
             };
@@ -85,6 +87,39 @@ namespace Wallet.Services.Services
             _airTimeRepo.Delete(airTime);
 
             return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been deleted Successfully");
+        }
+
+        public async Task<Response> DeleteAirTimeById(Guid airTimeId)
+        {
+            AirTime airTime = await _airTimeRepo.GetSingleByAsync(a => a.Id == airTimeId);
+
+            if (airTime is null)
+                return new Response(false, $"AirTime with Id {airTimeId} does not Exist");
+
+            _airTimeRepo.Delete(airTime);
+
+            return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been deleted Successfully");
+        }
+
+        public async Task<Response> ToggleAirTimeStatus(Guid airTimeId)
+        {
+            AirTime airTime = await _airTimeRepo.GetSingleByAsync(a => a.Id == airTimeId);
+
+            if (airTime is null)
+                return new Response(false, $"AirTime with Id {airTimeId} does not Exist");
+
+           airTime.IsDeletd = !airTime.IsDeletd;
+
+           await _airTimeRepo.UpdateAsync(airTime);
+
+            if(airTime.IsDeletd == true)
+            {
+                return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been deleted Successfully");
+            }
+            else
+            {
+                return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been activated Successfully");
+            }
         }
     }
 }

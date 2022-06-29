@@ -3,19 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
-using Wallet.Entities.Dto.IdentityUsers.Request;
-using Wallet.Entities.Dto.Transaction.PostDto;
+using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.GobalMessage;
-using Wallet.Entities.Models.Domain;
 
 namespace Wallet.Services.Interfaces
 {
     public interface IDataService
     {
-        Task<Response> AddData(AddNetworkProviderDto model);
-        Task<Response> EditData(Guid Id, JsonPatchDocument<PatchDataDto> model);
+        Task<Response> AddData(CreateNetworkProviderDto model);
+        Task<Response> EditData(Guid Id, JsonPatchDocument<PatchNetworkProviderDto> model);
         Task<Response> DeleteDataByName(string name);
-        Task<IEnumerable<AllDataDto>> GetAllData();
+        Task<IEnumerable<NetworkProviderResponseDto>> GetAllData();
         IEnumerable<Entities.Models.Domain.Data> GetTotalNumberOfData();
     }
 }

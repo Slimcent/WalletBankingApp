@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
-using Wallet.Entities.Dto.Transaction.PostDto;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.GobalMessage;
 using Wallet.Services.Interfaces;
@@ -24,7 +24,7 @@ namespace WalletApi.Controllers
 
         [HttpPost("create-airtime")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> AddAirTime([FromBody] AddNetworkProviderDto model)
+        public async Task<IActionResult> AddAirTime([FromBody] CreateNetworkProviderDto model)
         {
             var result = await _airTimeService.AddAirTime(model);
 
@@ -36,7 +36,7 @@ namespace WalletApi.Controllers
 
         [HttpPatch("edit-airtime")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> EditAirTime(Guid Id, JsonPatchDocument<PatchAirTimeDto> model)
+        public async Task<IActionResult> EditAirTime(Guid Id, JsonPatchDocument<PatchNetworkProviderDto> model)
         {
             var airTime = await _airTimeService.EditAirTime(Id, model);
 

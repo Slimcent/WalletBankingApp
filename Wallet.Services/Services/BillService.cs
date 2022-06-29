@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.Request;
+using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
@@ -28,7 +30,7 @@ namespace Wallet.Services.Services
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
-        public async Task<Response> AddBill(AddBillDto model)
+        public async Task<Response> AddBill(CreateBillDto model)
         {
             var existingBill = await _billRepo.GetSingleByAsync(b => b.BillName == model.BillName.Trim().ToLower());
             if (existingBill != null)
@@ -75,11 +77,11 @@ namespace Wallet.Services.Services
             return new Response(true, $"Bill with Name {bill.BillName} And Amount {bill.Amount} has been deleted Successfully");
         }
 
-        public async Task<IEnumerable<AllBillsDto>> GetAllBills()
+        public async Task<IEnumerable<BillsResponseDto>> GetAllBills()
         {
             var allBills = await _billRepo.GetAllAsync();
 
-            var billsDto = _mapper.Map<IEnumerable<AllBillsDto>>(allBills);
+            var billsDto = _mapper.Map<IEnumerable<BillsResponseDto>>(allBills);
 
             return billsDto;
         }

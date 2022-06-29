@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.Dto.IdentityUsers.PostDto
+namespace Wallet.Entities.Dto.PostDto
 {
-    public class AddUserDto
+    public class CreateUserDto
     {
         [Required(ErrorMessage = "First Name canot be empty"), RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Alphabets allowed"), MaxLength(50), MinLength(2)]
         public string FirstName { get; set; }

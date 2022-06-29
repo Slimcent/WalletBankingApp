@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Wallet.Entities.Dto.Response;
 using System.Collections.Generic;
+using Wallet.Entities.Dto;
+using Wallet.Entities.Dto.PostDto;
 
 namespace Wallet.Services.Services
 {
@@ -38,7 +40,7 @@ namespace Wallet.Services.Services
 
         public async Task<string> CreateCustomer(UsersCreateRequestDto model)
         {
-            AddUserDto user = new()
+            CreateUserDto user = new()
             {
                 Email = model.Email,
                 FirstName = model.FirstName,
