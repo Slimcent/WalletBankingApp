@@ -129,7 +129,13 @@ namespace WalletApi
             }
             else
             {
-                app.UseHsts();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WalletApi v1");
+                    c.InjectStylesheet("/css/swagger-dark-theme.css");
+                });
+                //app.UseHsts();
             }
 
             app.ConfigureExceptionHandler();
