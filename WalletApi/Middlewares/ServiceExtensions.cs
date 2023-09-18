@@ -40,6 +40,7 @@ namespace WalletApi.Middlewares
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            services.AddTransient<IServiceFactory, ServiceFactory>();
             services.AddTransient<IUnitOfWork, UnitOfWork<WalletDbContext>>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITransactionService, TransactionService>();
@@ -50,8 +51,10 @@ namespace WalletApi.Middlewares
             services.AddTransient<IDataService, DataService>();
             services.AddTransient<IBillService, BillService>();
             services.AddTransient<IStaffService, StaffService>();
-            services.AddTransient<IServiceFactory, ServiceFactory>();
-
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<BackgroundTaskService>();
+            //services.AddHostedService<BackgroundTaskService>();
+            
             return services;
         }
 

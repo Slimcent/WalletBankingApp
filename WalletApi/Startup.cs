@@ -26,6 +26,7 @@ using WalletApi.Middlewares;
 using Newtonsoft.Json.Serialization;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Wallet.Services.Services;
 
 namespace WalletApi
 {

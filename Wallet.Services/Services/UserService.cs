@@ -19,7 +19,7 @@ namespace Wallet.Services.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-       private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
 

@@ -12,6 +12,7 @@ using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
+using Wallet.Logger;
 using Wallet.Services.Interfaces;
 
 namespace Wallet.Services.Services
@@ -24,6 +25,7 @@ namespace Wallet.Services.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Role> _roleRepo;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILoggerMessage _logger;
 
         public RoleService(IServiceFactory serviceFactory)
         {
@@ -33,6 +35,7 @@ namespace Wallet.Services.Services
             _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
             _roleRepo = _unitOfWork.GetRepository<Role>();
             _mapper = _serviceFactory.GetServices<IMapper>();
+            _logger = serviceFactory.GetServices<ILoggerMessage>();
         }
 
         public async Task<string> AddUserToRole(UserRoleDto request)
@@ -113,6 +116,8 @@ namespace Wallet.Services.Services
             var allRoles = await _roleRepo.GetAllAsync();
 
             var rolesDto = _mapper.Map<IEnumerable<RoleResponseDto>>(allRoles);
+
+            _logger.LogInfo($"{rolesDto.Count()} found.");
 
             return rolesDto;
         }
