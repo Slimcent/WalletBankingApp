@@ -27,6 +27,8 @@ using Newtonsoft.Json.Serialization;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Wallet.Services.Services;
+using Serilog;
+using Serilog.Core;
 
 namespace WalletApi
 {
@@ -38,7 +40,17 @@ namespace WalletApi
                 "/Nlog/nlog.config"));
 
             Configuration = configuration;
+
+            // Configure Serilog
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration) // Read Serilog settings from appsettings.json
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
+                        
+            Log.Information("Starting application");
         }
+
 
         public IConfiguration Configuration { get; }
 

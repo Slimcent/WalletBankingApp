@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Wallet.Data.Implementation;
 using Wallet.Data.Interfaces;
+using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Services.Interfaces;
@@ -67,7 +69,8 @@ namespace Wallet.Services.Services
                     _logger.LogInfo($"Deleted {usersToDelete.Count()} users.");
                 }
 
-                _logger.LogInfo("No users to delete.");
+                Serilog.Context.LogContext.PushProperty("AllRoles", usersToDelete, destructureObjects: true);
+                Log.Information($"No users found");
             }
             catch (Exception ex)
             {

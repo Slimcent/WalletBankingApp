@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,8 +117,9 @@ namespace Wallet.Services.Services
             var allRoles = await _roleRepo.GetAllAsync();
 
             var rolesDto = _mapper.Map<IEnumerable<RoleResponseDto>>(allRoles);
-
-            _logger.LogInfo($"{rolesDto.Count()} found.");
+                        
+            Serilog.Context.LogContext.PushProperty("AllRoles", rolesDto, destructureObjects: true);
+            Log.Information($"Got all {rolesDto.Count()} roles Successful");
 
             return rolesDto;
         }
