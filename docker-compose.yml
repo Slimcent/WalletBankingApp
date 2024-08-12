@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  walletapi:
+    image: ${DOCKER_REGISTRY-}walletapi
+    build:
+      context: .
+      dockerfile: WalletApi/Dockerfile

@@ -179,9 +179,9 @@ namespace WalletApi
 
             //app.InitialSwagger();
 
-            SeedRole.EnsurePopulated(app);
-            SeedAdmin.EnsurePopulated(app);
-            SeedUser.EnsurePopulated(app);
+            //SeedRole.EnsurePopulated(app);
+            //SeedAdmin.EnsurePopulated(app);
+            //SeedUser.EnsurePopulated(app);
         }
 
         public partial class Program { }
