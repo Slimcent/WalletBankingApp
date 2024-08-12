@@ -16,23 +16,23 @@ namespace WalletApi.Data
 
         public static async void EnsurePopulated(IApplicationBuilder app)
         {
-            var context = app.ApplicationServices
-                .CreateScope().ServiceProvider
-                .GetRequiredService<WalletDbContext>();
-            if ((await context.Database.GetPendingMigrationsAsync()).Any()) await context.Database.MigrateAsync();
+            //var context = app.ApplicationServices
+            //    .CreateScope().ServiceProvider
+            //    .GetRequiredService<WalletDbContext>();
+            //if ((await context.Database.GetPendingMigrationsAsync()).Any()) await context.Database.MigrateAsync();
 
-            var userManager = app.ApplicationServices
-                .CreateScope().ServiceProvider
-                .GetRequiredService<UserManager<User>>();
+            //var userManager = app.ApplicationServices
+            //    .CreateScope().ServiceProvider
+            //    .GetRequiredService<UserManager<User>>();
 
-            var user = await userManager.FindByNameAsync(AdminUser);
-            if (user != null) return;
+            //var user = await userManager.FindByNameAsync(AdminUser);
+            //if (user != null) return;
 
-            user = new User
-            { Email = "centpresley@gmail.com", UserName = "Dara", PhoneNumber = "070-323-1244", EmailConfirmed = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
-            var createUser = await userManager.CreateAsync(user, AdminPassword);
+            //user = new User
+            //{ Email = "centpresley@gmail.com", UserName = "Dara", PhoneNumber = "070-323-1244", EmailConfirmed = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
+            //var createUser = await userManager.CreateAsync(user, AdminPassword);
 
-            if (createUser.Succeeded) await userManager.AddToRoleAsync(user, "Manager");
+            //if (createUser.Succeeded) await userManager.AddToRoleAsync(user, "Manager");
         }
     }
 }
