@@ -17,13 +17,13 @@ jobs:
     - name: Set up .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x' # Adjust to your .NET version
+        dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore WalletBankingApp.sln
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build WalletBankingApp.sln --no-restore
 
   dockerize:
     needs: build
