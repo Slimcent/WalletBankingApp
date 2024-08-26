@@ -33,6 +33,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Build Docker image
+      run: docker build -t walletapi:latest .
+    
     - name: Tag Docker image for Docker Hub
       run: docker tag walletapi:latest slimcent/walletapi1:latest
     
