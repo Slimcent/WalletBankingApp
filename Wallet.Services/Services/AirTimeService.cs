@@ -28,16 +28,7 @@ namespace Wallet.Services.Services
             _airTimeRepo = _unitOfWork.GetRepository<AirTime>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
-
-        public async Task<IEnumerable<NetworkProviderResponseDto>> GetAllAirTime()
-        {
-            IEnumerable<AirTime> allAirTime = await _airTimeRepo.GetAllAsync();
-
-            IEnumerable<NetworkProviderResponseDto> airTimeDto = _mapper.Map<IEnumerable<NetworkProviderResponseDto>>(allAirTime);
-
-            return airTimeDto;
-        }
-
+                
         public IEnumerable<AirTime> GetTotalNumberOfAirTime()
         {
             return _airTimeRepo.GetAll();

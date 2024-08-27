@@ -75,16 +75,7 @@ namespace Wallet.Services.Services
 
             return new Response(true, $"Data with Name {data.NetworkProvider} has been deleted Successfully");
         }
-
-        public async Task<IEnumerable<NetworkProviderResponseDto>> GetAllData()
-        {
-            var allData = await _dataRepo.GetAllAsync();
-
-            var dataDto = _mapper.Map<IEnumerable<NetworkProviderResponseDto>>(allData);
-
-            return dataDto;
-        }
-
+                
         public IEnumerable<Entities.Models.Domain.Data> GetTotalNumberOfData()
         {
             return _dataRepo.GetAll();

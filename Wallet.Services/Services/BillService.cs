@@ -76,16 +76,7 @@ namespace Wallet.Services.Services
 
             return new Response(true, $"Bill with Name {bill.BillName} And Amount {bill.Amount} has been deleted Successfully");
         }
-
-        public async Task<IEnumerable<BillsResponseDto>> GetAllBills()
-        {
-            var allBills = await _billRepo.GetAllAsync();
-
-            var billsDto = _mapper.Map<IEnumerable<BillsResponseDto>>(allBills);
-
-            return billsDto;
-        }
-
+                
         public IEnumerable<Bill> GetTotalNumberOfBills()
         {
             return _billRepo.GetAll();
