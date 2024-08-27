@@ -15,7 +15,6 @@ namespace Wallet.Services.Interfaces
         Task<Response> AddBill(CreateBillDto model);
         Task<Response> EditBill(Guid Id, JsonPatchDocument<PatchBillDto> model);
         Task<Response> DeleteBillByName(string name);
-        Task<IEnumerable<BillsResponseDto>> GetAllBills();
         IEnumerable<Bill> GetTotalNumberOfBills();
     }
 }

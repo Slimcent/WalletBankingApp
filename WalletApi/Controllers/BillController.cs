@@ -58,18 +58,7 @@ namespace WalletApi.Controllers
                 return Ok(bill.Message);
 
             return BadRequest(bill.Message);
-        }
-
-        [HttpGet("all-bills")]
-        public async Task<IActionResult> GetAllBills()
-        {
-            var allBills = await _billService.GetAllBills();
-
-            if (allBills.Any())
-                return Ok(allBills);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Bills found" });
-        }
+        }              
 
         [HttpGet("total-number-of-bills")]
         public IActionResult GetTotalNumberOfBills()

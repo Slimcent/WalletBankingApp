@@ -51,6 +51,7 @@ namespace WalletApi.Middlewares
             services.AddTransient<IDataService, DataService>();
             services.AddTransient<IBillService, BillService>();
             services.AddTransient<IStaffService, StaffService>();
+            services.AddTransient<ISelectService, SelectService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddScoped<BackgroundTaskService>();
             //services.AddHostedService<BackgroundTaskService>();
