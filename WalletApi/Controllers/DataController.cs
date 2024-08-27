@@ -57,18 +57,7 @@ namespace WalletApi.Controllers
 
             return BadRequest(data.Message);
         }
-
-        [HttpGet("all-data")]
-        public async Task<IActionResult> GetAllData()
-        {
-            var allData = await _dataService.GetAllData();
-
-            if (allData.Any())
-                return Ok(allData);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No Data found" });
-        }
-
+                
         [HttpGet("total-number-of-data")]
         public IActionResult GetTotalNumberOfData()
         {

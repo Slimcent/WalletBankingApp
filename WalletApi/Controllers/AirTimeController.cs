@@ -56,18 +56,7 @@ namespace WalletApi.Controllers
 
             return BadRequest(airTime.Message);
         }
-
-        [HttpGet("all-airTime")]
-        public async Task<IActionResult> GetAllAirTime()
-        {
-            var allAirTime = await _airTimeService.GetAllAirTime();
-
-            if (allAirTime.Any())
-                return Ok(allAirTime);
-
-            return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"No AirTime found" });
-        }
-
+                
         [HttpGet("total-number-of-airTime")]
         public IActionResult GetTotalNumberOfAirTime()
         {
