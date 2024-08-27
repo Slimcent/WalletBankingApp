@@ -57,15 +57,15 @@ namespace WalletApi.Controllers
             return BadRequest(airTime.Message);
         }
                 
-        [HttpGet("total-number-of-airTime")]
-        public IActionResult GetTotalNumberOfAirTime()
-        {
-            var numberOfAirTime = _airTimeService.GetTotalNumberOfAirTime().Count();
+        //[HttpGet("total-number-of-airTime")]
+        //public IActionResult GetTotalNumberOfAirTime()
+        //{
+        //    var numberOfAirTime = _airTimeService.GetTotalNumberOfAirTime().Count();
 
-            if (numberOfAirTime <= 0)
-                return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
+        //    if (numberOfAirTime <= 0)
+        //        return BadRequest(new ErrorDetails { Status = ResponseStatus.NOT_FOUND, Message = $"0 AirTime found" });
 
-            return Ok($"{numberOfAirTime} AirTime");
-        }
+        //    return Ok($"{numberOfAirTime} AirTime");
+        //}
     }
 }
