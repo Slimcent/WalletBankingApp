@@ -41,7 +41,7 @@ namespace Wallet.Services.Services
 
         public async Task<IEnumerable<NetworkProviderResponseDto>> GetAllData()
         {
-            IEnumerable<Entities.Models.Domain.Data> allData = await _unitOfWork.GetRepository<Entities.Models.Domain.Data>().GetAllAsync();
+            IEnumerable<Entities.Models.Domain.NetworkData> allData = await _unitOfWork.GetRepository<Entities.Models.Domain.NetworkData>().GetAllAsync();
 
             IEnumerable<NetworkProviderResponseDto> dataResponse = _mapper.Map<IEnumerable<NetworkProviderResponseDto>>(allData);
 

@@ -18,18 +18,18 @@ namespace Wallet.Entities.Mapper
             CreateMap<Role, RoleResponseDto>();
             CreateMap<Bill, BillsResponseDto>();
             CreateMap<AirTime, NetworkProviderResponseDto>();
-            CreateMap<Models.Domain.Data, NetworkProviderResponseDto>();
+            CreateMap<Models.Domain.NetworkData, NetworkProviderResponseDto>();
            
             CreateMap<RoleDto, Role>();
             CreateMap<CreateBillDto, Bill>();
-            CreateMap<CreateNetworkProviderDto, Models.Domain.Data>();
+            CreateMap<CreateNetworkProviderDto, Models.Domain.NetworkData>();
             CreateMap<CreateNetworkProviderDto, AirTime>();
             CreateMap<DepositTransactionDto, Transaction>();
             CreateMap<PatchUserDto, User>();
             CreateMap<PatchRoleDto, Role>();
             CreateMap<PatchBillDto, Bill>();
             CreateMap<PatchNetworkProviderDto, AirTime>();
-            CreateMap<PatchNetworkProviderDto, Models.Domain.Data>();
+            CreateMap<PatchNetworkProviderDto, Models.Domain.NetworkData>();
 
             //CreateMap<Staff, UpdateStaffDto>()
             //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
