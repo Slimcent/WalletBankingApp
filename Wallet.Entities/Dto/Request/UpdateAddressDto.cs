@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.Dto
+namespace Wallet.Entities.Dto.Request
 {
     public class UpdateAddressDto
     {

@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Wallet.Entities.Dto.IdentityUsers.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.Models.Domain;
 
 namespace WalletApi.Authentication

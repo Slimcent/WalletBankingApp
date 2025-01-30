@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Wallet.Entities.Dto.IdentityUsers.PostDto;
+using Wallet.Entities.Dto.Request;
 
 namespace WalletApi.Authentication
 {

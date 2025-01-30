@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Wallet.Entities.Dto.Transaction.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Interfaces;
 using WalletApi.ActionFilters;

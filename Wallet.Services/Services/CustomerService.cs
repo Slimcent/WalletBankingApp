@@ -5,14 +5,11 @@ using Wallet.Entities.Models.Domain;
 using Wallet.Services.Interfaces;
 using Wallet.Services.Helpers;
 using Wallet.Data.Interfaces;
-using Wallet.Entities.Dto.IdentityUsers.PostDto;
-using Wallet.Entities.Dto.IdentityUsers.Request;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Wallet.Entities.Dto.Response;
 using System.Collections.Generic;
-using Wallet.Entities.Dto;
-using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Request;
 
 namespace Wallet.Services.Services
 {

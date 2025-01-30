@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.Request;
-using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;

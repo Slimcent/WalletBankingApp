@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Dto.IdentityUsers.Request;
-using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.Dto.Response;
 using Wallet.Entities.Models.Domain;
 using Wallet.Services.Exceptions;

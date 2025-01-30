@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wallet.Entities.Dto.IdentityUsers.Request
+namespace Wallet.Entities.Dto.Request
 {
     public class UpdateStaffDto
     {

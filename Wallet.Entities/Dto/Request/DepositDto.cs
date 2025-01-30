@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Wallet.Entities.Dto.PostDto
+namespace Wallet.Entities.Dto.Request
 {
-    public class CreateBillDto
+    public class DepositDto
     {
-        [Required(ErrorMessage = "Bill Name cannot be empty"), RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Alphabets allowed")]
-        public string BillName { get; set; }
-
         [Required(ErrorMessage = "Amount cannot be empty"), Column(TypeName = "decimal(38,2)")]
         public decimal Amount { get; set; }
+
+        [Required(ErrorMessage = "WalletID cannot be empty"), Display(Name = "Wallet Account")]
+        public string WalletID { get; set; }
     }
 }

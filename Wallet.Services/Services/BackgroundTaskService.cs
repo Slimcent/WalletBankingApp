@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Wallet.Data.Implementation;
 using Wallet.Data.Interfaces;
-using Wallet.Entities.Dto.PostDto;
 using Wallet.Entities.Models.Domain;
 using Wallet.Logger;
 using Wallet.Services.Interfaces;

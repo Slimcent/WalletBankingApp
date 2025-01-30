@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Wallet.Entities.Dto.Transaction.PostDto
+namespace Wallet.Entities.Dto.Request
 {
     public class TransferDto
     {

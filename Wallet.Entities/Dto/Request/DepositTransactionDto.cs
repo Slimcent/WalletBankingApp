@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.Models.Domain;
 
-namespace Wallet.Entities.Dto.Transaction.PostDto
+namespace Wallet.Entities.Dto.Request
 {
     public class DepositTransactionDto
     {

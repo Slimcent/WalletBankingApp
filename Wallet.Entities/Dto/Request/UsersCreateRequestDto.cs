@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Wallet.Entities.Enumerators;
 
-namespace Wallet.Entities.Dto.IdentityUsers.PostDto
+namespace Wallet.Entities.Dto.Request
 {
     public class UsersCreateRequestDto
     {

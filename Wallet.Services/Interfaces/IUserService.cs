@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wallet.Entities.Dto.IdentityUsers.Request;
-using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.Dto.Response;
 
 namespace Wallet.Services.Interfaces
