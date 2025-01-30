@@ -19,6 +19,7 @@ namespace Wallet.Entities.Models.Domain
         public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public bool Active { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Staff Staff { get; set; }
     }

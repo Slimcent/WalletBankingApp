@@ -15,6 +15,7 @@ namespace Wallet.Entities.Models.Domain
         public decimal StampDuty { get; set; }
         public DateTime TimeStamp { get; set; }
         public Guid CustomerId { get; set; }
+        public bool Active { get; set; }
 
         //[ForeignKey(nameof(CustomerId))]
         public virtual Customer Customer { get; set; }

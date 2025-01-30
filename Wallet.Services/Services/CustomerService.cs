@@ -75,7 +75,7 @@ namespace Wallet.Services.Services
             {
                 WalletNo = WalletIdGenerator.GenerateWalletId(),
                 Balance = 0,
-                IsActive = true,
+                Active = true,
                 CustomerId = customer.Id
             };
             await _walletRepo.AddAsync(wallet);
@@ -169,7 +169,7 @@ namespace Wallet.Services.Services
 
         public async Task<IEnumerable<CustomerResponseDto>> GetAllCustomers()
         {
-            IEnumerable<Customer> all = await _customerRepo.GetByAsync(x => x.IsDeleted == false,
+            IEnumerable<Customer> all = await _customerRepo.GetByAsync(x => x.Active == false,
                 include: x => x.Include(u => u.User).Include(a => a.Address).Include(w => w.Wallet));
 
             return _mapper.Map<IEnumerable<CustomerResponseDto>>(all);
@@ -177,7 +177,7 @@ namespace Wallet.Services.Services
 
         public async Task<CustomerResponseDto> GetCustomer(Guid id)
         {
-            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id && x.IsDeleted == false, 
+            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id && x.Active == false,
                 include: x => x.Include(x => x.Address).Include(x => x.User).Include(x => x.Wallet));
 
             if (customer == null)
@@ -188,7 +188,7 @@ namespace Wallet.Services.Services
 
         public async Task<CustomerResponseDto> GetCustomerByEmail(string email)
         {
-            User user = await _userRepo.GetSingleByAsync(u => u.Email == email && u.Customer.IsDeleted == false,
+            User user = await _userRepo.GetSingleByAsync(u => u.Email == email && u.Customer.Active == false,
                 include: u => u.Include(s => s.Customer).ThenInclude(a => a.Address)
                     .Include(x => x.Customer).ThenInclude(x => x.Wallet));
 
@@ -205,8 +205,8 @@ namespace Wallet.Services.Services
             if (customer is null)
                 return $"customer with Id {id} does not exist";
 
-            customer.IsDeleted = true;
-            customer.Wallet.IsActive = false;
+            customer.Active = true;
+            customer.Wallet.Active = false;
 
             await _customerRepo.UpdateAsync(customer);
             await _walletRepo.UpdateAsync(customer.Wallet);
@@ -223,8 +223,8 @@ namespace Wallet.Services.Services
             if (customer is null)
                 return $"customer with Id {id} does not exist";
 
-            customer.IsDeleted = false;
-            customer.Wallet.IsActive = true;
+            customer.Active = false;
+            customer.Wallet.Active = true;
 
             await _customerRepo.UpdateAsync(customer);
             await _walletRepo.UpdateAsync(customer.Wallet);
@@ -236,7 +236,7 @@ namespace Wallet.Services.Services
 
         public async Task<IEnumerable<CustomerResponseDto>> GetAllDeletedCustomers()
         {
-            IEnumerable<Customer> all = await _customerRepo.GetByAsync(x => x.IsDeleted == true,
+            IEnumerable<Customer> all = await _customerRepo.GetByAsync(x => x.Active == true,
                 include: x => x.Include(u => u.User).Include(a => a.Address).Include(w => w.Wallet));
 
             return _mapper.Map<IEnumerable<CustomerResponseDto>>(all);
