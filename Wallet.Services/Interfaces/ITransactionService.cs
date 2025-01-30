@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wallet.Entities.Dto.Transaction.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.GobalMessage;
 using Wallet.Entities.Models.Domain;
 

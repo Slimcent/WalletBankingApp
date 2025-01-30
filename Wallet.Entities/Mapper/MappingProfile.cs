@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using System;
-using Wallet.Entities.Dto;
-using Wallet.Entities.Dto.IdentityUsers.Patch;
 using Wallet.Entities.Dto.IdentityUsers.PostDto;
 using Wallet.Entities.Dto.IdentityUsers.Request;
-using Wallet.Entities.Dto.PostDto;
+using Wallet.Entities.Dto.Request;
 using Wallet.Entities.Dto.Response;
-using Wallet.Entities.Dto.Transaction.PostDto;
 using Wallet.Entities.Enumerators;
 using Wallet.Entities.Models.Domain;
 

@@ -5,20 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dto\Transaction\GetDto\**" />
-    <EmbeddedResource Remove="Dto\Transaction\GetDto\**" />
-    <None Remove="Dto\Transaction\GetDto\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dto\Update\" />
   </ItemGroup>
 
 </Project>
