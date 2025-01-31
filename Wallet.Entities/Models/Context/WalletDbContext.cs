@@ -80,7 +80,7 @@ namespace Wallet.Entities.Models.Context
         public DbSet<AirTime> AirTimes { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Domain.Data> Data { get; set; }
+        public DbSet<Domain.NetworkData> Data { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Staff> StaffProfile { get; set; }
         public DbSet<StampDutyCharge> StampDutyCharges { get; set; }

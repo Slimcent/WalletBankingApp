@@ -42,7 +42,7 @@ namespace Wallet.Services.Services
             if (wallet == null)
                 return new Response(false, "Wallet No does not exist, check and try again");
 
-            if (!wallet.IsActive) return new Response(false, "Your Wallet Account is not Active for now");
+            if (!wallet.Active) return new Response(false, "Your Wallet Account is not Active for now");
 
             if (model.Amount <= 0) return new Response(false, "You cannot Deposit 0 Amount");
 
@@ -74,7 +74,7 @@ namespace Wallet.Services.Services
             if (wallet == null)
                 return new Response(false, "Please, indicate your Wallet Account");
 
-            if (!wallet.IsActive) return new Response(false, "Your Account is not Active for now, contact the bank");
+            if (!wallet.Active) return new Response(false, "Your Account is not Active for now, contact the bank");
 
             if (model.Amount < 50) return new Response(false, "You cannot Withdraw below 50");
 
@@ -113,9 +113,9 @@ namespace Wallet.Services.Services
             if (receiverWallet == null)
                 return new Response(false, "Please, Indicate Recipient Wallet");
 
-            if (!senderWallet.IsActive) return new Response(false, "Your Account is not Active for now");
+            if (!senderWallet.Active) return new Response(false, "Your Account is not Active for now");
 
-            if (!receiverWallet.IsActive) return new Response(false, "Recipient Wallet is not Active for now");
+            if (!receiverWallet.Active) return new Response(false, "Recipient Wallet is not Active for now");
 
             if (receiverWallet == senderWallet) return new Response(false, "You cannot Transfer to your Wallet Account");
 
@@ -168,7 +168,7 @@ namespace Wallet.Services.Services
             if (bill == null)
                 return new Response(false, "Please, indicate The Bill you want to pay for");
 
-            if (!wallet.IsActive) return new Response(false, "Your Account is not Active for now");
+            if (!wallet.Active) return new Response(false, "Your Account is not Active for now");
 
             if (wallet.Balance < bill.Amount) return new Response(false, "Your Wallet Balance is Insufficient for this Bill");
 
@@ -209,7 +209,7 @@ namespace Wallet.Services.Services
             if (airTime == null)
                 return new Response(false, "Please, indicate the Network Provider");
 
-            if (!wallet.IsActive) return new Response(false, "Your Account is not Active for now");
+            if (!wallet.Active) return new Response(false, "Your Account is not Active for now");
 
             if (model.Amount < 50) return new Response(false, "You cannot buy AirTme below 50");
 
@@ -250,7 +250,7 @@ namespace Wallet.Services.Services
             if (data == null)
                 return new Response(false, "Please, indicate the Network Provider");
 
-            if (!wallet.IsActive) return new Response(false, "Your Account is not Active for now");
+            if (!wallet.Active) return new Response(false, "Your Account is not Active for now");
 
             if (model.Amount < 50) return new Response(false, "You cannot buy Data below 50");
 

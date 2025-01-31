@@ -14,14 +14,14 @@ namespace Wallet.Services.Services
     {
         private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
-        private readonly IRepository<Entities.Models.Domain.Data> _dataRepo;
+        private readonly IRepository<Entities.Models.Domain.NetworkData> _dataRepo;
         private readonly IUnitOfWork _unitOfWork;
 
         public DataService(IServiceFactory serviceFactory)
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _dataRepo = _unitOfWork.GetRepository<Entities.Models.Domain.Data>();
+            _dataRepo = _unitOfWork.GetRepository<Entities.Models.Domain.NetworkData>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -31,7 +31,7 @@ namespace Wallet.Services.Services
             if (existingData != null)
                 return new Response(false, "Network Provider name already Exist");
 
-            var dataDto = _mapper.Map<Entities.Models.Domain.Data>(model);
+            var dataDto = _mapper.Map<Entities.Models.Domain.NetworkData>(model);
 
             await _dataRepo.AddAsync(dataDto);
 
@@ -71,7 +71,7 @@ namespace Wallet.Services.Services
             return new Response(true, $"Data with Name {data.NetworkProvider} has been deleted Successfully");
         }
                 
-        public IEnumerable<Entities.Models.Domain.Data> GetTotalNumberOfData()
+        public IEnumerable<Entities.Models.Domain.NetworkData> GetTotalNumberOfData()
         {
             return _dataRepo.GetAll();
         }

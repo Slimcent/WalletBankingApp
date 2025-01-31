@@ -95,11 +95,11 @@ namespace Wallet.Services.Services
             if (airTime is null)
                 return new Response(false, $"AirTime with Id {airTimeId} does not Exist");
 
-           airTime.IsDeletd = !airTime.IsDeletd;
+           airTime.Active = !airTime.Active;
 
            await _airTimeRepo.UpdateAsync(airTime);
 
-            if(airTime.IsDeletd == true)
+            if(airTime.Active == true)
             {
                 return new Response(true, $"AirTime with Name {airTime.NetworkProvider} has been deleted Successfully");
             }

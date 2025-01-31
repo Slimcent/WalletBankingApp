@@ -12,6 +12,6 @@ namespace Wallet.Services.Interfaces
         Task<Response> AddData(CreateNetworkProviderDto model);
         Task<Response> EditData(Guid Id, JsonPatchDocument<PatchNetworkProviderDto> model);
         Task<Response> DeleteDataByName(string name);
-        IEnumerable<Entities.Models.Domain.Data> GetTotalNumberOfData();
+        IEnumerable<Entities.Models.Domain.NetworkData> GetTotalNumberOfData();
     }
 }

@@ -17,7 +17,7 @@ namespace Wallet.Entities.Models.Domain
         public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool Active { get; set; }
         public string UserId { get; set; }
         public virtual User User { get; set; }
         public virtual Address Address { get; set; }

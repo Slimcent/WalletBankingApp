@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,11 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250130154348_Added_Active_To_Entities")]
+    partial class Added_Active_To_Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +183,7 @@ namespace WalletApi.Migrations
                         .IsUnique()
                         .HasFilter("[StaffId] IS NOT NULL");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.AirTime", b =>
@@ -209,7 +212,7 @@ namespace WalletApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AirTimes", (string)null);
+                    b.ToTable("AirTimes");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Bill", b =>
@@ -241,7 +244,7 @@ namespace WalletApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bills", (string)null);
+                    b.ToTable("Bills");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Customer", b =>
@@ -286,7 +289,7 @@ namespace WalletApi.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Data", b =>
@@ -315,7 +318,7 @@ namespace WalletApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Data", (string)null);
+                    b.ToTable("Data");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.ProfilePicture", b =>
@@ -335,7 +338,7 @@ namespace WalletApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfilePictures", (string)null);
+                    b.ToTable("ProfilePictures");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Role", b =>
@@ -422,7 +425,7 @@ namespace WalletApi.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("StaffProfile", (string)null);
+                    b.ToTable("StaffProfile");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.StampDutyCharge", b =>
@@ -442,7 +445,7 @@ namespace WalletApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StampDutyCharges", (string)null);
+                    b.ToTable("StampDutyCharges");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Transaction", b =>
@@ -494,7 +497,7 @@ namespace WalletApi.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.TransactionStampDutyCharge", b =>
@@ -522,7 +525,7 @@ namespace WalletApi.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("TransactionStampDutyCharges", (string)null);
+                    b.ToTable("TransactionStampDutyCharges");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.User", b =>
@@ -644,7 +647,7 @@ namespace WalletApi.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
-                    b.ToTable("Wallets", (string)null);
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
