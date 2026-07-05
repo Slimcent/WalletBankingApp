@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Wallet.Entities.Data;
 using Wallet.Entities.Interfaces;
 using Wallet.Entities.Models.Domain;
 
@@ -79,11 +77,7 @@ namespace Wallet.Entities.Models.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.ApplyConfiguration(new RoleSeed());
-            //modelBuilder.ApplyConfiguration(new AirTimeSeed());
-            //modelBuilder.ApplyConfiguration(new DataSeed());
-            //modelBuilder.ApplyConfiguration(new BillPaymentSeed());
-
+            
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
 
@@ -103,17 +97,7 @@ namespace Wallet.Entities.Models.Context
                     }
                 }
             }
-
-            //modelBuilder.Entity<Staff>()
-            //    .HasOne(a => a.Address)
-            //    .WithOne(b => b.Staff)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<Customer>()
-            //    .HasOne(a => a.Address)
-            //    .WithOne(b => b.Customer)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
+                        
             modelBuilder.Entity<ApplicationUserRole>(b =>
             {
                 b.HasOne(x => x.User)
