@@ -11,13 +11,13 @@ namespace Wallet.Services.Interfaces
     public interface IStaffService
     {
         Task<string> CreateStaff(UsersCreateRequestDto model);
-        Task<string> UpdateStaffAddress(Guid staffId, UpdateAddressDto model);
+        Task<string> UpdateStaffAddress(string staffId, UpdateAddressDto model);
         Task<IEnumerable<StaffResponseDto>> GetAllStaff();
-        Task<StaffResponseDto> GetStaff(Guid id);
+        Task<StaffResponseDto> GetStaff(string id);
         IEnumerable<Staff> GetTotalNumberOfStaff();
-        Task<string> DeleteStaffById(Guid id);
+        Task<string> DeleteStaffById(string id);
         Task<StaffResponseDto> GetStaffByEmail(string email);
-        Task<String> UpdateStaff(Guid id, JsonPatchDocument<UpdateStaffDto> model);
-        Task<String> PatchStaffAddress(Guid staffId, JsonPatchDocument<UpdateAddressDto> model);
+        Task<String> UpdateStaff(string id, JsonPatchDocument<UpdateStaffDto> model);
+        Task<String> PatchStaffAddress(string staffId, JsonPatchDocument<UpdateAddressDto> model);
     }
 }
