@@ -17,10 +17,8 @@ namespace Wallet.Entities.Models.Context
         }
 
         public DbSet<Address> Address { get; set; }
-        public DbSet<AirTime> AirTimes { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<NetworkData> Data { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Staff> Staff { get; set; }
         public DbSet<Menu> Menus { get; set; }
@@ -123,12 +121,7 @@ namespace Wallet.Entities.Models.Context
             {
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
             });
-
-            modelBuilder.Entity<NetworkData>(b =>
-            {
-                b.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
-
+                        
             modelBuilder.Entity<Address>(b =>
             {
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
@@ -138,12 +131,7 @@ namespace Wallet.Entities.Models.Context
             {
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
             });
-
-            modelBuilder.Entity<AirTime>(b =>
-            {
-                b.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
-
+                        
             modelBuilder.Entity<Menu>(b =>
             {
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
