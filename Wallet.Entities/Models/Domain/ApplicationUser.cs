@@ -15,6 +15,7 @@ namespace Wallet.Entities.Models.Domain
         public bool Active { get; set; }
         public int UserTypeId { get; set; }
         public virtual Staff Staff { get; set; }
+        public virtual Wallet Wallet { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual UserType UserType { get; set; }
     }

@@ -17,7 +17,7 @@ namespace Wallet.Entities.Models.Domain
 
         [Unicode(false)]
         [MaxLength(45)]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         
         [Column(TypeName = "decimal(38,2)")]
         public decimal Balance { get; set; }

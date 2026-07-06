@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wallet.Entities.Models.Context;
 
@@ -11,9 +12,11 @@ using Wallet.Entities.Models.Context;
 namespace WalletApi.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260703191547_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,6 +112,35 @@ namespace WalletApi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("Wallet.Entities.Models.Domain.AirTime", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.Property<string>("NetworkProvider")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AirTimes");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.ApplicationRole", b =>
@@ -557,6 +589,35 @@ namespace WalletApi.Migrations
                     b.ToTable("Menus");
                 });
 
+            modelBuilder.Entity("Wallet.Entities.Models.Domain.NetworkData", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.Property<bool>("IsDeletd")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NetworkProvider")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Data");
+                });
+
             modelBuilder.Entity("Wallet.Entities.Models.Domain.ProfilePicture", b =>
                 {
                     b.Property<string>("Id")
@@ -888,9 +949,7 @@ namespace WalletApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wallets");
                 });
@@ -1114,8 +1173,8 @@ namespace WalletApi.Migrations
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Wallet", b =>
                 {
                     b.HasOne("Wallet.Entities.Models.Domain.ApplicationUser", "User")
-                        .WithOne("Wallet")
-                        .HasForeignKey("Wallet.Entities.Models.Domain.Wallet", "UserId");
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1132,8 +1191,6 @@ namespace WalletApi.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Staff");
-
-                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("Wallet.Entities.Models.Domain.Bill", b =>
