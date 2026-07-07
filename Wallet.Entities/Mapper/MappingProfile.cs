@@ -17,20 +17,14 @@ namespace Wallet.Entities.Mapper
             CreateMap<Transaction, AllTransactionsDto>();
             CreateMap<ApplicationRole, RoleResponseDto>();
             CreateMap<Bill, BillsResponseDto>();
-            CreateMap<AirTime, NetworkProviderResponseDto>();
-            CreateMap<Models.Domain.NetworkData, NetworkProviderResponseDto>();
 
             CreateMap<RoleDto, ApplicationRole>();
             CreateMap<CreateBillDto, Bill>();
-            CreateMap<CreateNetworkProviderDto, Models.Domain.NetworkData>();
-            CreateMap<CreateNetworkProviderDto, AirTime>();
             CreateMap<DepositTransactionDto, Transaction>();
             CreateMap<PatchUserDto, ApplicationUser>();
             CreateMap<PatchRoleDto, ApplicationRole>();
             CreateMap<PatchBillDto, Bill>();
-            CreateMap<PatchNetworkProviderDto, AirTime>();
-            CreateMap<PatchNetworkProviderDto, Models.Domain.NetworkData>();
-
+            
             //CreateMap<Staff, UpdateStaffDto>()
             //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
 
@@ -81,7 +75,6 @@ namespace Wallet.Entities.Mapper
                 .ForMember(dest => dest.WalletNo, opt => opt.MapFrom(src => src.WalletNumber))
                 .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => src.Balance));
                 //.ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{.Address.PlotNo} {src.Customer.Address.StreetName} {src.Customer.Address.State} {src.User.Address.Nationality}"));
-
         }
     }
 }
