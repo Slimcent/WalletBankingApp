@@ -28,7 +28,7 @@ namespace Wallet.Services.Services
 
         public async Task<Response> AddBill(CreateBillDto model)
         {
-            var existingBill = await _billRepo.GetSingleByAsync(b => b.BillName == model.BillName.Trim().ToLower());
+            var existingBill = await _billRepo.GetSingleByAsync(b => b.Name == model.BillName.Trim().ToLower());
             if (existingBill != null)
                 return new Response(false, "Bill Name already Exist");
 
@@ -48,7 +48,7 @@ namespace Wallet.Services.Services
 
             var billDto = new PatchBillDto
             {
-                BillName = bill.BillName,
+                BillName = bill.Name,
                 Amount = bill.Amount
             };
 
@@ -58,19 +58,19 @@ namespace Wallet.Services.Services
 
             _billRepo.Update(bill);
 
-            return new Response(true, $"Bill Updated Successfully, see Details below\nBill Name : {bill.BillName} \nAmount : {bill.Amount}");
+            return new Response(true, $"Bill Updated Successfully, see Details below\nBill Name : {bill.Name} \nAmount : {bill.Amount}");
         }
 
         public async Task<Response> DeleteBillByName(string name)
         {
-            var bill = await _billRepo.GetSingleByAsync(b => b.BillName == name.Trim().ToLower());
+            var bill = await _billRepo.GetSingleByAsync(b => b.Name == name.Trim().ToLower());
 
             if (bill is null)
                 return new Response(false, "Bill does not Exist");
 
             _billRepo.Delete(bill);
 
-            return new Response(true, $"Bill with Name {bill.BillName} And Amount {bill.Amount} has been deleted Successfully");
+            return new Response(true, $"Bill with Name {bill.Name} And Amount {bill.Amount} has been deleted Successfully");
         }
                 
         public IEnumerable<Bill> GetTotalNumberOfBills()
