@@ -18,7 +18,7 @@ namespace Wallet.Services.Interfaces
         Task<string> AddUserToRole(UserRoleDto request);
         Task<string> RemoveUserFromRole(UserRoleDto request);
         Task<IList<string>> GetUserRoles(string userName);
-        IEnumerable<Role> GetTotalNumberOfRoles();
+        IEnumerable<ApplicationRole> GetTotalNumberOfRoles();
         Task<IEnumerable<RoleResponseDto>> GetAllRoles();
     }
 }
