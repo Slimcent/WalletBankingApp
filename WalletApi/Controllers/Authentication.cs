@@ -16,11 +16,11 @@ namespace WalletApi.Controllers
     public class Authentication : ControllerBase
     {
         private readonly ILoggerMessage _logger;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthenticationManager _authManager;
         private readonly IUserService _userService;
 
-        public Authentication(ILoggerMessage logger, UserManager<User> userManager, IAuthenticationManager authManager, IUserService userService)
+        public Authentication(ILoggerMessage logger, UserManager<ApplicationUser> userManager, IAuthenticationManager authManager, IUserService userService)
         {
             _logger = logger;
             _userManager = userManager;
@@ -51,7 +51,5 @@ namespace WalletApi.Controllers
 
             return Ok(user);
         }
-
-
     }
 }

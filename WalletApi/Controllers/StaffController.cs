@@ -36,7 +36,7 @@ namespace WalletApi.Controllers
 
 
         [HttpGet("staff-by-id")]
-        public async Task<IActionResult> GetStaffById(Guid id)
+        public async Task<IActionResult> GetStaffById(string id)
         {
             var staff = await _staffService.GetStaff(id);
 
@@ -62,7 +62,7 @@ namespace WalletApi.Controllers
 
         [HttpPut("update-staff-address")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> UpdateStaffAddress([FromQuery] Guid staffId, UpdateAddressDto model)
+        public async Task<IActionResult> UpdateStaffAddress([FromQuery] string staffId, UpdateAddressDto model)
         {
             var staff = await _staffService.UpdateStaffAddress(staffId, model);
 
@@ -71,7 +71,7 @@ namespace WalletApi.Controllers
 
         [HttpPatch("update-staff")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> UpdateStaff(Guid Id, JsonPatchDocument<UpdateStaffDto> model)
+        public async Task<IActionResult> UpdateStaff(string Id, JsonPatchDocument<UpdateStaffDto> model)
         {
             string staff = await _staffService.UpdateStaff(Id, model);
 
@@ -80,7 +80,7 @@ namespace WalletApi.Controllers
 
         [HttpPatch("patch-staff-address")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> PatchStaffAddress(Guid Id, JsonPatchDocument<UpdateAddressDto> model)
+        public async Task<IActionResult> PatchStaffAddress(string Id, JsonPatchDocument<UpdateAddressDto> model)
         {
             string staff = await _staffService.PatchStaffAddress(Id, model);
 
@@ -99,12 +99,11 @@ namespace WalletApi.Controllers
         }
 
         [HttpDelete("delete-staff-by-id")]
-        public async Task<IActionResult> DeleteStaff([FromQuery] Guid id)
+        public async Task<IActionResult> DeleteStaff([FromQuery] string id)
         {
             var staff = await _staffService.DeleteStaffById(id);
 
             return Ok(staff);
         }
-
     }
 }
