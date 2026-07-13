@@ -25,12 +25,12 @@ namespace WalletApi.Data
 
             var userManager = app.ApplicationServices
                 .CreateScope().ServiceProvider
-                .GetRequiredService<UserManager<User>>();
+                .GetRequiredService<UserManager<ApplicationUser>>();
 
             var user = await userManager.FindByNameAsync(AdminUser);
             if (user != null) return;
 
-            user = new User
+            user = new ApplicationUser
             { Email = "admin@domain.com", UserName = "Admin", PhoneNumber = "090-123-4090", EmailConfirmed = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
             var createUser = await userManager.CreateAsync(user, AdminPassword);
 

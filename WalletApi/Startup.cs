@@ -16,8 +16,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Wallet.Entities.Mapper;
+//using Wallet.Entities.Mapper;
 using Wallet.Entities.Models.Context;
+using WalletApi.Data.Seeders;
 using Wallet.Logger;
 using WalletApi.ActionFilters;
 using WalletApi.Authentication;
@@ -61,12 +62,13 @@ namespace WalletApi
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
             services.AddDBConnection(Configuration);
+            services.BindSeedConfig(Configuration);
             services.AddScoped<DbContext, WalletDbContext>();
             services.ConfigureJWT(Configuration);
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();
             services.AddScoped<ModelStateValidation>();
             services.AddScoped<MediaTypeValidation>();
-            services.AddAutoMapper(typeof(MappingProfile));
+            //services.AddAutoMapper(typeof(MappingProfile));
             services.AddAuthentication();
 
             services.AddControllers(setupAction =>
@@ -129,6 +131,8 @@ namespace WalletApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerMessage logger)
         {
+            SeedApplicationData.EnsurePopulated(app).GetAwaiter().GetResult();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -182,6 +186,8 @@ namespace WalletApi
             //SeedRole.EnsurePopulated(app);
             //SeedAdmin.EnsurePopulated(app);
             //SeedUser.EnsurePopulated(app);
+
+            SeedApplicationData.EnsurePopulated(app).GetAwaiter().GetResult();
         }
 
         public partial class Program { }
