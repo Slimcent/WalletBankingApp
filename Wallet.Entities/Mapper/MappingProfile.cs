@@ -11,26 +11,20 @@ namespace Wallet.Entities.Mapper
         public MappingProfile()
         {
             //Create User
-            CreateMap<CreateUserDto, User>();
+            CreateMap<CreateUserDto, ApplicationUser>();
 
-            
+
             CreateMap<Transaction, AllTransactionsDto>();
-            CreateMap<Role, RoleResponseDto>();
+            CreateMap<ApplicationRole, RoleResponseDto>();
             CreateMap<Bill, BillsResponseDto>();
-            CreateMap<AirTime, NetworkProviderResponseDto>();
-            CreateMap<Models.Domain.NetworkData, NetworkProviderResponseDto>();
-           
-            CreateMap<RoleDto, Role>();
-            CreateMap<CreateBillDto, Bill>();
-            CreateMap<CreateNetworkProviderDto, Models.Domain.NetworkData>();
-            CreateMap<CreateNetworkProviderDto, AirTime>();
-            CreateMap<DepositTransactionDto, Transaction>();
-            CreateMap<PatchUserDto, User>();
-            CreateMap<PatchRoleDto, Role>();
-            CreateMap<PatchBillDto, Bill>();
-            CreateMap<PatchNetworkProviderDto, AirTime>();
-            CreateMap<PatchNetworkProviderDto, Models.Domain.NetworkData>();
 
+            CreateMap<RoleDto, ApplicationRole>();
+            CreateMap<CreateBillDto, Bill>();
+            CreateMap<DepositTransactionDto, Transaction>();
+            CreateMap<PatchUserDto, ApplicationUser>();
+            CreateMap<PatchRoleDto, ApplicationRole>();
+            CreateMap<PatchBillDto, Bill>();
+            
             //CreateMap<Staff, UpdateStaffDto>()
             //    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
 
@@ -39,23 +33,21 @@ namespace Wallet.Entities.Mapper
                 .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.Email));
 
             // Update Staff and Customer by Put
-            CreateMap<UpdateAddressDto, Address> ();
+            CreateMap<UpdateAddressDto, Address>();
 
             // Get all staff and Get staff by Id 
-            CreateMap<Staff, StaffResponseDto> ()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName}"))
+            CreateMap<Staff, StaffResponseDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => 
-                $"{src.Address.PlotNo} {src.Address.StreetName} {src.Address.State} {src.Address.Nationality}"));
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Address.PlotNo} {src.Address.StreetName} {src.Address.State} {src.Address.Nationality}"));
 
             // Get Staff by Email
-            CreateMap<User, StaffResponseDto>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.Staff.LastName} {src.Staff.FirstName}"))
+            CreateMap<ApplicationUser, StaffResponseDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.Staff.User.LastName} {src.Staff.User.FirstName}"))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Staff.PhoneNumber))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => 
-                $"{src.Staff.Address.PlotNo} {src.Staff.Address.StreetName} {src.Staff.Address.State} {src.Staff.Address.Nationality}"));
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Staff.Address.PlotNo} {src.Staff.Address.StreetName} {src.Staff.Address.State} {src.Staff.Address.Nationality}"));
 
             // Uodate Customer by Patch
             CreateMap<UpdateStaffDto, Customer>()
@@ -63,35 +55,26 @@ namespace Wallet.Entities.Mapper
 
             // Get all Customer and Get Customer by Id 
             CreateMap<Customer, CustomerResponseDto>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName}"))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.WalletNo, opt => opt.MapFrom(src => src.Wallet.WalletNo))
-                .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => src.Wallet.Balance))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => 
-                $"{src.Address.PlotNo} {src.Address.StreetName} {src.Address.State} {src.Address.Nationality}"));
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Address.PlotNo} {src.Address.StreetName} {src.Address.State} {src.Address.Nationality}"));
 
             // Get Customer by Email
-            CreateMap<User, CustomerResponseDto>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.Customer.LastName} {src.Customer.FirstName}"))
+            CreateMap<ApplicationUser, CustomerResponseDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.Customer.User.LastName} {src.Customer.User.FirstName}"))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Customer.PhoneNumber))
-                .ForMember(dest => dest.WalletNo, opt => opt.MapFrom(src => src.Customer.Wallet.WalletNo))
-                .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => src.Customer.Wallet.Balance))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => 
-                $"{src.Customer.Address.PlotNo} {src.Customer.Address.StreetName} {src.Customer.Address.State} {src.Customer.Address.Nationality}"));
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Customer.Address.PlotNo} {src.Customer.Address.StreetName} {src.Customer.Address.State} {src.Customer.Address.Nationality}"));
 
             // Get Customer by Walletno
             CreateMap<Entities.Models.Domain.Wallet, CustomerResponseDto>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.Customer.LastName} {src.Customer.FirstName}"))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Customer.User.Email))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Customer.PhoneNumber))
-                .ForMember(dest => dest.WalletNo, opt => opt.MapFrom(src => src.WalletNo))
-                .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => src.Balance))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => 
-                $"{src.Customer.Address.PlotNo} {src.Customer.Address.StreetName} {src.Customer.Address.State} {src.Customer.Address.Nationality}"));
-
-            
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.WalletNo, opt => opt.MapFrom(src => src.WalletNumber))
+                .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => src.Balance));
+                //.ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{.Address.PlotNo} {src.Customer.Address.StreetName} {src.Customer.Address.State} {src.User.Address.Nationality}"));
         }
     }
 }

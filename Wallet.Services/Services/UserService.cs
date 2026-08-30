@@ -17,8 +17,8 @@ namespace Wallet.Services.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
@@ -28,8 +28,8 @@ namespace Wallet.Services.Services
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _userManager = _serviceFactory.GetServices<UserManager<User>>();
-            _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
+            _userManager = _serviceFactory.GetServices<UserManager<ApplicationUser>>();
+            _roleManager = _serviceFactory.GetServices<RoleManager<ApplicationRole>>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -40,11 +40,11 @@ namespace Wallet.Services.Services
             if (existingEmail != null)
                 throw new UserExistException(model.Email);
 
-            User userNameExists = await _userManager.FindByNameAsync(model.UserName);
+            ApplicationUser userNameExists = await _userManager.FindByNameAsync(model.UserName);
             if (userNameExists != null)
                 return $"Username {model.UserName} already exists";
 
-            var user = _mapper.Map<User>(model);
+            var user = _mapper.Map<ApplicationUser>(model);
             user.EmailConfirmed = true;
 
             var password = "123456";
@@ -56,7 +56,7 @@ namespace Wallet.Services.Services
 
             if (!_roleManager.RoleExistsAsync(model.Role).Result)
             {
-                var role = new Role { Name = model.Role };
+                var role = new ApplicationRole { Name = model.Role };
                 var roleResult = _roleManager.CreateAsync(role).Result;
                 if (!roleResult.Succeeded)
                     throw new InvalidOperationException($"Role creation failed");

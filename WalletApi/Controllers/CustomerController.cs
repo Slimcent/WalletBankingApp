@@ -46,7 +46,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpGet("customer-by-id")]
-        public async Task<IActionResult> GetCustomerById(Guid id)
+        public async Task<IActionResult> GetCustomerById(string id)
         {
             var customer = await _customerService.GetCustomer(id);
 
@@ -80,7 +80,7 @@ namespace WalletApi.Controllers
 
         [HttpPatch("update-customer")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> UpdateStaff(Guid Id, JsonPatchDocument<UpdateStaffDto> model)
+        public async Task<IActionResult> UpdateStaff(string Id, JsonPatchDocument<UpdateStaffDto> model)
         {
             string customer = await _customerService.UpdateCustomer(Id, model);
 
@@ -89,7 +89,7 @@ namespace WalletApi.Controllers
 
         [HttpPut("update-customer-address")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> UpdateCustomerAddress([FromQuery] Guid customerId, UpdateAddressDto model)
+        public async Task<IActionResult> UpdateCustomerAddress([FromQuery] string customerId, UpdateAddressDto model)
         {
             var customer = await _customerService.UpdateCustomerAddress(customerId, model);
 
@@ -98,7 +98,7 @@ namespace WalletApi.Controllers
 
         [HttpPatch("patch-customer-address")]
         [ServiceFilter(typeof(ModelStateValidation))]
-        public async Task<IActionResult> PatchCustomerAddress(Guid Id, JsonPatchDocument<UpdateAddressDto> model)
+        public async Task<IActionResult> PatchCustomerAddress(string Id, JsonPatchDocument<UpdateAddressDto> model)
         {
             string customer = await _customerService.PatchCustomerAddress(Id, model);
 
@@ -106,7 +106,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpPut("undelete-customer")]
-        public async Task<IActionResult> UnDeleteCustomer([FromQuery] Guid id)
+        public async Task<IActionResult> UnDeleteCustomer([FromQuery] string id)
         {
             var customer = await _customerService.UnDeleteCustomer(id);
 
@@ -114,7 +114,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpDelete("soft-delete-customer")]
-        public async Task<IActionResult> SoftDeleteCustomer([FromQuery] Guid id)
+        public async Task<IActionResult> SoftDeleteCustomer([FromQuery] string id)
         {
             var customer = await _customerService.SoftDeleteCustomer(id);
 
@@ -122,7 +122,7 @@ namespace WalletApi.Controllers
         }
 
         [HttpDelete("delete-customer-by-id")]
-        public async Task<IActionResult> DeleteCustomer([FromQuery] Guid id)
+        public async Task<IActionResult> DeleteCustomer([FromQuery] string id)
         {
             var customer = await _customerService.DeleteCustomerById(id);
 

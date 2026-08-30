@@ -5,11 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Wallet.Data.Implementation;
 using Wallet.Data.Interfaces;
 using Wallet.Entities.Models.Context;
@@ -37,7 +33,6 @@ namespace WalletApi.Middlewares
         public static void ConfigureLoggerService(this IServiceCollection services) =>
             services.AddScoped<ILoggerMessage, LoggerMessage>();
 
-
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IServiceFactory, ServiceFactory>();
@@ -46,15 +41,13 @@ namespace WalletApi.Middlewares
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAirTimeService, AirTimeService>();
             services.AddTransient<IRoleService, RoleService>();
-            services.AddTransient<IDataService, DataService>();
             services.AddTransient<IBillService, BillService>();
             services.AddTransient<IStaffService, StaffService>();
             services.AddTransient<ISelectService, SelectService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddScoped<BackgroundTaskService>();
-            //services.AddHostedService<BackgroundTaskService>();
+            services.AddHostedService<BackgroundTaskService>();
             
             return services;
         }
@@ -68,7 +61,7 @@ namespace WalletApi.Middlewares
                 ));
 
 
-            services.AddIdentity<User, Role>(o =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
@@ -107,6 +100,5 @@ namespace WalletApi.Middlewares
                 };
             });
         }
-
     }
 }

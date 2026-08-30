@@ -19,11 +19,11 @@ namespace Wallet.Services.Services
 {
     public class RoleService : IRoleService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
-        private readonly IRepository<Role> _roleRepo;
+        private readonly IRepository<ApplicationRole> _roleRepo;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerMessage _logger;
 
@@ -31,9 +31,9 @@ namespace Wallet.Services.Services
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _userManager = _serviceFactory.GetServices<UserManager<User>>();
-            _roleManager = _serviceFactory.GetServices<RoleManager<Role>>();
-            _roleRepo = _unitOfWork.GetRepository<Role>();
+            _userManager = _serviceFactory.GetServices<UserManager<ApplicationUser>>();
+            _roleManager = _serviceFactory.GetServices<RoleManager<ApplicationRole>>();
+            _roleRepo = _unitOfWork.GetRepository<ApplicationRole>();
             _mapper = _serviceFactory.GetServices<IMapper>();
             _logger = serviceFactory.GetServices<ILoggerMessage>();
         }
@@ -58,7 +58,7 @@ namespace Wallet.Services.Services
             if (roleExists != null)
                 throw new InvalidOperationException($"Role with name {request.Name} already exist");
 
-            var roleToCreate = _mapper.Map<Role>(request);
+            var roleToCreate = _mapper.Map<ApplicationRole>(request);
 
             var result = await _roleManager.CreateAsync(roleToCreate);
             if (!result.Succeeded)
@@ -123,7 +123,7 @@ namespace Wallet.Services.Services
             return rolesDto;
         }
 
-        public IEnumerable<Role> GetTotalNumberOfRoles()
+        public IEnumerable<ApplicationRole> GetTotalNumberOfRoles()
         {
             return _roleRepo.GetAll();
         }

@@ -15,14 +15,14 @@ namespace WalletApi.Controllers
     [Produces("application/json")]
     public class BaseController : ControllerBase
     {
-        protected readonly UserManager<User> _userManager;
+        protected readonly UserManager<ApplicationUser> _userManager;
 
         public BaseController()
         {
             
         }
 
-        public BaseController(UserManager<User> userManager)
+        public BaseController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
@@ -74,7 +74,7 @@ namespace WalletApi.Controllers
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<User> GetCurrentUserAsync()
+        public async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.GetUserAsync(HttpContext.User);
         }
@@ -82,7 +82,7 @@ namespace WalletApi.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<string> GetUserIdAsync()
         {
-            User user = await GetCurrentUserAsync();
+            ApplicationUser user = await GetCurrentUserAsync();
             return user.Id;
         }
 

@@ -13,7 +13,7 @@ namespace Wallet.Services.Services
 {
     public class BackgroundTaskService : IHostedService, IDisposable
     {
-        private readonly IRepository<User> _userRepo;
+        private readonly IRepository<ApplicationUser> _userRepo;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerMessage _logger;
@@ -23,7 +23,7 @@ namespace Wallet.Services.Services
         {
             _serviceFactory = serviceFactory;
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
-            _userRepo = _unitOfWork.GetRepository<User>();
+            _userRepo = _unitOfWork.GetRepository<ApplicationUser>();
             _logger = serviceFactory.GetServices<ILoggerMessage>();
         }
 

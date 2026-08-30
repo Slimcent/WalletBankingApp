@@ -15,7 +15,7 @@ namespace Wallet.Services.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly IRepository<User> _userRepo;
+        private readonly IRepository<ApplicationUser> _userRepo;
         private readonly IRepository<Customer> _customerRepo;
         private readonly IRepository<Address> _addressRepo;
         private readonly IRepository<Entities.Models.Domain.Wallet> _walletRepo;
@@ -29,7 +29,7 @@ namespace Wallet.Services.Services
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
             _customerRepo = _unitOfWork.GetRepository<Customer>();
             _addressRepo = _unitOfWork.GetRepository<Address>();
-            _userRepo = _unitOfWork.GetRepository<User>();
+            _userRepo = _unitOfWork.GetRepository<ApplicationUser>();
             _walletRepo = _unitOfWork.GetRepository<Entities.Models.Domain.Wallet>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
@@ -50,22 +50,19 @@ namespace Wallet.Services.Services
             {
                 UserId = userId,
                 PhoneNumber = model.PhoneNumber,
-                LastName = model.LastName,
-                FirstName = model.FirstName,
-                Gender = model.Gender
             };
             await _customerRepo.AddAsync(customer);
-                        
+
             await CreateCustomerAddress(customer);
 
             await CreateCustomerAccount(customer);
-                        
+
             return $"Customer with email {model.Email} was created successfully";
         }
 
         private async Task CreateCustomerAddress(Customer customer)
         {
-            Address address = new() { CustomerId = customer.Id };
+            Address address = new() { UserId = customer.UserId};
             await _addressRepo.AddAsync(address);
         }
 
@@ -73,10 +70,9 @@ namespace Wallet.Services.Services
         {
             Entities.Models.Domain.Wallet wallet = new()
             {
-                WalletNo = WalletIdGenerator.GenerateWalletId(),
+                WalletNumber = WalletIdGenerator.GenerateWalletId(),
                 Balance = 0,
                 Active = true,
-                CustomerId = customer.Id
             };
             await _walletRepo.AddAsync(wallet);
         }
@@ -93,9 +89,9 @@ namespace Wallet.Services.Services
             return $"Customer deleted successfully";
         }
 
-        public async Task<string> UpdateCustomerAddress(Guid customerId, UpdateAddressDto model)
+        public async Task<string> UpdateCustomerAddress(string customerId, UpdateAddressDto model)
         {
-            Address customer = await _addressRepo.GetSingleByAsync(x => x.CustomerId == customerId);
+            Address customer = await _addressRepo.GetSingleByAsync(x => x.UserId == customerId);
             if (customer == null)
                 return $"Customer with id {customerId} does not exist";
 
@@ -107,12 +103,12 @@ namespace Wallet.Services.Services
             return "Address updated successfully";
         }
 
-        public async Task<string> PatchCustomerAddress(Guid customerId, JsonPatchDocument<UpdateAddressDto> model)
+        public async Task<string> PatchCustomerAddress(string userId, JsonPatchDocument<UpdateAddressDto> model)
         {
-            Address customer = await _addressRepo.GetSingleByAsync(x => x.CustomerId == customerId);
+            Address customer = await _addressRepo.GetSingleByAsync(x => x.UserId == userId);
 
             if (customer == null)
-                return $"Customer with id {customerId} does not exist";
+                return $"Customer with id {userId} does not exist";
 
             UpdateAddressDto updateAddress = new()
             {
@@ -134,7 +130,7 @@ namespace Wallet.Services.Services
             return $"staff updated successfully";
         }
 
-        public async Task<string> UpdateCustomer(Guid id, JsonPatchDocument<UpdateStaffDto> model)
+        public async Task<string> UpdateCustomer(string id, JsonPatchDocument<UpdateStaffDto> model)
         {
             Customer customer = await _customerRepo.GetSingleByAsync(s => s.Id == id,
                 include: s => s.Include(u => u.User));
@@ -144,8 +140,6 @@ namespace Wallet.Services.Services
 
             UpdateStaffDto updateStaff = new()
             {
-                LastName = customer.LastName,
-                FirstName = customer.FirstName,
                 Email = customer.User.Email,
                 MobileNo = customer.PhoneNumber
             };
@@ -170,15 +164,15 @@ namespace Wallet.Services.Services
         public async Task<IEnumerable<CustomerResponseDto>> GetAllCustomers()
         {
             IEnumerable<Customer> all = await _customerRepo.GetByAsync(x => x.Active == false,
-                include: x => x.Include(u => u.User).Include(a => a.Address).Include(w => w.Wallet));
+                include: x => x.Include(u => u.User).Include(a => a.Address));
 
             return _mapper.Map<IEnumerable<CustomerResponseDto>>(all);
         }
 
-        public async Task<CustomerResponseDto> GetCustomer(Guid id)
+        public async Task<CustomerResponseDto> GetCustomer(string id)
         {
             Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id && x.Active == false,
-                include: x => x.Include(x => x.Address).Include(x => x.User).Include(x => x.Wallet));
+                include: x => x.Include(x => x.Address).Include(x => x.User));
 
             if (customer == null)
                 throw new InvalidOperationException("Customer not found");
@@ -188,9 +182,9 @@ namespace Wallet.Services.Services
 
         public async Task<CustomerResponseDto> GetCustomerByEmail(string email)
         {
-            User user = await _userRepo.GetSingleByAsync(u => u.Email == email && u.Customer.Active == false,
+            ApplicationUser user = await _userRepo.GetSingleByAsync(u => u.Email == email && u.Customer.Active == false,
                 include: u => u.Include(s => s.Customer).ThenInclude(a => a.Address)
-                    .Include(x => x.Customer).ThenInclude(x => x.Wallet));
+                    .Include(x => x.Customer));
 
             if (user == null)
                 throw new InvalidOperationException("User not found");
@@ -198,60 +192,58 @@ namespace Wallet.Services.Services
             return _mapper.Map<CustomerResponseDto>(user);
         }
 
-        public async Task<string> SoftDeleteCustomer(Guid id)
+        public async Task<string> SoftDeleteCustomer(string id)
         {
-            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id, include: x => x.Include(w => w.Wallet));
+            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id);
 
             if (customer is null)
                 return $"customer with Id {id} does not exist";
 
             customer.Active = true;
-            customer.Wallet.Active = false;
-
+            
             await _customerRepo.UpdateAsync(customer);
-            await _walletRepo.UpdateAsync(customer.Wallet);
-
+            
             await _unitOfWork.SaveChangesAsync();
 
             return "Customer Deleted successfully";
         }
 
-        public async Task<string> UnDeleteCustomer(Guid id)
+        public async Task<string> UnDeleteCustomer(string id)
         {
-            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id, include: x => x.Include(w => w.Wallet));
+            Customer customer = await _customerRepo.GetSingleByAsync(x => x.Id == id);
 
             if (customer is null)
                 return $"customer with Id {id} does not exist";
 
             customer.Active = false;
-            customer.Wallet.Active = true;
-
+            
             await _customerRepo.UpdateAsync(customer);
-            await _walletRepo.UpdateAsync(customer.Wallet);
-
-            await _unitOfWork.SaveChangesAsync();
-
+            
             return "Customer UnDeleted successfully";
         }
 
         public async Task<IEnumerable<CustomerResponseDto>> GetAllDeletedCustomers()
         {
             IEnumerable<Customer> all = await _customerRepo.GetByAsync(x => x.Active == true,
-                include: x => x.Include(u => u.User).Include(a => a.Address).Include(w => w.Wallet));
+                include: x => x.Include(u => u.User).Include(a => a.Address));
 
             return _mapper.Map<IEnumerable<CustomerResponseDto>>(all);
         }
 
         public async Task<CustomerResponseDto> GetCustomerByWalletNo(string WalletNo)
         {
-           Entities.Models.Domain.Wallet wallet = await _walletRepo.GetSingleByAsync(u => u.WalletNo == WalletNo,
-                include: u => u.Include(s => s.Customer).ThenInclude(a => a.Address)
-                .Include(e => e.Customer.User));
+            Entities.Models.Domain.Wallet wallet = await _walletRepo.GetSingleByAsync(u => u.WalletNumber == WalletNo,
+                 include: u => u.Include(e => e.User));
 
             if (wallet == null)
                 throw new InvalidOperationException("User not found");
 
             return _mapper.Map<CustomerResponseDto>(wallet);
+        }
+
+        public Task<string> DeleteCustomerById(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

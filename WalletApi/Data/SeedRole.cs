@@ -13,7 +13,7 @@ namespace WalletApi.Data
 {
     public static class SeedRole
     {
-        private static RoleManager<Role> _roleManager;
+        private static RoleManager<ApplicationRole> _roleManager;
 
         public static async void EnsurePopulated(IApplicationBuilder app)
         {
@@ -24,7 +24,7 @@ namespace WalletApi.Data
 
             _roleManager = app.ApplicationServices
                 .CreateScope().ServiceProvider
-                .GetRequiredService<RoleManager<Role>>();
+                .GetRequiredService<RoleManager<ApplicationRole>>();
 
             await Create("SuperAdmin");
         }
@@ -33,7 +33,7 @@ namespace WalletApi.Data
         {
             if (!await _roleManager.RoleExistsAsync(name))
             {
-                var role = new Role { Name = name, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
+                var role = new ApplicationRole { Name = name, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
                 await _roleManager.CreateAsync(role);
             }
         }

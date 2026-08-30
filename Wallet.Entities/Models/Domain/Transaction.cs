@@ -1,33 +1,35 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Wallet.Entities.Enumerators;
-
 namespace Wallet.Entities.Models.Domain
 {
     public class Transaction
     {
         [Key]
         public Guid Id { get; set; }
-        public TransactionType TransactionType { get; set; }
-        public TransactionMode TransactionMode { get; set; }
-        public string NetworkProvider { get; set; }
-        public string BillName { get; set; }
-        public string PhoneNumber { get; set; }
+        public int TransactionTypeId { get; set; }
+        public int TransactionModeId { get; set; }
+        
+        [Unicode(false)]
+        [MaxLength(18)]
+        public string? PhoneNumber { get; set; }
+        public string? BillModeId { get; set; }
 
         [Column(TypeName = "decimal(38,2)")]
         public decimal Amount { get; set; }
 
         [Column(TypeName = "decimal(38,2)")]
-        public decimal StampDuty { get; set; }
-        public string ReceiverWalletId { get; set; }
-        public string SenderWalletId { get; set; }
+        public decimal? StampDuty { get; set; }
+        public string SenderAccount { get; set; }
         public DateTime TimeStamp { get; set; }
-        public Guid CustomerId { get; set; }
-        public string StampDutyId { get; set; }
+        public string? StampDutyChargeId { get; set; }
         public bool Active { get; set; }
-
-        //[ForeignKey(nameof(CustomerId))]
-        public virtual Customer Customer { get; set; }
+        public string WalletId { get; set; }
+        public virtual Wallet Wallet { get; set; }
+        public virtual BillMode BillMode { get; set; }
+        public virtual StampDutyCharge StampDutyCharge { get; set; }
+        public virtual TransactionType TransactionType { get; set; }
+        public virtual TransactionMode TransactionMode { get; set; }
     }
 }
