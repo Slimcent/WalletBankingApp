@@ -16,11 +16,11 @@ namespace Wallet.Services.Services
     {
         private readonly IRepository<Staff> _staffRepo;
         private readonly IRepository<Address> _addressRepo;
-        private readonly IRepository<User> _userRepo;
+        private readonly IRepository<ApplicationUser> _userRepo;
         private readonly IMapper _mapper;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
-       
+
 
         public StaffService(IServiceFactory serviceFactory)
         {
@@ -28,7 +28,7 @@ namespace Wallet.Services.Services
             _unitOfWork = _serviceFactory.GetServices<IUnitOfWork>();
             _staffRepo = _unitOfWork.GetRepository<Staff>();
             _addressRepo = _unitOfWork.GetRepository<Address>();
-            _userRepo = _unitOfWork.GetRepository<User>();
+            _userRepo = _unitOfWork.GetRepository<ApplicationUser>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
 
@@ -47,33 +47,31 @@ namespace Wallet.Services.Services
             {
                 UserId = userId,
                 PhoneNumber = model.PhoneNumber,
-                LastName = model.LastName,
-                FirstName = model.FirstName,
-                Gender = model.Gender
+                //Gender = model.Gender
             };
             await _staffRepo.AddAsync(staff);
 
             await CreateStaffAddress(staff);
-            
+
             return $"Staff with email {model.Email} was created successfully";
         }
 
         private async Task CreateStaffAddress(Staff staff)
         {
-            Address address = new() { StaffId = staff.Id };
+            Address address = new() { UserId = staff.UserId };
             await _addressRepo.AddAsync(address);
         }
-               
+
         public async Task<IEnumerable<StaffResponseDto>> GetAllStaff()
-        { 
+        {
             var all = await _staffRepo.GetAllAndInclude(x => x.Address, x => x.User);
 
             return _mapper.Map<IEnumerable<StaffResponseDto>>(all);
         }
 
-        public async Task<string> UpdateStaffAddress(Guid staffId, UpdateAddressDto model)
+        public async Task<string> UpdateStaffAddress(string staffId, UpdateAddressDto model)
         {
-            var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == staffId);
+            var staff = await _addressRepo.GetSingleByAsync(x => x.UserId == staffId);
             if (staff == null)
                 return $"staff with id {staffId} does not exist";
 
@@ -84,9 +82,9 @@ namespace Wallet.Services.Services
             return "Address updated successfully";
         }
 
-        public async Task<string> UpdateStaff(Guid id, JsonPatchDocument<UpdateStaffDto> model)
+        public async Task<string> UpdateStaff(string id, JsonPatchDocument<UpdateStaffDto> model)
         {
-            Staff staff = await _staffRepo.GetSingleByAsync(s => s.Id == id, 
+            Staff staff = await _staffRepo.GetSingleByAsync(s => s.Id == id,
                 include: s => s.Include(u => u.User));
 
             if (staff == null)
@@ -94,8 +92,6 @@ namespace Wallet.Services.Services
 
             UpdateStaffDto updateStaff = new()
             {
-                LastName = staff.LastName,
-                FirstName = staff.FirstName,
                 Email = staff.User.Email,
                 MobileNo = staff.PhoneNumber
             };
@@ -117,7 +113,7 @@ namespace Wallet.Services.Services
             return $"staff with email {staff.User.Email} updated successfully";
         }
 
-        public async Task<StaffResponseDto> GetStaff(Guid id)
+        public async Task<StaffResponseDto> GetStaff(string id)
         {
             var staff = await _staffRepo.GetSingleByAsync(x => x.Id == id, include: x => x.Include(x => x.Address).Include(x => x.User));
 
@@ -132,10 +128,10 @@ namespace Wallet.Services.Services
             return _staffRepo.GetAll();
         }
 
-        public async Task<string> DeleteStaffById(Guid id)
+        public async Task<string> DeleteStaffById(string id)
         {
             Staff staff = await _staffRepo.GetByIdAsync(id);
-            
+
             if (staff == null)
                 return $"Staff with id {id} does not exist";
 
@@ -146,7 +142,7 @@ namespace Wallet.Services.Services
 
         public async Task<StaffResponseDto> GetStaffByEmail(string email)
         {
-            User user = await _userRepo.GetSingleByAsync(u => u.Email == email,
+            ApplicationUser user = await _userRepo.GetSingleByAsync(u => u.Email == email,
                 include: u => u.Include(s => s.Staff).ThenInclude(a => a.Address));
 
             if (user == null)
@@ -156,9 +152,9 @@ namespace Wallet.Services.Services
         }
 
 
-        public async Task<string> PatchStaffAddress(Guid staffId, JsonPatchDocument<UpdateAddressDto> model)
+        public async Task<string> PatchStaffAddress(string staffId, JsonPatchDocument<UpdateAddressDto> model)
         {
-            var staff = await _addressRepo.GetSingleByAsync(x => x.StaffId == staffId);
+            var staff = await _addressRepo.GetSingleByAsync(x => x.UserId == staffId);
 
             if (staff == null)
                 return $"staff with id {staffId} does not exist";
@@ -182,6 +178,5 @@ namespace Wallet.Services.Services
 
             return $"staff updated successfully";
         }
-
     }
 }

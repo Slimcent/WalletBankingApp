@@ -20,7 +20,7 @@ namespace WalletApi.Data
 
         public async void SeedAdminUser()
         {
-            var user = new User
+            var user = new ApplicationUser
             {
                 UserName = "Admin",
                 NormalizedUserName = "ADMIN",
@@ -33,19 +33,19 @@ namespace WalletApi.Data
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            var roleStore = new RoleStore<Role>(_context);
+            var roleStore = new RoleStore<ApplicationRole>(_context);
 
             if (!_context.Roles.Any(r => r.Name == "admin"))
             {
-                await roleStore.CreateAsync(new Role { Name = "admin", NormalizedName = "admin" });
+                await roleStore.CreateAsync(new ApplicationRole { Name = "admin", NormalizedName = "admin" });
             }
 
             if (!_context.Users.Any(u => u.UserName == user.UserName))
             {
-                var password = new PasswordHasher<User>();
+                var password = new PasswordHasher<ApplicationUser>();
                 var hashed = password.HashPassword(user, "password");
                 user.PasswordHash = hashed;
-                var userStore = new UserStore<User>(_context);
+                var userStore = new UserStore<ApplicationUser>(_context);
                 await userStore.CreateAsync(user);
                 await userStore.AddToRoleAsync(user, "admin");
             }

@@ -15,7 +15,7 @@ namespace Wallet.Services.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -23,10 +23,9 @@ namespace Wallet.Services.Services
         public AuthenticationService(IServiceFactory serviceFactory)
         {
             _serviceFactory = serviceFactory;
-            _userManager = _serviceFactory.GetServices<UserManager<User>>();
+            _userManager = _serviceFactory.GetServices<UserManager<ApplicationUser>>();
             _mapper = _serviceFactory.GetServices<IMapper>();
             _mapper = _serviceFactory.GetServices<IMapper>();
         }
-        
     }
 }
